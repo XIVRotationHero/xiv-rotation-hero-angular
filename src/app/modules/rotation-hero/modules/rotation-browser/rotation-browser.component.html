@@ -1,0 +1,42 @@
+<div class="rh-rotation-browser__tab-bar rh-rotation-browser__tab-bar--primary">
+  <span class="rh-rotation-browser__button"
+      (click)="selectedCategorySubject$.next(RotationBrowserCategoryType.Community)">Community</span>
+  <span class="rh-rotation-browser__button"
+        *ngIf="user$ | async"
+        (click)="selectedCategorySubject$.next(RotationBrowserCategoryType.Favourites)">Favorites</span>
+  <span class="rh-rotation-browser__button"
+        *ngIf="user$ | async"
+        (click)="selectedCategorySubject$.next(RotationBrowserCategoryType.Mine)">Mine</span>
+</div>
+<div class="rh-rotation-browser__tab-bar rh-rotation-browser__tab-bar--secondary">
+  <span class="rh-rotation-browser__button"
+      (click)="selectedSubCategorySubject$.next(RotationBrowserSubCategoryType.Favorites)">Favorites</span>
+  <span class="rh-rotation-browser__button"
+      (click)="selectedSubCategorySubject$.next(RotationBrowserSubCategoryType.Recent)">Recent</span>
+</div>
+<div
+    class="rh-rotation-browser__list"
+    *ngIf="paginatedResponse$ | async">
+  <rh-pagination [pagination]="(paginatedResponse$ | async)?.pagination"></rh-pagination>
+  <div class="rh-rotation-browser__list-item"
+      *ngFor="let rotation of (paginatedResponse$ | async)?.results"
+      (click)="selectRotation.emit(rotation)">
+    <rh-class-job-icon
+        class="rh-rotation-browser__list-item-image"
+        [classJobId]="rotation.classJobId"></rh-class-job-icon>
+    <div class="rh-rotation-browser__list-item-title">
+      {{ rotation.title }}
+    </div>
+    <div class="rh-rotation-browser__list-item-subtitle">
+      {{ rotation.description }}
+    </div>
+    <div class="rh-rotation-browser__list-item-favourite">
+      {{ rotation.favouriteCount }}
+    </div>
+    <div class="rh-rotation-browser__list-item-actions"></div>
+  </div>
+</div>
+<div class="rh-rotation-browser__empty-view"
+    *ngIf="(paginatedResponse$ | async)?.pagination?.resultsTotal === 0">Looks like there's nothing here yet</div>
+<div class="rh-rotation-browser__loading-view"
+    *ngIf="!(paginatedResponse$ | async)">Loading rotations</div>

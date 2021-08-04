@@ -1,0 +1,252 @@
+@import '../../../styles/variables.scss';
+
+.rh-builder {
+  width: 500px;
+
+  // Meta information styling
+  &__meta-toggle {
+    display: flex;
+    font-size: 11px;
+    text-transform: uppercase;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    padding: 0;
+  }
+
+  &__meta-information {
+    background: $primary-dark;
+    padding: 6px 12px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    row-gap: 6px;
+  }
+
+  &__meta-label {
+    font-size: 12px;
+    padding: 12px 12px 12px 0;
+  }
+
+  &__rotation-id {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    font-size: 11px;
+  }
+
+  &__title-input,
+  &__description-input {
+    display: block;
+    resize: none;
+    background: transparent;
+    outline: none;
+    color: white;
+    padding: 4px 8px;
+    font-family: 'Fira Sans', sans-serif;
+    border: 1px solid $primary-light;
+    box-sizing: border-box;
+    font-size: 12px;
+
+    &::placeholder {
+      // text-shadow: 0 0 1px black, 0 0 4px rgba(255, 255, 255, 0.4);
+      color: lighten($primary-light, 20%);
+    }
+  }
+
+  &__toolbar {
+    display: flex;
+    align-items: stretch;
+    line-height: 16px;
+    background: $primary-dark;
+    border-bottom: 1px solid $primary-light;
+
+    &--bottom {
+      justify-content: space-between;
+    }
+  }
+
+  &__toolbar-button {
+    font-weight: 900;
+    padding: 2px 8px;
+    font-size: 10px;
+    line-height: 2;
+    color: #2f79a3;
+    cursor: pointer;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+
+  &__record-button {
+    font-weight: 900;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    font-size: 10px;
+    line-height: inherit;
+    color: green;
+
+    &::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      display: inline-block;
+      margin-right: 6px;
+      background: white;
+      border-radius: 100%;
+    }
+
+    &:focus,
+    &:active,
+    &:hover {
+      color: green;
+    }
+
+    &:disabled {
+      color: #777;
+      cursor: not-allowed;
+
+      &::before {
+        color: #777;
+      }
+    }
+
+    &--recording {
+      background: red;
+      color: white;
+
+      &:focus,
+      &:active,
+      &:hover {
+        color: white;
+      }
+
+      &::before {
+        border-radius: 0;
+        background: linear-gradient(to right, #fff 40%, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0) 60%, #fff 60%);
+      }
+    }
+  }
+
+  &__phase-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__phase-button {
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 900;
+    line-height: inherit;
+    padding: 0 6px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.4);
+    color: rgba(255, 255, 255, 0.2);
+    margin-right: 1px;
+    height: 100%;
+    cursor: pointer;
+
+    &:focus,
+    &:active,
+    &:hover {
+      color: rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    &--enabled {
+      background: rgba(255, 255, 255, 0.7);
+      color: black;
+
+      &:focus,
+      &:active,
+      &:hover {
+        color: rgba(0, 0, 0, 0.5);
+        background: rgba(255, 255, 255, 0.5);
+      }
+    }
+  }
+
+  &__warning {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, .8);
+    line-height: 1.5;
+  }
+
+  &__warning-text {
+    margin-bottom: 12px;
+    width: 80%;
+  }
+
+  &__warning-buttons {
+    display: flex;
+    width: 80%;
+  }
+
+  &__empty-view {
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  &__adding-actions-help-view {
+    font-size: 12px;
+    padding: 12px;
+  }
+
+  &__phase {
+    display: flex;
+    padding: 4px 0;
+    border-bottom: 1px solid #262626;
+    box-sizing: border-box;
+    width: 500px;
+  }
+
+  &__phase-information {
+    width: 80px;
+    background: #262626;
+    padding: 6px;
+    flex-shrink: 0;
+  }
+
+  &__phase--record-active &__phase-information {
+    box-shadow: inset 0 0 5px red;
+  }
+
+  &__phase-label {
+    text-transform: uppercase;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  &__phase-actions {
+    padding: 8px;
+    flex: 1 1 auto;
+
+    &--drag-over {
+      outline: 2px solid white;
+    }
+  }
+
+  &__phase-action-image {
+    margin-bottom: 4px;
+  }
+
+  &__phase-target-time,
+  &__phase-estimated-time {
+    font-size: 10px;
+  }
+
+  &__phase-action-image {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+  }
+
+}

@@ -1,0 +1,13 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #545561;
+}
+
+.rh-browser {
+  &__content {
+    flex-grow: 1;
+    position: relative;
+  }
+}

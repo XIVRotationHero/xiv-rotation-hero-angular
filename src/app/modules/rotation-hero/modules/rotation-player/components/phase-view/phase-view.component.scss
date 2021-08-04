@@ -1,0 +1,100 @@
+$action-size: 64px;
+$border-color: #e4d020;
+$border-thickness: 4px;
+$border-length: 16px;
+
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  border: 1px solid gray;
+  overflow: hidden;
+}
+
+.rh-phase-view {
+  &__phase-title {
+    background: #444;
+    color: white;
+    padding: 4px 12px;
+  }
+
+  &__action-counter {
+    padding: 4px 12px;
+  }
+
+  &__actions {
+    display: flex;
+    flex: 0 0 100%;
+    position: relative;
+    will-change: left;
+    left: 0;
+    transition: left .5s;
+  }
+
+  &__rotation--done &__action-counter {
+    color: lightgreen;
+  }
+
+  &__rotation--active &__actions {
+    display: flex;
+    justify-content: space-around;
+    margin: 16px 0;
+    padding: 0 12px;
+  }
+
+  &__action {
+    position: relative;
+    width: $action-size;
+    height: $action-size;
+    border: 1px solid black;
+    box-sizing: border-box;
+    border-radius: 10%;
+    margin: 6px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      transition: opacity .2s;
+    }
+
+    &--done {
+
+      img {
+        opacity: .3;
+      }
+
+      &:after {
+        content: '\2713';
+        color: lightgreen;
+        font-size: $action-size / 2;
+        text-align: center;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        text-shadow: 0 0 5px black, 0 0 2px white;
+      }
+    }
+
+    &--next:after {
+      content: '';
+      position: absolute;
+      left: -$border-thickness;
+      top: -$border-thickness;
+      right: -$border-thickness;
+      bottom: -$border-thickness;
+      border-radius: 10%;
+      border: 0;
+      background: linear-gradient(90deg, $border-color 50%, transparent 50%), linear-gradient(90deg, $border-color 50%, transparent 50%), linear-gradient(0deg, $border-color 50%, transparent 50%), linear-gradient(0deg, $border-color 50%, transparent 50%);
+      background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+      background-size: $border-length $border-thickness, $border-length $border-thickness, $border-thickness $border-length, $border-thickness $border-length;
+      background-position: 0 0, $action-size $action-size, 0 $action-size, $action-size 0;
+      animation: border-dance 4s infinite linear;
+    }
+  }
+
+  &__footer {
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 300;
+  }
+}

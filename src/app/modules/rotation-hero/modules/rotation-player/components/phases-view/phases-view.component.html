@@ -1,0 +1,6 @@
+<rh-phase-view
+  *ngFor="let phase of phases; index as phaseIndex"
+  [phase]="phase.phase"
+  [actionIds]="phase.actions"
+  [phaseState]="phaseIndex === activePhaseIndex ? PhaseState.Active : PhaseState.Inactive"
+  [activeActionIndex]="phaseIndex === activePhaseIndex ? activeActionIndex : -1"></rh-phase-view>

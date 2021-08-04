@@ -1,0 +1,15 @@
+<rh-action-icon
+  *ngIf="action"
+  [action]="action">
+</rh-action-icon>
+<rh-cooldown-view
+  *ngIf="showCooldowns"
+  [action]="action">
+</rh-cooldown-view>
+<div
+    class="rh-action__combo-indicator"
+    *ngIf="showComboIndicator && isComboAction">
+</div>
+<div class="rh-action__action-cost" *ngIf="action && action.PrimaryCostValue">
+  {{ action.PrimaryCostValue }}
+</div>

@@ -1,0 +1,114 @@
+@import '../../../../../styles/variables.scss';
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+.rh-rotation-browser {
+
+  &__tab-bar {
+    padding: 4px 12px;
+
+    &--primary { background: $primary-dark; font-size: 14px; }
+    &--secondary { background: $primary-light; font-size: 11px; }
+  }
+
+  &__loading-view,
+  &__empty-view {
+    text-align: center;
+    padding: 30px 0;
+    color: #BBB;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  &__button {
+    background: none;
+    border: none;
+    color: #2f79a3;
+    cursor: pointer;
+    padding: 6px 0;
+    margin-right: 12px;
+    font-size: inherit;
+
+    &:focus,
+    &:hover {
+      // background: rgba(255, 255, 255, 0.2);
+      color: lighten(#2f79a3, 20%);
+    }
+
+    &:active {
+      color: lighten(#2f79a3, 40%);
+    }
+
+    &--selected {
+      color: lighten(#2f79a3, 30%);
+    }
+  }
+
+  &__list {
+    max-height: 200px;
+    overflow: auto;
+  }
+
+  &__list-item {
+    display: grid;
+    padding: 8px 12px;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      'img title favourites'
+      'img subtitle actions';
+    background: #323232;
+    cursor: pointer;
+
+    &:nth-child(odd) {
+      background: #262626;
+    }
+
+    &:hover {
+      background: #424242;
+    }
+  }
+
+  &__list-item-image {
+    width: 32px;
+    height: 32px;
+    grid-area: img;
+    margin-right: 8px;
+  }
+
+  &__list-item-title {
+    font-size: 12px;
+    color: #e1e1e1;
+    grid-area: title;
+    line-height: 1.5;
+  }
+
+  &__list-item-subtitle {
+    font-size: 10px;
+    color: #a8a8a8;
+    grid-area: subtitle;
+    line-height: 1.5;
+  }
+
+  &__list-item-favourite {
+    font-size: 14px;
+    color: #e1e1e1;
+    grid-area: favourites;
+    text-align: right;
+  }
+
+  &__list-item-actions {
+    grid-area: actions;
+  }
+
+  &__list-item-action {
+    font-size: 12px;
+    padding: 0;
+    line-height: 1;
+    margin: 0 4px;
+  }
+
+}

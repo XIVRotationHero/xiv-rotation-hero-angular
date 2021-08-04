@@ -1,0 +1,76 @@
+:host {
+  display: none;
+  flex-wrap: nowrap;
+  position: absolute;
+  transform-origin: top left;
+  white-space: nowrap;
+  will-change: left, top;
+
+  &.is-visible {
+    display: flex;
+  }
+}
+
+$slot-size: 64px;
+$slot-margin: 2px;
+$slot-border: 1px;
+
+.rh-hotbar {
+
+  // Styles
+  &--12x1 &__slots {
+    flex-direction: row;
+    width: ($slot-size + (($slot-margin + $slot-border) * 2)) * 12;
+  }
+
+  &--6x2 &__slots {
+    flex-direction: row;
+    width: ($slot-size + (($slot-margin + $slot-border) * 2)) * 6;
+  }
+
+  &--4x3 &__slots {
+    flex-direction: row;
+    width: ($slot-size + (($slot-margin + $slot-border) * 2)) * 4;
+  }
+
+  &--3x4,
+  &--2x6,
+  &--1x12 {
+    flex-direction: column;
+  }
+
+  &--3x4 &__slots {
+    flex-direction: column;
+    height: ($slot-size + (($slot-margin + $slot-border) * 2)) * 4;
+  }
+
+  &--2x6 &__slots {
+    flex-direction: column;
+    height: ($slot-size + (($slot-margin + $slot-border) * 2)) * 6;
+  }
+
+  &--1x12 &__slots {
+    flex-direction: column;
+    height: ($slot-size + (($slot-margin + $slot-border) * 2)) * 12;
+  }
+
+  &__slots {
+    display: flex;
+    align-content: stretch;
+    flex-wrap: wrap;
+  }
+
+  &__number {
+    flex: 0 0 auto;
+    width: $slot-size;
+    align-self: center;
+    justify-self: center;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    text-shadow: 0 0 2px darkgoldenrod, 0 0 2px darkgoldenrod;
+    font-size: 24px;
+    cursor: move;
+  }
+}
+

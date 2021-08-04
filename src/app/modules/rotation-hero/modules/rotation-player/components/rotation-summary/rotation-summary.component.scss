@@ -1,0 +1,53 @@
+:host {
+  display: grid;
+  padding: 8px 12px;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 5fr 1fr;
+  grid-row-gap: 6px;
+  grid-template-areas:
+    'title changeset'
+    'subtitle favourites';
+  background: #323232;
+}
+
+.rh-rotation-summary {
+  &__title {
+    font-size: 12px;
+    color: #e1e1e1;
+    grid-area: title;
+  }
+
+  &__description {
+    font-size: 10px;
+    color: #a8a8a8;
+    grid-area: subtitle;
+  }
+
+  &__change-set {
+    font-size: 12px;
+    grid-area: changeset;
+    padding: 0;
+    line-height: 1;
+    text-align: right;
+  }
+
+  &__favourites {
+    font-size: 12px;
+    color: #e1e1e1;
+    padding: 0;
+    height: 1em;
+    text-align: right;
+    grid-area: favourites;
+  }
+
+  &__author {
+    font-size: 12px;
+    color: #e1e1e1;
+    display: none;
+    grid-area: favourites;
+  }
+
+  &__patch {
+    display: none;
+  }
+}

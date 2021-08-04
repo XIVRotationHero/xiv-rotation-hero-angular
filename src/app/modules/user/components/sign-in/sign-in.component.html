@@ -1,0 +1,17 @@
+<h2 class="rh-sign-in__title">Sign In</h2>
+
+<form class="rh-sign-in"
+      [formGroup]="signInFormGroup"
+      (ngSubmit)="onSubmit(signInFormGroup.value)">
+  <div class="rh-sign-in__input-container">
+    <label class="rh-sign-in__input-label">Email</label>
+    <input class="rh-sign-in__input" type="email" formControlName="email" />
+  </div>
+  <div class="rh-sign-in__input-container">
+    <label class="rh-sign-in__input-label">Password</label>
+    <input class="rh-sign-in__input" type="password" formControlName="password" />
+  </div>
+  <button
+      class="rh-sign-in__button"
+      [disabled]="!signInFormGroup.valid">Sign in</button>
+</form>

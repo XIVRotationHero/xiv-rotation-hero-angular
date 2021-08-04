@@ -1,0 +1,14 @@
+<p>
+  ID:<br />
+  {{ user?.id }}
+</p>
+<p>
+  Username:<br />
+  {{ user?.username }}
+</p>
+<p>
+  ACT Overlay URL:<br />
+  {{ user?.uniqueToken }}
+</p>
+
+<button class="button" (click)="logout()">Logout</button>

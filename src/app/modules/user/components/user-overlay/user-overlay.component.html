@@ -1,0 +1,19 @@
+<div class="rh-user-overlay__container">
+  <rh-sign-in *ngIf="activeView === ActiveUserView.SignIn"></rh-sign-in>
+  <rh-sign-up *ngIf="activeView === ActiveUserView.SignUp"></rh-sign-up>
+
+  <hr class="fade" />
+
+  <p
+      class="rh-user-overlay__view-switcher"
+      *ngIf="activeView === ActiveUserView.SignIn">
+    Don't have an account yet?<br />
+    <a (click)="activeView = ActiveUserView.SignUp">Register an account</a>
+  </p>
+  <p
+      class="rh-user-overlay__view-switcher"
+      *ngIf="activeView === ActiveUserView.SignUp">
+    Already have an account?<br />
+    <a (click)="activeView = ActiveUserView.SignIn">Sign in</a>
+  </p>
+</div>

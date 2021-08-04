@@ -1,0 +1,63 @@
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th>12x1</th>
+    <th>6x2</th>
+    <th>4x3</th>
+    <th>3x4</th>
+    <th>2x6</th>
+    <th>1x12</th>
+    <th>Size</th>
+  </tr>
+  <tr *ngFor="let hotbarSetting of this.hotbarSettings$ | async; index as index">
+    <td>
+      <label class="ui-style">
+        <input
+            class="checkbox"
+            type="checkbox" />
+        <span class="ui-style-element"></span>
+      </label>
+    </td>
+    <td class="hotbar__name">Hotbar {{ index + 1 }}</td>
+    <td>
+      <label class="ui-style">
+        <input class="hotbar__radio" type="radio" value="12x1">
+        <span class="ui-style-element"></span>
+      </label>
+    </td>
+    <td>
+      <label class="ui-style">
+        <input class="hotbar__radio" type="radio" value="6x2">
+        <span class="ui-style-element"></span>
+      </label>
+    </td>
+    <td>
+      <label class="ui-style">
+        <input class="hotbar__radio" type="radio" value="4x3">
+        <span class="ui-style-element"></span>
+      </label>
+    </td>
+    <td>
+      <label class="ui-style">
+        <input class="hotbar__radio" type="radio" value="3x4">
+        <span class="ui-style-element"></span>
+      </label>
+    </td>
+    <td>
+      <label class="ui-style">
+        <input class="hotbar__radio" type="radio" value="2x6">
+        <span class="ui-style-element"></span>
+      </label>
+    </td>
+    <td>
+      <label class="ui-style">
+        <input class="hotbar__radio" type="radio" value="1x12">
+        <span class="ui-style-element"></span>
+      </label>
+    </td>
+    <td>
+
+    </td>
+  </tr>
+</table>

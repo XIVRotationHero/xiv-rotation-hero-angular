@@ -1,0 +1,122 @@
+$slot-size: 64px;
+$slot-margin: 2px;
+$slot-border: 1px;
+
+:host {
+  flex: 0 0 $slot-size;
+  width: $slot-size;
+  height: $slot-size;
+  border-radius: 15%;
+  margin: $slot-margin;
+  position: relative;
+  font-family: 'Kodchasan', sans-serif;
+
+  &.empty {
+    background: linear-gradient(180deg, rgba(53,53,53,.2) 19%, rgba(35,35,35,.2) 100%);
+    border-bottom: rgba(170, 170, 170, 0.233) 2px solid;
+    box-shadow: 0 3px 5px inset rgba(0, 0, 0, 0.534);
+    transform: scale(.9);
+  }
+}
+
+.rh-hotbar-slot {
+  &--empty {
+    background: linear-gradient(180deg, rgba(53,53,53,.2) 19%, rgba(35,35,35,.2) 100%);
+    border-bottom: rgba(170, 170, 170, 0.233) 2px solid;
+    box-shadow: 0 3px 5px inset rgba(0, 0, 0, 0.534);
+    transform: scale(.9);
+  }
+
+  &__drop-container {
+    height: 100%;
+  }
+
+  .hide-empty-slots &--empty {
+    visibility: hidden;
+  }
+
+  &--empty &__action {
+    display: none;
+  }
+
+  &__action {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 5%;
+    background-size: contain;
+    position: relative;
+    cursor: pointer;
+
+    &::after {
+      content: '';
+      display: block;
+      box-sizing: border-box;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      border-radius: 10%;
+      border-top: 2px solid rgba(255, 255, 255, .7);
+      box-shadow: inset 0 0 5px rgba(255, 255, 255, .6);
+      pointer-events: none;
+    }
+
+    &--combo {
+      box-shadow: 0 0 10px 5px yellow;
+    }
+  }
+
+  &__cooldown {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-size: cover;
+  }
+
+  &--cooldown::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:conic-gradient(from 0deg at 50% 50%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 40%, rgba(255, 255, 255, 1) 41%, rgba(0, 0, 0, 0.53) 42%, rgba(0, 0, 0, 0.43) 99%, rgba(255, 255, 255, 1) 101%);
+  }
+
+  &__keybinding {
+    position: absolute;
+    left: 5px;
+    top: -6px;
+    color: white;
+    font-weight: 500;
+    font-size: 24px;
+    text-shadow: 0 0 4px black, 0 0 8px black;
+    z-index: 200;
+    user-select: none;
+
+    &::before {
+      font-size: 12px;
+      vertical-align: super;
+      display: inline-block;
+      margin-right: 2px;
+      text-shadow: 0 0 2px black, 0 0 4px black, 0 0 8px black;
+    }
+
+    &--ctrl::before {
+      content: 'C';
+    }
+
+    &--shift::before {
+      content: '\21E7';
+    }
+
+    &--alt::before {
+      content: 'A';
+    }
+  }
+}

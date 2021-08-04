@@ -1,0 +1,24 @@
+:host {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.rh-user-overlay__container {
+  background: #323232;
+  padding: 32px;
+  min-width: 300px;
+}
+
+.rh-user-overlay__view-switcher {
+  color: white;
+  text-align: center;
+  font-size: 12px;
+  margin-bottom: 0;
+}

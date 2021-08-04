@@ -1,0 +1,13 @@
+<div class="rh-rotation-hero__title-bar">Rotation Hero</div>
+<div class="rh-rotation-hero__content">
+  <rh-rotation-browser
+      *ngIf="!activeRotation"
+      (selectRotation)="selectRotation($event)">
+  </rh-rotation-browser>
+  <rh-rotation-player
+      *ngIf="activeRotation"
+      [rotation]="activeRotation"
+      (changeRotation)="activeRotation = undefined"
+      (favouriteRotation)="favouriteRotation(activeRotation)"
+  ></rh-rotation-player>
+</div>

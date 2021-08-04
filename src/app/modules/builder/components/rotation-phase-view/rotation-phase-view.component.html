@@ -1,0 +1,16 @@
+<div class="rh-rotation-phase-view__information">
+  {{ phase?.phase }}
+</div>
+
+<div
+    class="rh-rotation-phase-view__actions"
+    cdkDropList
+    [cdkDropListData]="phase?.actions"
+    cdkDropListOrientation="horizontal"
+    (cdkDropListDropped)="onDrop($event)">
+  <rh-action
+      cdkDrag
+      *ngFor="let actionId of phase?.actions"
+      [action]="actionId | actionById"
+      (cdkDragEnded)="onDragEnd($event)"></rh-action>
+</div>

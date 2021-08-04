@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:local": "ng serve --configuration local",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.1.3",
+    "@angular/cdk": "^12.1.3",
     "@angular/cli": "~12.1.3",
     "@angular/compiler-cli": "~12.1.0-",
     "@types/jasmine": "~3.8.0",

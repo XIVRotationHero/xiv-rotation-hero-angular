@@ -1,0 +1,10 @@
+:host {
+  position: relative;
+  display: block;
+  height: 100%;
+  pointer-events: none;
+}
+
+rh-hotbar {
+  pointer-events: all;
+}

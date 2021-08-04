@@ -1,0 +1,54 @@
+:host {
+  position: relative;
+  background: rgba(0,0,0,0.2);
+  padding-right: 12px;
+}
+
+.rh-job-selection {
+  &__active-class-job {
+    display: inline-flex;
+    vertical-align: middle;
+    align-items: center;
+    margin: 0 4px 0 10px;
+  }
+
+  &__active-class-job-image {
+    height: 30px;
+    width: 30px;
+    margin-right: 6px;
+  }
+
+  &__active-class-job-abbreviation {
+    display: inline-block;
+  }
+
+  &__jobs {
+    position: absolute;
+    z-index: 1000;
+    top: 100%;
+    box-shadow: 0 8px 10px 0 rgba(0, 0, 0, .2);
+  }
+
+  &__job {
+    display: flex;
+    padding: 6px 18px 6px 12px;
+    color: white;
+    align-items: center;
+    cursor: pointer;
+
+    &:nth-child(odd) {
+      background: rgba(50, 50, 50, .6);
+    }
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  &__job-image {
+    height: 30px;
+    width: 30px;
+    margin-right: 10px;
+  }
+
+}

@@ -1,0 +1,12 @@
+<div class="rh-phase-view__phase-title">{{ phase }}</div>
+<div class="rh-phase-view__action-count">{{ actions?.length }}</div>
+<div class="rh-phase-view__actions">
+  <div
+      class="rh-phase-view__action"
+      *ngFor="let action of actions; index as actionIndex"
+      [ngClass]="{
+        'rh-phase-view__action--next': activeActionIndex === actionIndex
+      }">
+    <rh-action-icon [action]="action"></rh-action-icon>
+  </div>
+</div>

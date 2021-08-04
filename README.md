@@ -1,27 +1,66 @@
-# XivRotationHeroAngular
+![Logo](./docs/img/xivrh-logo.png)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.3.
+<a href="https://discord.gg/d7r8h5tDPA">
+  <img src="https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat" />
+</a>
+<img src="https://img.shields.io/github/license/SargoDarya/xiv-rotation-hero" />
+<img src="https://img.shields.io/github/stars/SargoDarya/xiv-rotation-hero?style=flat" />
+<img src="https://img.shields.io/github/issues-raw/SargoDarya/xiv-rotation-hero" />
 
-## Development server
+This is a free open source tool to practice your rotation inside and outside FFXIV.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+To give this tool a try, head over to https://app.xivrotationhero.com/ to practice in the browser or use this URL as overlay in ACT to practice directly in game.
 
-## Code scaffolding
+Note: The **full** browser version means opening the URL in the browser. This is completely free.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Features
 
-## Build
+### Rotation hero overlay
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+* ACT Overlay Support (just include the URL)
+* Community rotation presets for each discipile of war
+* Customisable rotations with repeatable steps
+* (Planned) Different training modes to increase efficiency in learning
 
-## Running unit tests
+### Full browser version
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+* Massive full version with simulated UI
+* Hotbar customisation (1x12, 2x6, 3x4, 4x3, 6x2, 12x1, Scaling, Visibility)
+* Drag/Drop of actions
+* Persistent hotbar layout and allocation
+* Persistent Key bindings
+* Rotation Recorder / action history
+* Combo indicators
+* (Partial) Support for gamepads
+* (Partial) Cross hotbars
+* (Planned) Movement simulator for directionals and dodging practice
+* (Evaluating) Drag/Drop of HOTBAR.DAT for automatic hotbar allocation
 
-## Running end-to-end tests
+# Development
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+The primary development focuses on acting as ACT overlay. The browser version is mainly there to support players who for any reason 
+can't run ACT and thus need to practice outside the game.
 
-## Further help
+## Usage
+Start developing in the **src/** directory. The structure will be preserved and all files and compilations are copied to the output directory **bin/**.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+To start a local server and watch the *bin/* directory just call
+```
+npm run start
+```
+
+Alternatively, you can copy the `environment.local.ts.sample` to `environment.local.ts` and adjust it to your needs
+and then run:
+```
+npm run start:local
+```
+
+# Disclaimer
+
+This project is not sponsored or endorsed by SquareEnix.
+
+Square Enix, Final Fantasy, Final Fantasy XIV, Final Fantasy XIV: Heavensward, Final Fantasy XIV: Stormblood, and all associated logos and designs are trademarks or registered trademarks of Square Enix Holdings Co., Ltd.
+
+# License
+
+This project is licensed under MIT.

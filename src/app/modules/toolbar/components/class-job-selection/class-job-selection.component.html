@@ -1,0 +1,28 @@
+<button
+    class="rh-job-selection__toggle button"
+    (click)="isExpanded = !isExpanded">
+  <span *ngIf="!currentClassJob">Select Job</span>
+  <div
+      class="rh-job-selection__active-class-job"
+      *ngIf="currentClassJob">
+    <rh-class-job-icon
+      class="rh-job-selection__active-class-job-image"
+      [classJobId]="currentClassJob.ID"></rh-class-job-icon>
+    <span class="rh-job-selection__active-class-job-abbreviation">{{currentClassJob.Abbreviation}}</span>
+  </div>
+  <span>{{ isExpanded ? '\u25B2' : '\u25BC' }}</span>
+</button>
+
+<div
+    class="rh-job-selection__jobs"
+    *ngIf="isExpanded">
+  <div
+      class="rh-job-selection__job"
+      *ngFor="let job of classJobs"
+      (click)="onSelectClassJob(job)">
+    <rh-class-job-icon
+        class="rh-job-selection__job-image"
+        [classJobId]="job.ID"></rh-class-job-icon>
+    <span class="rh-job-selection__job-abbreviation">{{job.Abbreviation}}</span>
+  </div>
+</div>

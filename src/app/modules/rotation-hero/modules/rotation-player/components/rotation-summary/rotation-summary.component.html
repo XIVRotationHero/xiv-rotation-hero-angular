@@ -1,0 +1,6 @@
+<div class="rh-rotation-summary__title">{{ rotation?.title }}</div>
+<div class="rh-rotation-summary__description">{{ rotation?.description }}</div>
+<div class="rh-rotation-summary__patch">{{ rotation?.patch }}</div>
+<div class="rh-rotation-summary__author">{{ rotation?.user?.username }}</div>
+<button class="rh-rotation-summary__change-set button" (click)="changeRotation.emit()">Change set</button>
+<div class="rh-rotation-summary__favourites">{{ rotation?.favouriteCount }} &#9829;</div>

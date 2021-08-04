@@ -1,0 +1,9 @@
+<div class="rh-key-binding-list__list-item"
+     *ngFor="let labelMap of labelMap$ | async">
+  <div class="rh-key-binding-list__binding-label">{{ labelMap[0] }}</div>
+  <div
+      class="rh-key-binding-list__binding-key"
+      (click)="recordNewKeyForLabel(labelMap[0])">
+    {{ labelRecordingKey === labelMap[0] ? 'Press a key' : labelMap[1] }}
+  </div>
+</div>

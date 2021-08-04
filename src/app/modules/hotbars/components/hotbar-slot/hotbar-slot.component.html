@@ -1,0 +1,16 @@
+<div
+    class="rh-hotbar-slot__drop-container"
+    cdkDropList
+    cdkDropListSortingDisabled
+    [cdkDropListData]="cdkDropListData"
+    (cdkDropListDropped)="onDrop($event)">
+  <rh-action
+      *ngIf="actionId"
+      cdkDrag
+      [cdkDragData]="actionId"
+      [action]="actionId | actionById"
+      [showCooldowns]="true"
+      [showComboIndicator]="true"
+      (click)="triggerAction()"></rh-action>
+  <div class="rh-hotbar-slot__keybinding">{{ keyBinding$ | async}}</div>
+</div>

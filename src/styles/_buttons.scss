@@ -1,0 +1,57 @@
+a,
+.button {
+  background: none;
+  border: none;
+  color: #2f79a3;
+  cursor: pointer;
+  padding: 6px 0;
+  font-size: inherit;
+  white-space: nowrap;
+  display: inline-block;
+
+  &:focus,
+  &:hover {
+    color: lighten(#2f79a3, 20%);
+  }
+
+  &:active {
+    color: lighten(#2f79a3, 40%);
+  }
+
+  &--selected {
+    color: lighten(#2f79a3, 30%);
+  }
+
+  &--block {
+    background: none;
+    color: #2f79a3;
+    border: 1px solid #2f79a3;
+    padding: 6px 0;
+    font-size: inherit;
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+
+  &--warning {
+    color: darkred;
+    border-color: darkred;
+
+    &:hover {
+      color: red;
+      border-color: red;
+    }
+  }
+}
+
+.button-group {
+  display: flex;
+
+  .button {
+    margin-right: 12px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

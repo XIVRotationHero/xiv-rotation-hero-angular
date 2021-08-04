@@ -1,0 +1,81 @@
+$action-size: 64px;
+$border-color: #eca951;
+$border-thickness: 3px;
+$border-length: 8px;
+
+:host {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  // opacity: .6;
+
+  &.is-executable {
+    opacity: 1;
+  }
+
+  &::before {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    background: radial-gradient(circle at 50% -50%, rgba(255,255,255,0.4) 50%, rgba(255,254,254,0) 55%);
+    border-radius: 10%;
+  }
+
+  &:hover::after {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: 4px solid white;
+    box-shadow: inset 0 0 10px white, 0 0 10px white;
+    border-radius: 10%;
+    z-index: 10;
+  }
+}
+
+rh-cooldown-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.rh-action {
+  &__combo-indicator {
+    position: absolute;
+    left: -$border-thickness;
+    top: -$border-thickness;
+    right: -$border-thickness;
+    bottom: -$border-thickness;
+    border-radius: 10%;
+    border: 0;
+    background: linear-gradient(90deg, $border-color 50%, transparent 50%), linear-gradient(90deg, $border-color 50%, transparent 50%), linear-gradient(0deg, $border-color 50%, transparent 50%), linear-gradient(0deg, $border-color 50%, transparent 50%);
+    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+    background-size: $border-length $border-thickness, $border-length $border-thickness, $border-thickness $border-length, $border-thickness $border-length;
+    background-position: 0 0, $action-size $action-size, 0 $action-size, $action-size 0;
+    animation: border-dance 2s infinite linear;
+  }
+
+  &__action-cost {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+@keyframes border-dance {
+  0% {
+    background-position: $action-size 0, 0 $action-size, 0 0, $action-size $action-size;
+  }
+  100% {
+    background-position: 0 0, $action-size $action-size, 0 $action-size, $action-size 0;
+  }
+}

@@ -1,0 +1,47 @@
+<div class="rh-builder__toolbar rh-builder__toolbar--top">
+  <a class="rh-builder__toolbar-button">New</a>
+  <a class="rh-builder__toolbar-button">Try out</a>
+  <a class="rh-builder__toolbar-button">Save/Update</a>
+</div>
+
+<div class="rh-builder__toolbar rh-builder__toolbar--bottom">
+  <button>Record</button>
+
+  <div class="rh-builder__phase-buttons">
+    <a class="rh-builder__phase-button"
+       *ngFor="let phase of availablePhases"
+       [ngClass]="{ 'rh-builder__phase-button--enabled': enabledPhases.has(phase) }"
+       (click)="togglePhase(phase)">{{ phase }}</a>
+  </div>
+
+  <a class="rh-builder__meta-toggle">Toggle meta info</a>
+</div>
+
+<div class="rh-builder__warning"
+     *ngIf="pendingRemovalPhase">
+  <div class="rh-builder__warning-text">
+    Phase {{pendingRemovalPhase}} already contains actions. Removing it will also clear these. Do you still want to remove it?
+  </div>
+  <div class="rh-builder__warning-buttons button-group">
+    <button
+        class="button button--block"
+        (click)="removePhase(pendingRemovalPhase)">Yes</button>
+    <button
+        class="button button--block button--warning"
+        (click)="pendingRemovalPhase = null">No</button>
+  </div>
+</div>
+
+<div class="rh-builder__meta-information">
+  <div class="rh-builder__meta-label">Title:</div>
+  <input class="rh-builder__title-input" type="text" placeholder="Enter rotation title">
+  <div class="rh-builder__meta-label">Description:</div>
+  <textarea class="rh-builder__description-input" placeholder="Enter a description for your rotation"></textarea>
+  <div class="rh-builder__meta-label">ID:</div>
+  <div class="rh-builder__rotation-id">-</div>
+</div>
+
+<rh-rotation-phase-view
+    *ngFor="let phase of rotation.phases"
+    [phase]="phase"
+    (updateActions)="updatePhaseAction(phase.phase, $event)"></rh-rotation-phase-view>

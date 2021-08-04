@@ -1,0 +1,9 @@
+hr {
+  margin: 24px 0;
+}
+
+hr.fade {
+  background: linear-gradient(to right, transparent, white, transparent);
+  height: 1px;
+  border: 0;
+}

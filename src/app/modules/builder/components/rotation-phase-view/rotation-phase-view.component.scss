@@ -1,0 +1,33 @@
+:host {
+  display: flex;
+  padding: 4px 0;
+  border-bottom: 1px solid #262626;
+  box-sizing: border-box;
+}
+
+.rh-rotation-phase-view {
+  &__information {
+    width: 80px;
+    background: #262626;
+    padding: 6px;
+    flex-shrink: 0;
+  }
+
+  &__actions {
+    padding: 8px;
+    flex: 1 1 auto;
+    display: flex;
+    flex-wrap: wrap;
+
+    ::ng-deep rh-action {
+      width: 30px;
+      height: 30px;
+      margin: 4px;
+    }
+  }
+}
+
+rh-action {
+  width: 30px;
+  height: 30px;
+}

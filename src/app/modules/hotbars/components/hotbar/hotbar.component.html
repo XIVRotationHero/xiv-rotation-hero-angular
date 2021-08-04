@@ -1,0 +1,10 @@
+<div
+    class="rh-hotbar__number"
+    (mousedown)="onMouseDragStart($event)">{{hotbarId + 1}}</div>
+<div class="rh-hotbar__slots">
+  <rh-hotbar-slot
+      *ngFor="let slot of allocation; index as slotId; trackBy: slotId"
+      [hotbarId]="hotbarId"
+      [slotId]="slotId"
+      [actionId]="slot"></rh-hotbar-slot>
+</div>

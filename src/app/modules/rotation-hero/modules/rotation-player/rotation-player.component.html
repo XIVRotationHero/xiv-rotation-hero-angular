@@ -1,0 +1,8 @@
+<rh-rotation-summary
+    [rotation]="rotation"
+    (changeRotation)="changeRotation.emit()"></rh-rotation-summary>
+
+<rh-phases-view
+  [phases]="rotation!.phases"
+  [activeActionIndex]="activeActionIndex$ | async"
+  [activePhaseIndex]="activePhaseIndex$ | async"></rh-phases-view>

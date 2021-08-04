@@ -1,0 +1,38 @@
+.rh-pagination {
+  list-style: none;
+  color: #2f79a3;
+  font-size: 12px;
+  padding: 0;
+  text-align: right;
+  margin: 4px 12px;
+
+  &__page {
+    display: inline-block;
+    padding: 0 4px;
+    cursor: pointer;
+
+    &:hover:not(&--disabled) {
+      color: #65abd3;
+    }
+
+    &:active {
+      color: #b4d6ea;
+    }
+
+    &--disabled {
+      color: gray;
+      cursor: default;
+    }
+
+    &--current {
+      font-weight: 900;
+      cursor: default;
+      color: white;
+    }
+  }
+
+  &__page-ellipsis {
+    display: inline-block;
+    padding: 0 2px;
+  }
+}

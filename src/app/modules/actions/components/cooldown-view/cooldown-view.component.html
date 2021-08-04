@@ -1,0 +1,33 @@
+<div
+    class="rh-cooldown-view__container"
+    *ngIf="isOnCooldown$ | async">
+  <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="64"
+      height="64"
+      viewBox="0 0 64 64">
+    <mask [id]="'circleMask'+instanceId">
+      <g transform="translate(32, 32)">
+        <rect
+            class="rh-cooldown-view__mask-rect"
+            x="-32"
+            y="-32"
+            width="64"
+            height="64"
+            rx="6"
+            ry="6"></rect>
+        <circle
+            class="rh-cooldown-view__mask-circle"
+            [style.strokeDashoffset]="(remainingPercent$ | async)! * 88"
+            cx="0"
+            cy="0"
+            r="14"></circle>
+      </g>
+    </mask>
+    <rect x="0" y="0" width="64" height="64" rx="6" ry="6" fill="black" [attr.mask]="'url(#circleMask' + instanceId + ')'"></rect>
+  </svg>
+
+  <span
+      *ngIf="showCooldownTime$ | async"
+      class="rh-cooldown-view__time-remaining">{{ timeRemainingOnCooldown$ | async }}</span>
+</div>

@@ -1,0 +1,57 @@
+$action-size: 64px;
+$border-color: #e4d020;
+$border-thickness: 4px;
+$border-length: 16px;
+
+:host {
+  position: relative;
+  color: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.rh-rotation-hero {
+
+  &__content {
+    background: rgba(0, 0, 0, 0.7);
+    flex-grow: 1;
+  }
+
+  &__title-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #414141;
+
+    padding: 4px 12px;
+    line-height: 1.5;
+    font-weight: bold;
+  }
+
+  &__settings {
+    font-size: 32px;
+    line-height: 1;
+  }
+
+  &__rotation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border: 1px solid gray;
+    opacity: .7;
+
+    &--active {
+      opacity: 1;
+    }
+  }
+}
+
+@keyframes border-dance {
+  0% {
+    background-position: 0 0, $action-size $action-size, 0 $action-size, $action-size 0;
+  }
+  100% {
+    background-position: $action-size 0, 0 $action-size, 0 0, $action-size $action-size;
+  }
+}

@@ -1,0 +1,8 @@
+<ng-container *ngIf="user$ | async; else signedOut">
+  <rh-profile [user]="user$ | async"></rh-profile>
+</ng-container>
+
+<ng-template #signedOut>
+  <rh-sign-in *ngIf="activeView === ActiveUserView.SignIn"></rh-sign-in>
+  <rh-sign-up *ngIf="activeView === ActiveUserView.SignUp"></rh-sign-up>
+</ng-template>

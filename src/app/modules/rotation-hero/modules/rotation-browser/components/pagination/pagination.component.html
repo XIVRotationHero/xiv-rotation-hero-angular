@@ -1,0 +1,42 @@
+<ul class="rh-pagination"
+     *ngIf="pagination">
+  <li class="rh-pagination__page"
+      [ngClass]="{ 'rh-pagination__page--disabled': pagination?.page === 1 }"
+      (click)="pagination.pagePrev && selectPage.emit(pagination.pagePrev)">&lt;</li>
+
+  <ng-container *ngIf="pagination.page - pageSpan > 1">
+    <li class="rh-pagination__page"
+        (click)="selectPage.emit(1)">
+      1
+    </li>
+    <li class="rh-pagination__page-ellipsis" *ngIf="pagination.page - pageSpan - 1 > 1">...</li>
+  </ng-container>
+
+  <li class="rh-pagination__page"
+      *ngFor="let page of previousPages"
+      (click)="page && selectPage.emit(page)">
+    {{ page}}
+  </li>
+
+  <li class="rh-pagination__page rh-pagination__page--disabled rh-pagination__page--current">{{ pagination.page }}</li>
+
+  <li class="rh-pagination__page"
+      *ngFor="let page of nextPages"
+      (click)="page && selectPage.emit(page)">
+    {{ page}}
+  </li>
+
+  <ng-container *ngIf="pagination.page + pageSpan < pagination.pageTotal">
+    <li class="rh-pagination__page-ellipsis" *ngIf="pagination.page + pageSpan + 1 < pagination.pageTotal">...</li>
+    <li class="rh-pagination__page"
+        (click)="selectPage.emit(pagination.pageTotal)">
+      {{ pagination.pageTotal }}
+    </li>
+  </ng-container>
+
+  <li class="rh-pagination__page"
+      [ngClass]="{ 'rh-pagination__page--disabled': pagination?.page === pagination.pageTotal }"
+      (click)="pagination.pageNext && selectPage.emit(pagination.pageNext)">
+    &gt;
+  </li>
+</ul>
