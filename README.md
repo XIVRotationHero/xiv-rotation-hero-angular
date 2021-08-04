@@ -3,9 +3,9 @@
 <a href="https://discord.gg/d7r8h5tDPA">
   <img src="https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat" />
 </a>
-<img src="https://img.shields.io/github/license/SargoDarya/xiv-rotation-hero" />
-<img src="https://img.shields.io/github/stars/SargoDarya/xiv-rotation-hero?style=flat" />
-<img src="https://img.shields.io/github/issues-raw/SargoDarya/xiv-rotation-hero" />
+<img src="https://img.shields.io/github/license/XIVRotationHero/xiv-rotation-hero-angular" />
+<img src="https://img.shields.io/github/stars/XIVRotationHero/xiv-rotation-hero-angular?style=flat" />
+<img src="https://img.shields.io/github/issues-raw/XIVRotationHero/xiv-rotation-hero-angular" />
 
 This is a free open source tool to practice your rotation inside and outside FFXIV.
 
