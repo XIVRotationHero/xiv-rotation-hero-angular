@@ -1,11 +1,12 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Action} from "../interfaces/action";
 import {animationFrameScheduler, BehaviorSubject, interval, Observable, Subject} from "rxjs";
 import {GameDataService} from "../../../core/services/game-data.service";
 import {CooldownGroup} from "../interfaces/cooldown-group";
 import {
   distinctUntilChanged,
-  filter, finalize,
+  filter,
+  finalize,
   map,
   mergeScan,
   scan,
@@ -59,8 +60,8 @@ export class ActionService {
         (acc, action) => {
           acc[action.CooldownGroup] = {
             start: performance.now(),
-            duration: action.Recast100ms*100,
-            remaining: action.Recast100ms*100
+            duration: action.Recast100ms * 100,
+            remaining: action.Recast100ms * 100
           };
           return acc;
         },

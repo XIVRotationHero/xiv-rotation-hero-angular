@@ -7,11 +7,12 @@ import {
   OnChanges,
 } from '@angular/core';
 import {KeyBindingService} from "../../../key-binding/services/key-binding.service";
-import {Observable, of} from "rxjs";
+import {Observable, of, Subject} from "rxjs";
 import {CdkDragDrop } from "@angular/cdk/drag-drop";
 import {HotbarService} from "../../services/hotbar.service";
 import {GameDataService} from "../../../../core/services/game-data.service";
 import {ActionService} from "../../../actions/services/action.service";
+import {delay, startWith, switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'rh-hotbar-slot',
@@ -31,6 +32,11 @@ export class HotbarSlotComponent implements OnChanges {
   public keyBinding$: Observable<string | undefined> = of();
 
   public cdkDropListData: [ number? ] = [];
+
+  private readonly triggered$ = new Subject();
+  public readonly showTriggerBorder$ = this.triggered$.pipe(
+    switchMap(() => of(false).pipe(delay(200), startWith(true)))
+  );
 
   constructor(
     private readonly keyBindingService: KeyBindingService,
@@ -62,6 +68,8 @@ export class HotbarSlotComponent implements OnChanges {
   }
 
   triggerAction() {
+    this.triggered$.next();
+
     if (this.actionId) {
       this.actionService.triggerActionId(this.actionId);
     }

@@ -13,3 +13,18 @@
 <div class="rh-action__action-cost" *ngIf="action && action.PrimaryCostValue">
   {{ action.PrimaryCostValue }}
 </div>
+
+<div #tooltip class="rh-action-tooltip">
+  <div class="rh-action-tooltip__top">
+    <rh-action-icon class="rh-action-tooltip__image" [action]="action"></rh-action-icon>
+    <div class="rh-action-tooltip__name">{{action.Name}}</div>
+    <div class="rh-action-tooltip__type">{{action.ActionCategory.Name}}</div>
+    <div class="rh-action-tooltip__range">{{action.Range}}y</div>
+    <div class="rh-action-tooltip__effect-range">{{action.EffectRange}}y</div>
+  </div>
+  <div class="rh-action-tooltip__costs">
+    <div class="rh-action-tooltip__cast-time">{{ action.Cast100ms ? action.Cast100ms / 10 + 's' : 'Instant'}}</div>
+    <div class="rh-action-tooltip__recast-time">{{action.Recast100ms / 10}}s</div>
+  </div>
+  <div class="rh-action-tooltip__description" [innerHTML]="getSafeDescription(action.Description)"></div>
+</div>
