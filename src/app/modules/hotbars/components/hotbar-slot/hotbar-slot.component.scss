@@ -96,8 +96,8 @@ $slot-border: 1px;
     font-weight: 500;
     font-size: 24px;
     text-shadow: 0 0 4px black, 0 0 8px black;
-    z-index: 200;
     user-select: none;
+    pointer-events: none;
 
     &::before {
       font-size: 12px;
