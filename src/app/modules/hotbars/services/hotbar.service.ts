@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HotbarOptions} from "../interfaces/hotbar-options";
 import {HotbarStyle} from "../enums/hotbar-style.enum";
-import {BehaviorSubject, combineLatest, merge, Observable, ReplaySubject, Subject} from "rxjs";
+import {BehaviorSubject, combineLatest, Observable, Subject} from "rxjs";
 import {map, scan, shareReplay, startWith, switchMap, take, tap, withLatestFrom} from "rxjs/operators";
 import {GameDataService} from "../../../core/services/game-data.service";
 import {KeyBindingService} from "../../key-binding/services/key-binding.service";
@@ -89,6 +89,19 @@ export class HotbarService {
     this.registerHotbarKeyBindingLabels();
   }
 
+  public updateHotbarOptions(hotbarOptions: HotbarOptions[]) {
+    this.hotbarSettings$.pipe(
+      take(1)
+    ).subscribe((oldHotbarOptions) => {
+      this.hotbarSettingsSubject$.next(hotbarOptions.map((newHotbarOptions, index) => {
+        return {
+          ...oldHotbarOptions[ index ],
+          ...newHotbarOptions
+        }
+      }));
+    });
+  }
+
   public registerHotbarKeyBindingLabels() {
     for (let i=0; i<this.HOTBAR_COUNT; i++) {
       for (let k = 0; k < 12; k++) {
@@ -106,19 +119,16 @@ export class HotbarService {
     this.hotbarAllocationSubject$.next([ hotbarId, slotId, actionId ]);
   }
 
-  public getClearHotbars() {
-    let newAllocation: (number|undefined)[][] =
-      Array
+  public getClearHotbars(): (number|undefined)[][] {
+    return Array
         .from({ length: this.HOTBAR_COUNT })
         .map(() => [ ...this.EMPTY_HOTBAR ]);
-
-    return newAllocation;
   }
 
   public clearHotbar(hotbarId: number) {
     this.hotbarAllocation$
       .pipe(take(1))
-      .subscribe((allocation) => {
+      .subscribe(() => {
         for(let slotId=0; slotId<this.SLOTS_PER_HOTBAR; slotId++) {
           this.hotbarAllocationSubject$.next([ hotbarId, slotId, undefined ]);
         }
