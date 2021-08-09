@@ -1,63 +1,99 @@
-<table>
-  <tr>
-    <th></th>
-    <th></th>
-    <th>12x1</th>
-    <th>6x2</th>
-    <th>4x3</th>
-    <th>3x4</th>
-    <th>2x6</th>
-    <th>1x12</th>
-    <th>Size</th>
-  </tr>
-  <tr *ngFor="let hotbarSetting of this.hotbarSettings$ | async; index as index">
-    <td>
-      <label class="ui-style">
-        <input
-            class="checkbox"
-            type="checkbox" />
-        <span class="ui-style-element"></span>
-      </label>
-    </td>
-    <td class="hotbar__name">Hotbar {{ index + 1 }}</td>
-    <td>
-      <label class="ui-style">
-        <input class="hotbar__radio" type="radio" value="12x1">
-        <span class="ui-style-element"></span>
-      </label>
-    </td>
-    <td>
-      <label class="ui-style">
-        <input class="hotbar__radio" type="radio" value="6x2">
-        <span class="ui-style-element"></span>
-      </label>
-    </td>
-    <td>
-      <label class="ui-style">
-        <input class="hotbar__radio" type="radio" value="4x3">
-        <span class="ui-style-element"></span>
-      </label>
-    </td>
-    <td>
-      <label class="ui-style">
-        <input class="hotbar__radio" type="radio" value="3x4">
-        <span class="ui-style-element"></span>
-      </label>
-    </td>
-    <td>
-      <label class="ui-style">
-        <input class="hotbar__radio" type="radio" value="2x6">
-        <span class="ui-style-element"></span>
-      </label>
-    </td>
-    <td>
-      <label class="ui-style">
-        <input class="hotbar__radio" type="radio" value="1x12">
-        <span class="ui-style-element"></span>
-      </label>
-    </td>
-    <td>
-
-    </td>
-  </tr>
-</table>
+<form [formGroup]="form">
+  <table formArrayName="hotbarOptions">
+    <tr>
+      <th></th>
+      <th></th>
+      <th>12x1</th>
+      <th>6x2</th>
+      <th>4x3</th>
+      <th>3x4</th>
+      <th>2x6</th>
+      <th>1x12</th>
+      <th>Size</th>
+    </tr>
+    <tr
+        *ngFor="let hotbarSetting of hotbarOptionsArray.controls; index as index"
+        [formGroupName]="index">
+      <td>
+        <label class="ui-style">
+          <input
+              class="checkbox"
+              formControlName="visible"
+              type="checkbox" />
+          <span class="ui-style-element"></span>
+        </label>
+      </td>
+      <td class="hotbar__name">Hotbar {{ index + 1 }}</td>
+      <td>
+        <label class="ui-style">
+          <input
+              class="hotbar__radio"
+              type="radio"
+              value="12x1"
+              formControlName="hotbarStyle">
+          <span class="ui-style-element"></span>
+        </label>
+      </td>
+      <td>
+        <label class="ui-style">
+          <input
+            class="hotbar__radio"
+            type="radio"
+            value="6x2"
+            formControlName="hotbarStyle">
+          <span class="ui-style-element"></span>
+        </label>
+      </td>
+      <td>
+        <label class="ui-style">
+          <input
+            class="hotbar__radio"
+            type="radio"
+            value="4x3"
+            formControlName="hotbarStyle">
+          <span class="ui-style-element"></span>
+        </label>
+      </td>
+      <td>
+        <label class="ui-style">
+          <input
+            class="hotbar__radio"
+            type="radio"
+            value="3x4"
+            formControlName="hotbarStyle">
+          <span class="ui-style-element"></span>
+        </label>
+      </td>
+      <td>
+        <label class="ui-style">
+          <input
+            class="hotbar__radio"
+            type="radio"
+            value="2x6"
+            formControlName="hotbarStyle">
+          <span class="ui-style-element"></span>
+        </label>
+      </td>
+      <td>
+        <label class="ui-style">
+          <input
+            class="hotbar__radio"
+            type="radio"
+            value="1x12"
+            formControlName="hotbarStyle">
+          <span class="ui-style-element"></span>
+        </label>
+      </td>
+      <td>
+        <select formControlName="scale">
+          <option value="0.6">60%</option>
+          <option value="0.8">80%</option>
+          <option value="1">100%</option>
+          <option value="1.2">120%</option>
+          <option value="1.5">150%</option>
+          <option value="2">200%</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+</form>
