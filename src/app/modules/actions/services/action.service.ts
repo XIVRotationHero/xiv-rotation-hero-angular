@@ -28,13 +28,7 @@ export class ActionService {
   public readonly comboActionIds$: Observable<number[]>;
 
   private readonly cooldownGroupSubject$: BehaviorSubject<{ [groupdId: number]: CooldownGroup }> = new BehaviorSubject({});
-
-
-  private currentTime: number = performance.now();
-  private actionBuffer: Action | null = null;
-  private lastAction: Action | null = null;
-  private comboActive: boolean = false;
-
+  
   private readonly triggeredActions$: Subject<Action> = new Subject();
 
   public constructor(private readonly gameDataService: GameDataService) {
