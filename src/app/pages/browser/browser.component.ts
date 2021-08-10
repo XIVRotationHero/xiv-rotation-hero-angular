@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {DialogConfiguration, DialogService} from "../../modules/dialog/services/dialog.service";
 
 @Component({
   selector: 'app-browser',
@@ -6,12 +7,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./browser.component.scss']
 })
 export class BrowserComponent {
-  public visibleDialogs: Set<string> = new Set([ 'builder' ]);
+  public constructor(private readonly dialogService: DialogService) {
+  }
 
-  public toggleDialog(dialog: string) {
-    return this.visibleDialogs.has(dialog)
-      ? this.visibleDialogs.delete(dialog)
-      : this.visibleDialogs.add(dialog)
+  public toggleDialog(dialogConfiguration: string | DialogConfiguration) {
+    if (typeof dialogConfiguration !== 'string') {
+      this.dialogService.toggle(dialogConfiguration);
+    }
   }
 
   public isUserPanelVisible = false;

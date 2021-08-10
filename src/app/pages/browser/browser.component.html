@@ -4,21 +4,8 @@
 
 <div class="rh-browser__content" cdkDropListGroup>
   <rh-hotbars></rh-hotbars>
-  <rh-rotation-hero-dialog
-      *ngIf="visibleDialogs.has('rotation-hero')"
-      (closeDialog)="toggleDialog('rotation-hero')"></rh-rotation-hero-dialog>
-  <rh-layout-dialog
-    *ngIf="visibleDialogs.has('layout')"
-    (closeDialog)="toggleDialog('layout')"></rh-layout-dialog>
-  <rh-actions-dialog
-      *ngIf="visibleDialogs.has('actions')"
-      (closeDialog)="toggleDialog('actions')"></rh-actions-dialog>
-  <rh-builder-dialog
-      *ngIf="visibleDialogs.has('builder')"
-      (closeDialog)="toggleDialog('builder')"></rh-builder-dialog>
-  <rh-key-binding-dialog
-      *ngIf="visibleDialogs.has('keybindings')"
-      (closeDialog)="toggleDialog('keybindings')"></rh-key-binding-dialog>
+
+  <rh-dialog-outlet></rh-dialog-outlet>
 </div>
 
 <rh-user-overlay

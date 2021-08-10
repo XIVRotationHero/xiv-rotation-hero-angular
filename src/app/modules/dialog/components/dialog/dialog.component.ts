@@ -1,4 +1,5 @@
-import {Component, ElementRef, EventEmitter, Input, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, Output} from '@angular/core';
+import {DialogRef, DialogService} from "../../services/dialog.service";
 
 @Component({
   selector: 'rh-dialog',
@@ -6,13 +7,23 @@ import {Component, ElementRef, EventEmitter, Input, Output} from '@angular/core'
   styleUrls: ['./dialog.component.scss']
 })
 export class DialogComponent {
-  @Input() public dialogTitle?: string;
+  @Input() public dialogTitle!: string;
+  @Input() public dialogRef!: DialogRef;
+
+  @HostBinding('style.zIndex')
+  @Input() public zIndex!: number;
+
+  @HostBinding('class.active')
+  @Input() public isActive!: boolean;
 
   @Output() public closeDialog: EventEmitter<void> = new EventEmitter();
 
   private lastMousePosition: [number, number] = [0, 0];
 
-  public constructor(private readonly elementRef: ElementRef) {
+  public constructor(
+    private readonly elementRef: ElementRef,
+    private readonly dialogService: DialogService
+  ) {
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseDragStop = this.onMouseDragStop.bind(this);
   }
@@ -54,5 +65,10 @@ export class DialogComponent {
   private onMouseDragStop(): void {
     document.removeEventListener('mouseup', this.onMouseDragStop);
     document.removeEventListener('mousemove', this.onMouseMove);
+  }
+
+  @HostListener('mousedown')
+  private moveDialogToTop() {
+    this.dialogService.moveDialogToFront(this.dialogRef);
   }
 }

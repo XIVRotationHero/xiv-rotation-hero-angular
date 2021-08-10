@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BuilderDialogComponent } from './builder-dialog.component';
+import { DialogOutletComponent } from './dialog-outlet.component';
 
-describe('BuilderDialogComponent', () => {
-  let component: BuilderDialogComponent;
-  let fixture: ComponentFixture<BuilderDialogComponent>;
+describe('DialogOutletComponent', () => {
+  let component: DialogOutletComponent;
+  let fixture: ComponentFixture<DialogOutletComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BuilderDialogComponent ]
+      declarations: [ DialogOutletComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BuilderDialogComponent);
+    fixture = TestBed.createComponent(DialogOutletComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -4,21 +4,21 @@
   (selectClassJob)="selectClassJob($event)">
 </rh-class-job-selection>
 
-<a class="rh-toolbar__button button" (click)="toggleDialog.emit('rotation-hero')">Rotation Hero</a>
-<a class="rh-toolbar__button button" (click)="toggleDialog.emit('layout')">Layout</a>
-<a class="rh-toolbar__button button" (click)="toggleDialog.emit('actions')">Actions</a>
-<a class="rh-toolbar__button button" (click)="toggleDialog.emit('builder')">Builder</a>
-<a class="rh-toolbar__button button" (click)="toggleDialog.emit('keybindings')">Keybinds</a>
+<a class="rh-toolbar__button button" (click)="toggleDialog.emit(rotationHeroDialogConfiguration)">Rotation Hero</a>
+<a class="rh-toolbar__button button" (click)="toggleDialog.emit(layoutDialogConfiguration)">Layout</a>
+<a class="rh-toolbar__button button" (click)="toggleDialog.emit(actionsDialogConfiguration)">Actions</a>
+<a class="rh-toolbar__button button" (click)="toggleDialog.emit(builderDialogConfiguration)">Builder</a>
+<a class="rh-toolbar__button button" (click)="toggleDialog.emit(keybindingDialogConfiguration)">Keybinds</a>
 
 <button class="rh-toolbar__user-menu button"
-     *ngIf="!(user$ | async)"
-     (click)="toggleUserOverlay.emit()">
+        *ngIf="!(user$ | async)"
+        (click)="toggleUserOverlay.emit()">
   Sign in / Sign up
 </button>
 
 <button class="rh-toolbar__user-menu button"
-     *ngIf="user$ | async"
-     (click)="isUserPanelVisible = !isUserPanelVisible">
+        *ngIf="user$ | async"
+        (click)="isUserPanelVisible = !isUserPanelVisible">
   {{ (user$ | async)?.username }}
 </button>
 

@@ -9,15 +9,15 @@
   color: white;
   will-change: top, left;
   min-width: 300px;
+
+  &.active {
+    border: 2px solid goldenrod;
+    box-shadow: 0 5px 20px 10px rgba(0, 0, 0, 0.4);
+  }
 }
 
 
 .rh-dialog {
-  &--focus {
-    border: 2px solid goldenrod;
-    box-shadow: 0 5px 20px 10px rgba(0, 0, 0, 0.4);
-  }
-
   &--visible {
     display: block;
   }
