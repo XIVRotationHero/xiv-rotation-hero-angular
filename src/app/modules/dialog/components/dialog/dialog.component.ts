@@ -20,6 +20,9 @@ export class DialogComponent {
 
   private lastMousePosition: [number, number] = [0, 0];
 
+  private maxLeft = 0;
+  private maxTop = 0;
+
   public constructor(
     private readonly elementRef: ElementRef,
     private readonly dialogService: DialogService
@@ -33,13 +36,16 @@ export class DialogComponent {
     if (evt.button !== 0) {
       return;
     }
-
     evt.preventDefault();
 
     document.addEventListener('mousemove', this.onMouseMove);
     document.addEventListener('mouseup', this.onMouseDragStop);
 
-    this.lastMousePosition = [ evt.clientX, evt.clientY ];
+    const {width, height} = this.elementRef.nativeElement.getBoundingClientRect();
+    this.maxTop = window.innerHeight - height;
+    this.maxLeft = window.innerWidth - width;
+
+    this.lastMousePosition = [evt.clientX, evt.clientY];
   }
 
   private onMouseMove(evt: MouseEvent): void {
@@ -58,8 +64,8 @@ export class DialogComponent {
   }
 
   private updatePosition(x: number, y: number) {
-    this.elementRef.nativeElement.style.left = Math.max(x, 0) + 'px';
-    this.elementRef.nativeElement.style.top = Math.max(y, 0) + 'px';
+    this.elementRef.nativeElement.style.left = Math.min(Math.max(x, 0), this.maxLeft) + 'px';
+    this.elementRef.nativeElement.style.top = Math.min(Math.max(y, 0), this.maxTop) + 'px';
   }
 
   private onMouseDragStop(): void {
