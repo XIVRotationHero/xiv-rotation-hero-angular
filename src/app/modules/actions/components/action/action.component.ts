@@ -14,9 +14,9 @@ import {ActionTooltipComponent} from "../action-tooltip/action-tooltip.component
 })
 export class ActionComponent {
   @Input() public action!: Action;
-
   @Input() public showCooldowns = false;
   @Input() public showComboIndicator = false;
+  @Input() public displayRecastTime = false;
 
   public isComboAction = false;
 

@@ -9,7 +9,7 @@ import {ActionsModule} from "../../modules/actions/actions.module";
 import {KeyBindingModule} from "../../modules/key-binding/key-binding.module";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {BuilderModule} from "../../modules/builder/builder.module";
-import {LayoutModule} from "../../modules/layout/layout.module";
+import {ConfigurationModule} from "../../modules/configuration/configuration.module";
 import {UserModule} from "../../modules/user/user.module";
 import {DialogModule} from "../../modules/dialog/dialog.module";
 
@@ -27,7 +27,7 @@ import {DialogModule} from "../../modules/dialog/dialog.module";
     KeyBindingModule,
     DragDropModule,
     BuilderModule,
-    LayoutModule,
+    ConfigurationModule,
     UserModule,
     DialogModule
   ]

@@ -6,7 +6,7 @@ import {UserService} from "../user/services/user.service";
 import {DialogConfiguration} from "../dialog/services/dialog.service";
 import {ActionsDialogConfiguration} from "../actions/actions-dialog-configuration";
 import {RotationHeroDialogConfiguration} from "../rotation-hero/rotation-hero-dialog-configuration";
-import {LayoutDialogConfiguration} from "../layout/layout-dialog-configuration";
+import {ConfigurationDialogConfiguration} from "../configuration/configuration-dialog-configuration";
 import {BuilderDialogConfiguration} from "../builder/builder-dialog-configuration";
 import {KeyBindingDialogConfiguration} from "../key-binding/key-binding-dialog-configuration";
 
@@ -28,7 +28,7 @@ export class ToolbarComponent {
 
   public readonly actionsDialogConfiguration = ActionsDialogConfiguration;
   public readonly rotationHeroDialogConfiguration = RotationHeroDialogConfiguration;
-  public readonly layoutDialogConfiguration = LayoutDialogConfiguration;
+  public readonly layoutDialogConfiguration = ConfigurationDialogConfiguration;
   public readonly builderDialogConfiguration = BuilderDialogConfiguration;
   public readonly keybindingDialogConfiguration = KeyBindingDialogConfiguration;
 

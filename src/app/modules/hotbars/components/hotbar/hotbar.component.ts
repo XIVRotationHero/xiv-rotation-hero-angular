@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBinding, Input, Output} from '@angular/core';
 import {HotbarOptions} from "../../interfaces/hotbar-options";
 import {HotbarStyle} from "../../enums/hotbar-style.enum";
+import {HotbarDisplaySettings} from "../../interfaces/hotbar-display-settings";
 
 @Component({
   selector: 'rh-hotbar',
@@ -12,19 +13,24 @@ export class HotbarComponent {
 
   @Input() public hotbarId: number = -1;
 
+  @Input() public displayedHotbarId: number | null = null;
+
   @HostBinding('class.is-visible')
   @Input() public isVisible: boolean = false;
 
   @Input() public hotbarStyle: HotbarStyle = HotbarStyle.Horizontal;
 
+  @Input() public hotbarDisplaySettings!: HotbarDisplaySettings | null;
+
   @Input()
   public set position(position: [number, number]) {
-    [ this.positionX, this.positionY ] = position;
-    this.elementRef.nativeElement.style.left = this.position[ 0 ] * 100 + '%';
-    this.elementRef.nativeElement.style.top = this.position[ 1 ] * 100 + '%';
+    [this.positionX, this.positionY] = position;
+    this.elementRef.nativeElement.style.left = this.position[0] * 100 + '%';
+    this.elementRef.nativeElement.style.top = this.position[1] * 100 + '%';
   }
+
   public get position() {
-    return [ this.positionX, this.positionY ];
+    return [this.positionX, this.positionY];
   }
 
   // @HostBinding('style.zoom')
@@ -34,6 +40,7 @@ export class HotbarComponent {
 
   @Input() public allocation: any[] = [ null, null, null, null, null, null, null, null, null, null, null, null ];
 
+  @Output() public onCycle: EventEmitter<number> = new EventEmitter();
   @Output() public changePosition: EventEmitter<[number, number]> = new EventEmitter();
 
   private positionX: number = 0;
@@ -47,11 +54,8 @@ export class HotbarComponent {
     this.onMouseMove = this.onMouseMove.bind(this);
   }
 
-  public onEnter(evt: any) {
-  }
-
   public onMouseDragStart(evt: MouseEvent) {
-    if (evt.button !== 0) {
+    if (evt.button !== 0 || !this.hotbarDisplaySettings?.enableDragDropRepositioning) {
       return;
     }
     evt.preventDefault();

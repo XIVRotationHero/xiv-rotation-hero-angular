@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HotbarOptions} from "../interfaces/hotbar-options";
 import {HotbarStyle} from "../enums/hotbar-style.enum";
 import {BehaviorSubject, combineLatest, Observable, Subject} from "rxjs";
@@ -103,7 +103,8 @@ export class HotbarService {
   }
 
   public registerHotbarKeyBindingLabels() {
-    for (let i=0; i<this.HOTBAR_COUNT; i++) {
+    // Register labels for hotbar slots
+    for (let i = 0; i < this.HOTBAR_COUNT; i++) {
       for (let k = 0; k < 12; k++) {
         const label = `Hotbar ${i + 1} - Slot ${k + 1}`;
         this.keyBindingService.registerBindingLabel$.next(label);
@@ -112,6 +113,12 @@ export class HotbarService {
           this.keyBindingService.registerBindingKey$.next([label, this.HOTBAR_KEYS[k]]);
         }
       }
+    }
+
+    // Register labels for hotbar switching
+    for (let i = 0; i < this.HOTBAR_COUNT; i++) {
+      const label = `Switch to Hotbar ${i + 1}`;
+      this.keyBindingService.registerBindingLabel$.next(label);
     }
   }
 

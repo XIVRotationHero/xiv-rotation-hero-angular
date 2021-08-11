@@ -67,6 +67,10 @@
     display: block;
     opacity: 1;
   }
+
+  & input:disabled ~ .ui-style-element {
+    opacity: .4;
+  }
 }
 
 .form {

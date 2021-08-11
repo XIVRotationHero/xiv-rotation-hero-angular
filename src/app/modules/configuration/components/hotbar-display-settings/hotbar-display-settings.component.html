@@ -1,4 +1,55 @@
 <form [formGroup]="form">
+  <div>Hotbar Display Settings</div>
+
+  <label class="ui-style">
+    <input
+      class="checkbox"
+      formControlName="displayRecastTimes"
+      type="checkbox"/>
+    <span class="ui-style-element"></span>
+    Display recast times.
+  </label>
+
+  <label class="ui-style">
+    <input
+      class="checkbox"
+      formControlName="hideUnassignedSlots"
+      type="checkbox"/>
+    <span class="ui-style-element"></span>
+
+    Hide unassigned slots.
+  </label>
+
+  <label class="ui-style">
+    <input
+      class="checkbox"
+      formControlName="displayHotbarNumbers"
+      type="checkbox"/>
+    <span class="ui-style-element"></span>
+
+    Display hotbar numbers.
+  </label>
+
+  <label class="ui-style">
+    <input
+      class="checkbox"
+      formControlName="enableHotbarCyclingButton"
+      type="checkbox"/>
+    <span class="ui-style-element"></span>
+
+    Enable hotbar cycling button.
+  </label>
+
+  <label class="ui-style">
+    <input
+      class="checkbox"
+      formControlName="enableDragDropRepositioning"
+      type="checkbox"/>
+    <span class="ui-style-element"></span>
+
+    Enable drag-and-drop repositioning.
+  </label>
+
   <table formArrayName="hotbarOptions">
     <tr>
       <th></th>
@@ -12,14 +63,14 @@
       <th>Size</th>
     </tr>
     <tr
-        *ngFor="let hotbarSetting of hotbarOptionsArray.controls; index as index"
-        [formGroupName]="index">
+      *ngFor="let hotbarSetting of hotbarOptionsArray.controls; index as index"
+      [formGroupName]="index">
       <td>
         <label class="ui-style">
           <input
-              class="checkbox"
-              formControlName="visible"
-              type="checkbox" />
+            class="checkbox"
+            formControlName="visible"
+            type="checkbox" />
           <span class="ui-style-element"></span>
         </label>
       </td>
@@ -27,10 +78,10 @@
       <td>
         <label class="ui-style">
           <input
-              class="hotbar__radio"
-              type="radio"
-              value="12x1"
-              formControlName="hotbarStyle">
+            class="hotbar__radio"
+            type="radio"
+            value="12x1"
+            formControlName="hotbarStyle">
           <span class="ui-style-element"></span>
         </label>
       </td>

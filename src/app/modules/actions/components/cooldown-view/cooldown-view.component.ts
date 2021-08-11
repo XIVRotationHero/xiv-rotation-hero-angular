@@ -1,7 +1,7 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Action} from "../../interfaces/action";
 import {ActionService} from "../../services/action.service";
-import {filter, map, share, switchMap, takeUntil, tap} from "rxjs/operators";
+import {map, share, switchMap, takeUntil} from "rxjs/operators";
 import {ReplaySubject, Subject} from "rxjs";
 
 @Component({
@@ -17,6 +17,8 @@ export class CooldownViewComponent {
     }
   };
 
+  @Input() displayRecastTime = false;
+
   private static InstanceID = 0;
 
   private readonly actionSubject$: Subject<Action> = new ReplaySubject(1);
@@ -31,7 +33,7 @@ export class CooldownViewComponent {
 
   public timeRemainingOnCooldown$ = this.cooldownGroup$
     .pipe(
-      map((cooldownGroup) => cooldownGroup ? Math.ceil(cooldownGroup.remaining/1000) : 0),
+      map((cooldownGroup) => cooldownGroup ? Math.ceil(cooldownGroup.remaining / 1000) : 0),
       share()
     );
 
@@ -41,7 +43,8 @@ export class CooldownViewComponent {
       share()
     );
 
-  public showCooldownTime$ = this.actionSubject$.pipe(map(action => action.Recast100ms > 25));
+  public showCooldownTime$ = this.actionSubject$
+    .pipe(map(action => action.Recast100ms > 25));
 
   public remainingPercent$ = this.cooldownGroup$.pipe(
     map((group) => group ? group.remaining / group.duration : 0)
@@ -51,5 +54,6 @@ export class CooldownViewComponent {
     this.isDestroyed$.next();
   }
 
-  public constructor(private readonly actionService: ActionService) {}
+  public constructor(private readonly actionService: ActionService) {
+  }
 }

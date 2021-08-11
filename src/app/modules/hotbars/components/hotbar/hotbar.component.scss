@@ -58,6 +58,10 @@ $slot-border: 1px;
     display: flex;
     align-content: stretch;
     flex-wrap: wrap;
+
+    &--hide-unassigned .unassigned {
+      visibility: hidden;
+    }
   }
 
   &__number {
@@ -71,6 +75,10 @@ $slot-border: 1px;
     text-shadow: 0 0 2px darkgoldenrod, 0 0 2px darkgoldenrod;
     font-size: 24px;
     cursor: move;
+
+    &--hidden {
+      visibility: hidden;
+    }
   }
 }
 

@@ -1,13 +1,15 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {LayoutComponent} from './layout.component';
+import {ConfigurationComponent} from './configuration.component';
 import {DialogModule} from "../dialog/dialog.module";
 import {ReactiveFormsModule} from "@angular/forms";
+import { HotbarDisplaySettingsComponent } from './components/hotbar-display-settings/hotbar-display-settings.component';
 
 
 @NgModule({
   declarations: [
-    LayoutComponent
+    ConfigurationComponent,
+    HotbarDisplaySettingsComponent
   ],
   imports: [
     CommonModule,
@@ -15,7 +17,8 @@ import {ReactiveFormsModule} from "@angular/forms";
     ReactiveFormsModule
   ],
   exports: [
-    LayoutComponent
+    ConfigurationComponent
   ]
 })
-export class LayoutModule { }
+export class ConfigurationModule {
+}

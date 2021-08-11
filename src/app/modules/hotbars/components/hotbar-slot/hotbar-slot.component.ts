@@ -1,14 +1,7 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  Input,
-  HostBinding,
-  SimpleChanges,
-  OnChanges,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostBinding, Input, OnChanges, SimpleChanges,} from '@angular/core';
 import {KeyBindingService} from "../../../key-binding/services/key-binding.service";
 import {Observable, of, Subject} from "rxjs";
-import {CdkDragDrop } from "@angular/cdk/drag-drop";
+import {CdkDragDrop} from "@angular/cdk/drag-drop";
 import {HotbarService} from "../../services/hotbar.service";
 import {GameDataService} from "../../../../core/services/game-data.service";
 import {ActionService} from "../../../actions/services/action.service";
@@ -25,6 +18,7 @@ export class HotbarSlotComponent implements OnChanges {
   @Input() hotbarId: number = -1;
   @Input() slotId: number = -1;
   @Input() actionId?: number = -1;
+  @Input() displayRecastTime = false;
 
   @HostBinding('class.empty')
   private isEmpty: boolean = false;

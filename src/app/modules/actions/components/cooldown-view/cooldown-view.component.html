@@ -28,6 +28,6 @@
   </svg>
 
   <span
-      *ngIf="showCooldownTime$ | async"
-      class="rh-cooldown-view__time-remaining">{{ timeRemainingOnCooldown$ | async }}</span>
+    *ngIf="(showCooldownTime$ | async) && displayRecastTime"
+    class="rh-cooldown-view__time-remaining">{{ timeRemainingOnCooldown$ | async }}</span>
 </div>
