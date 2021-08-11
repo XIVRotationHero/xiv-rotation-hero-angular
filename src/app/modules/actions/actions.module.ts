@@ -7,13 +7,15 @@ import {CoreModule} from "../../core/core.module";
 import {CooldownViewComponent} from './components/cooldown-view/cooldown-view.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {ActionByIdPipe} from './pipes/action-by-id.pipe';
+import { ActionTooltipComponent } from './components/action-tooltip/action-tooltip.component';
 
 @NgModule({
   declarations: [
     ActionComponent,
     ActionListComponent,
     CooldownViewComponent,
-    ActionByIdPipe
+    ActionByIdPipe,
+    ActionTooltipComponent
   ],
   exports: [
     ActionComponent,

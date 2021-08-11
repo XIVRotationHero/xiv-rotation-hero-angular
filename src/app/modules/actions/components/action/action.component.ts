@@ -5,6 +5,7 @@ import {ActionCostService} from "../../services/action-cost.service";
 import {map} from "rxjs/operators";
 import {createPopper, Instance} from "@popperjs/core";
 import {DomSanitizer} from "@angular/platform-browser";
+import {ActionTooltipComponent} from "../action-tooltip/action-tooltip.component";
 
 @Component({
   selector: 'rh-action',
@@ -22,8 +23,8 @@ export class ActionComponent {
   @HostBinding('class.is-executable')
   public isExecutable = false;
 
-  @ViewChild('tooltip', { static: true })
-  public actionTooltip: ElementRef | undefined;
+  @ViewChild('tooltip', {static: true})
+  public actionTooltip!: ActionTooltipComponent;
 
   public tooltipInstance?: Instance;
 
@@ -60,17 +61,13 @@ export class ActionComponent {
       .subscribe((isExecutable) => this.isExecutable = isExecutable);
   }
 
-  public getSafeDescription(text: string) {
-    return this.domSanitizer.bypassSecurityTrustHtml(text);
-  }
-
   @HostListener('mouseover')
   public onMouseOver() {
     if (this.tooltipInstance) return;
 
     this.tooltipInstance = createPopper(
       this.elementRef.nativeElement,
-      this.actionTooltip?.nativeElement,
+      this.actionTooltip.elementRef.nativeElement,
       {
         placement: 'top',
         modifiers: [
@@ -83,12 +80,12 @@ export class ActionComponent {
         ]
       }
     );
-    this.actionTooltip?.nativeElement.setAttribute('data-show', '');
+    this.actionTooltip.elementRef.nativeElement.setAttribute('data-show', '');
   }
 
   @HostListener('mouseout')
   public onMouseOut() {
-    this.actionTooltip?.nativeElement.removeAttribute('data-show');
+    this.actionTooltip.elementRef.nativeElement.removeAttribute('data-show');
     this.tooltipInstance?.destroy();
     this.tooltipInstance = undefined;
   }
