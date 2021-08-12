@@ -1,0 +1,20 @@
+:host {
+  display: grid;
+  grid-template-rows: repeat(3, 16px);
+  grid-template-columns: repeat(3, 16px);
+  grid-template-areas:
+      ". a ."
+      "b . c"
+      ". d .";
+}
+
+.rh-dpad-icon {
+  position: relative;
+  top: -16px;
+  left: -16px;
+  &--up { grid-area: a; }
+  &--left { grid-area: b; }
+  &--right { grid-area: c; }
+  &--down { grid-area: d; }
+}
+

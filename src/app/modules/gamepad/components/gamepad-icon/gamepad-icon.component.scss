@@ -1,0 +1,39 @@
+.rh-gamepad-icon {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background: url("/assets/images/actioncross_hr1.png");
+  background-position-y: -210px;
+
+  &--square {
+    background-position-x: 0;
+  }
+
+  &--triangle {
+    background-position-x: -32px;
+  }
+
+  &--circle {
+    background-position-x: -64px;
+  }
+
+  &--cross {
+    background-position-x: -96px;
+  }
+
+  &--up {
+    background-position-x: -192px
+  }
+
+  &--right {
+    background-position-x: -128px;
+  }
+
+  &--down {
+    background-position-x: -224px;
+  }
+
+  &--left {
+    background-position-x: -160px;
+  }
+}
