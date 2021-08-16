@@ -17,7 +17,7 @@ jobs:
     
     environment: 
       name: app.xivrotationhero.com
-      url: app.xivrotationhero.com
+      url: https://app.xivrotationhero.com
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -35,7 +35,7 @@ jobs:
       - name: Create production build
         run: npm run build:prod
 
-      - name: Deploy to Staging server
+      - name: Deploy to Production server
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
