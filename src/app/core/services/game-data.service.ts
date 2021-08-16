@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {forkJoin, Observable, of, ReplaySubject} from "rxjs";
+import {forkJoin, Observable, ReplaySubject} from "rxjs";
 import {map, shareReplay, tap} from "rxjs/operators";
 import {Action} from "../../modules/actions/interfaces/action";
 import {ActionIndirection} from "../interfaces/action-indirection";
@@ -12,17 +12,17 @@ import {ClassJob} from "../interfaces/classJob";
 export class GameDataService {
   public classJobs$: Observable<ClassJob[]>;
   public classJobsById$: Observable<Map<number, ClassJob>>;
-  public actionsByClassJobId$: Observable<{ [ classJobId: string ]: Action[] }>;
-  public actionsById$: Observable<{ [ actionId: string ]: Action }>;
+  public actionsByClassJobId$: Observable<{ [classJobId: string]: Action[] }>;
+  public actionsById$: Observable<{ [actionId: string]: Action }>;
 
-  private actionsById: { [ actionId: number ]: Action } = {};
-  private actionsByClassJob: { [ classJobId: string ]: Action[] } = {};
-  private actionIndirectionsById: { [ actionId: number ]: ActionIndirection } = {};
+  private actionsById: { [actionId: number]: Action } = {};
+  private actionsByClassJob: { [classJobId: string]: Action[] } = {};
+  private actionIndirectionsById: { [actionId: number]: ActionIndirection } = {};
   private classJobs: ClassJob[] = [];
   private classJobsById: Map<number, ClassJob> = new Map();
 
   private classJobsSubject$: ReplaySubject<ClassJob[]> = new ReplaySubject(1);
-  private actionsByClassJobIdSubject$: ReplaySubject<{ [ classJobId: string ]: Action[] }> = new ReplaySubject(1);
+  private actionsByClassJobIdSubject$: ReplaySubject<{ [classJobId: string]: Action[] }> = new ReplaySubject(1);
 
   constructor(private readonly httpClient: HttpClient) {
     this.classJobs$ = this.classJobsSubject$.asObservable()
@@ -33,49 +33,51 @@ export class GameDataService {
     this.actionsByClassJobId$ = this.actionsByClassJobIdSubject$.asObservable();
 
     this.actionsById$ = this.actionsByClassJobId$.pipe(
-      map((actions) => Object.values(actions).flat().reduce(
-        (acc, action) => {
-          acc[action.ID] = action;
-          return acc;
-      }, <{ [ actionId: string ]: Action }>{})),
-      shareReplay(1)
+        map((actions) => Object.values(actions).flat().reduce(
+            (acc, action) => {
+              acc[action.ID] = action;
+              return acc;
+            }, <{ [actionId: string]: Action }>{})),
+        shareReplay(1)
     );
   }
 
   initialise() {
     return forkJoin([
       (<Observable<{ [classJobId: string]: Action[] }>>this.httpClient.get('./assets/classjobactions.json'))
-        .pipe(tap(this.registerActions.bind(this))),
+          .pipe(tap(this.registerActions.bind(this))),
       (<Observable<ActionIndirection[]>>this.httpClient.get('./assets/actionindirections.json'))
-        .pipe(tap(this.registerActionIndirections.bind(this))),
+          .pipe(tap(this.registerActionIndirections.bind(this))),
       (<Observable<ClassJob[]>>this.httpClient.get('./assets/classjobs.json'))
-        .pipe(tap((classJobs) => {
-          this.classJobs = classJobs;
-          this.classJobsSubject$.next(classJobs);
-          classJobs.forEach((job) => {
-            this.classJobsById.set(job.ID, job);
-          })
-        }))
+          .pipe(tap((classJobs) => {
+            this.classJobs = classJobs;
+            this.classJobsSubject$.next(classJobs);
+            classJobs.forEach((job) => {
+              this.classJobsById.set(job.ID, job);
+            })
+          }))
     ]);
   }
 
   getActionById(id: number) {
-    return this.actionsById[ id ];
+    return this.actionsById[id];
   }
 
-  getActionsByClassJobId(classJobId: number) {
-    return this.actionsByClassJob[ classJobId ];
+  getActionsByClassJobId(classJobId: number): Action[] {
+    const actions = this.actionsByClassJob[classJobId];
+
+    return actions.length ? actions : [];
   }
 
   getActionIndirectionById(id: number) {
-    return this.actionIndirectionsById[ id ];
+    return this.actionIndirectionsById[id];
   }
 
   getActionIndirectionsByClassJobId(classJobId: number) {
     const classJob = this.classJobsById.get(classJobId);
     if (!classJob || !classJob.GameContentLinks.ActionIndirection) return [];
 
-    return classJob.GameContentLinks.ActionIndirection.ClassJob.map((actionIndirection) => this.actionIndirectionsById[ actionIndirection ]);
+    return classJob.GameContentLinks.ActionIndirection.ClassJob.map((actionIndirection) => this.actionIndirectionsById[actionIndirection]);
   }
 
   getClassJobs() {
@@ -98,18 +100,18 @@ export class GameDataService {
     return classJob ? classJob.Abbreviation : classJob;
   }
 
-  private registerActions(actions: { [ classJobId: string ]: Action[] }): void {
+  private registerActions(actions: { [classJobId: string]: Action[] }): void {
     this.actionsByClassJobIdSubject$.next(actions);
     this.actionsByClassJob = actions;
 
     Object.values(actions).flat().forEach((action) => {
-      this.actionsById[ action.ID ] = action;
+      this.actionsById[action.ID] = action;
     });
   }
 
   private registerActionIndirections(actionIndirections: ActionIndirection[]): void {
     Object.values(actionIndirections).forEach((action) => {
-      this.actionIndirectionsById[ action.ID ] = action;
+      this.actionIndirectionsById[action.ID] = action;
     });
   }
 }

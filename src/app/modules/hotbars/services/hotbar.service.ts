@@ -14,13 +14,13 @@ import {Action} from "../../actions/interfaces/action";
 })
 export class HotbarService {
   public hotbarSettings$: Observable<HotbarOptions[]>;
-  public hotbarAllocation$: Observable<(number|undefined)[][]>;
+  public hotbarAllocation$: Observable<(number | undefined)[][]>;
 
   private readonly HOTBAR_SETTINGS_PERSISTANCE_KEY = 'hotbar-settings';
   private readonly HOTBAR_ALLOCATION_PERSISTANCE_KEY = 'hotbar-allocation-';
   private readonly HOTBAR_COUNT = 10;
   private readonly SLOTS_PER_HOTBAR = 12;
-  private readonly EMPTY_HOTBAR: (number|undefined)[] = Array.from({ length: this.SLOTS_PER_HOTBAR }).map(() => undefined);
+  private readonly EMPTY_HOTBAR: (number | undefined)[] = Array.from({length: this.SLOTS_PER_HOTBAR}).map(() => undefined);
 
   private HOTBAR_KEYS = [
     '1',
@@ -38,16 +38,16 @@ export class HotbarService {
   ];
 
   private readonly HOTBAR_DEFAULTS: HotbarOptions[] = [
-    { visible: true,  hotbarStyle: HotbarStyle.Horizontal, position: [ 0.2, 0.92 ], scale: .8 },
-    { visible: true,  hotbarStyle: HotbarStyle.Horizontal, position: [ 0.2, 0.84 ], scale: .8 },
-    { visible: true,  hotbarStyle: HotbarStyle.Horizontal, position: [ 0.2, 0.76 ], scale: .8 },
-    { visible: true,  hotbarStyle: HotbarStyle.Horizontal, position: [ 0.2, 0.68 ], scale: .8 },
-    { visible: false, hotbarStyle: HotbarStyle.Horizontal, position: [ 0.2, 0.60 ], scale: .8 },
-    { visible: false, hotbarStyle: HotbarStyle.Horizontal, position: [ 0.2, 0.52 ], scale: .8 },
-    { visible: false, hotbarStyle: HotbarStyle.Horizontal, position: [ 0.2, 0.44 ], scale: .8 },
-    { visible: false, hotbarStyle: HotbarStyle.Horizontal, position: [ 0.2, 0.36 ], scale: .8 },
-    { visible: false, hotbarStyle: HotbarStyle.Horizontal, position: [ 0.2, 0.28 ], scale: .8 },
-    { visible: false, hotbarStyle: HotbarStyle.Horizontal, position: [ 0.2, 0.20 ], scale: .8 }
+    {visible: true, hotbarStyle: HotbarStyle.Horizontal, position: [0.2, 0.92], scale: .8},
+    {visible: true, hotbarStyle: HotbarStyle.Horizontal, position: [0.2, 0.84], scale: .8},
+    {visible: true, hotbarStyle: HotbarStyle.Horizontal, position: [0.2, 0.76], scale: .8},
+    {visible: true, hotbarStyle: HotbarStyle.Horizontal, position: [0.2, 0.68], scale: .8},
+    {visible: false, hotbarStyle: HotbarStyle.Horizontal, position: [0.2, 0.60], scale: .8},
+    {visible: false, hotbarStyle: HotbarStyle.Horizontal, position: [0.2, 0.52], scale: .8},
+    {visible: false, hotbarStyle: HotbarStyle.Horizontal, position: [0.2, 0.44], scale: .8},
+    {visible: false, hotbarStyle: HotbarStyle.Horizontal, position: [0.2, 0.36], scale: .8},
+    {visible: false, hotbarStyle: HotbarStyle.Horizontal, position: [0.2, 0.28], scale: .8},
+    {visible: false, hotbarStyle: HotbarStyle.Horizontal, position: [0.2, 0.20], scale: .8}
   ];
 
   private hotbarResetTrigger$: Subject<void> = new Subject();
@@ -55,47 +55,47 @@ export class HotbarService {
   private hotbarSettingsSubject$: BehaviorSubject<HotbarOptions[]> = new BehaviorSubject(this.loadSettings());
 
   public constructor(
-    private readonly appStateService: AppStateService,
-    private readonly gameDataService: GameDataService,
-    private readonly keyBindingService: KeyBindingService
+      private readonly appStateService: AppStateService,
+      private readonly gameDataService: GameDataService,
+      private readonly keyBindingService: KeyBindingService
   ) {
     const currentClassJobAllocation$ = this.appStateService.currentClassJobId$.pipe(
-      map(this.loadHotbarAllocation.bind(this)),
-      shareReplay(1)
+        map(this.loadHotbarAllocation.bind(this)),
+        shareReplay(1)
     );
 
     this.hotbarSettings$ = this.hotbarSettingsSubject$.asObservable()
-      .pipe(tap(this.persistSettings.bind(this)));
+        .pipe(tap(this.persistSettings.bind(this)));
 
     this.hotbarAllocation$ = combineLatest([this.hotbarResetTrigger$.pipe(startWith([])), currentClassJobAllocation$])
-      .pipe(
-        switchMap(([, allocation]) => this.hotbarAllocationSubject$.asObservable()
-          .pipe(
-            scan((acc, [ hotbarId, slotId, actionId]) => {
-              acc[hotbarId][slotId] = actionId;
-              return acc;
-            }, allocation),
-            startWith(allocation)
-          )
-        ),
-        shareReplay(1)
-      );
+        .pipe(
+            switchMap(([, allocation]) => this.hotbarAllocationSubject$.asObservable()
+                .pipe(
+                    scan((acc, [hotbarId, slotId, actionId]) => {
+                      acc[hotbarId][slotId] = actionId;
+                      return acc;
+                    }, allocation),
+                    startWith(allocation)
+                )
+            ),
+            shareReplay(1)
+        );
 
     // Persist hotbar allocation
     this.hotbarAllocation$
-      .pipe(withLatestFrom(this.appStateService.currentClassJobId$))
-      .subscribe(([hotbarAllocation, currentClassJobId]) => this.persistHotbarAllocation(currentClassJobId, hotbarAllocation));
+        .pipe(withLatestFrom(this.appStateService.currentClassJobId$))
+        .subscribe(([hotbarAllocation, currentClassJobId]) => this.persistHotbarAllocation(currentClassJobId, hotbarAllocation));
 
     this.registerHotbarKeyBindingLabels();
   }
 
   public updateHotbarOptions(hotbarOptions: HotbarOptions[]) {
     this.hotbarSettings$.pipe(
-      take(1)
+        take(1)
     ).subscribe((oldHotbarOptions) => {
       this.hotbarSettingsSubject$.next(hotbarOptions.map((newHotbarOptions, index) => {
         return {
-          ...oldHotbarOptions[ index ],
+          ...oldHotbarOptions[index],
           ...newHotbarOptions
         }
       }));
@@ -123,23 +123,23 @@ export class HotbarService {
   }
 
   public allocateAction(hotbarId: number, slotId: number, actionId: number | undefined) {
-    this.hotbarAllocationSubject$.next([ hotbarId, slotId, actionId ]);
+    this.hotbarAllocationSubject$.next([hotbarId, slotId, actionId]);
   }
 
-  public getClearHotbars(): (number|undefined)[][] {
+  public getClearHotbars(): (number | undefined)[][] {
     return Array
-        .from({ length: this.HOTBAR_COUNT })
-        .map(() => [ ...this.EMPTY_HOTBAR ]);
+        .from({length: this.HOTBAR_COUNT})
+        .map(() => [...this.EMPTY_HOTBAR]);
   }
 
   public clearHotbar(hotbarId: number) {
     this.hotbarAllocation$
-      .pipe(take(1))
-      .subscribe(() => {
-        for(let slotId=0; slotId<this.SLOTS_PER_HOTBAR; slotId++) {
-          this.hotbarAllocationSubject$.next([ hotbarId, slotId, undefined ]);
-        }
-      });
+        .pipe(take(1))
+        .subscribe(() => {
+          for (let slotId = 0; slotId < this.SLOTS_PER_HOTBAR; slotId++) {
+            this.hotbarAllocationSubject$.next([hotbarId, slotId, undefined]);
+          }
+        });
   }
 
   /**
@@ -147,14 +147,14 @@ export class HotbarService {
    */
   public swapHotbarAllocations(sourceHotbarId: number, sourceSlotId: number, targetHotbarId: number, targetSlotId: number) {
     this.hotbarAllocation$
-      .pipe(take(1))
-      .subscribe((allocation) => {
-        const sourceAction = allocation[sourceHotbarId][sourceSlotId];
-        const targetAction = allocation[targetHotbarId][targetSlotId];
+        .pipe(take(1))
+        .subscribe((allocation) => {
+          const sourceAction = allocation[sourceHotbarId][sourceSlotId];
+          const targetAction = allocation[targetHotbarId][targetSlotId];
 
-        this.hotbarAllocationSubject$.next([ sourceHotbarId, sourceSlotId, targetAction]);
-        this.hotbarAllocationSubject$.next([ targetHotbarId, targetSlotId, sourceAction]);
-      });
+          this.hotbarAllocationSubject$.next([sourceHotbarId, sourceSlotId, targetAction]);
+          this.hotbarAllocationSubject$.next([targetHotbarId, targetSlotId, sourceAction]);
+        });
   }
 
   /**
@@ -162,17 +162,17 @@ export class HotbarService {
    */
   public setHotbarPosition(hotbarId: number, position: [number, number]) {
     this.hotbarSettings$
-      .pipe(take(1))
-      .subscribe((settings) => {
-        const newSettings = [
-          ...settings
-        ];
-        newSettings.splice(hotbarId, 1, {
-          ...newSettings[hotbarId],
-          position
-        })
-        this.hotbarSettingsSubject$.next(newSettings);
-      });
+        .pipe(take(1))
+        .subscribe((settings) => {
+          const newSettings = [
+            ...settings
+          ];
+          newSettings.splice(hotbarId, 1, {
+            ...newSettings[hotbarId],
+            position
+          })
+          this.hotbarSettingsSubject$.next(newSettings);
+        });
   }
 
   private persistSettings(hotbarSettings: HotbarOptions[]) {
@@ -204,7 +204,7 @@ export class HotbarService {
   }
 
   private autoAllocateActions(actions: Action[]): (number | undefined)[][] {
-    const allocation: (number|undefined)[][] = Array.from({ length: this.HOTBAR_COUNT }).map(() => [...this.EMPTY_HOTBAR]);
+    const allocation: (number | undefined)[][] = Array.from({length: this.HOTBAR_COUNT}).map(() => [...this.EMPTY_HOTBAR]);
 
     if (actions) {
       actions.forEach((action, index) => {
