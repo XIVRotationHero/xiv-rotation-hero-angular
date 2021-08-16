@@ -1,9 +1,17 @@
+<div class="rh-brand">
+  XIV ROTATION HERO
+</div>
+
 <rh-toolbar
     (toggleDialog)="toggleDialog($event)"
     (toggleUserOverlay)="isUserPanelVisible = !isUserPanelVisible"></rh-toolbar>
 
 <div class="rh-browser__content" cdkDropListGroup>
   <rh-hotbars></rh-hotbars>
+
+  <rh-cross-hotbar
+      [hotbarCrossSettings]="configurationService.hotbarCrossSettings$ | async"
+      [hotbarCustomSettings]="configurationService.hotbarCustomSettings$ | async"></rh-cross-hotbar>
 
   <rh-dialog-outlet></rh-dialog-outlet>
 </div>

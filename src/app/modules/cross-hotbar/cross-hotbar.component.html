@@ -1,0 +1,47 @@
+<div
+    class="rh-cross-hotbar"
+    *ngIf="hotbarCrossSettings?.enableCrossHotbar &&
+          (hotbarCrossSettings?.alwaysDisplayCrossHotbar || activeHotbarSide !== ActiveCrossHotbarSet.None)">
+  <div
+      class="rh-cross-hotbar__wide-sets"
+      *ngIf="hotbarCustomSettings?.enableWxhbWithDoubleTap && hotbarCrossSettings?.alwaysDisplayWxhb">
+    <rh-cross-hotbar-set
+        class="rh-cross-hotbar__wide-set rh-cross-hotbar__wide-set--left"
+        [allocation]="(activeHotbarSet$ | async)![0]"
+        [isActive]="activeHotbarSide === ActiveCrossHotbarSet.WXHBLeft"
+        [displayBothHalves]="hotbarCustomSettings?.wxhbInputType === WxhbInputType.DirectionalAndActionButtons"></rh-cross-hotbar-set>
+
+    <rh-cross-hotbar-set
+        class="rh-cross-hotbar__wide-set rh-cross-hotbar__wide-set--right"
+        [allocation]="(activeHotbarSet$ | async)![1]"
+        [isActive]="activeHotbarSide === ActiveCrossHotbarSet.WXHBRight"
+        [displayBothHalves]="hotbarCustomSettings?.wxhbInputType === WxhbInputType.DirectionalAndActionButtons"></rh-cross-hotbar-set>
+  </div>
+
+  <rh-set-select
+      style="position: absolute"
+      *ngIf="displaySetSelect"
+      [activeHotbarIndex]="activeHotbarIndex$ | async"
+      [availableHotbarSets]="crossHotbarSets"></rh-set-select>
+
+  <div class="rh-cross-hotbar__sets">
+    <rh-cross-hotbar-set
+        *ngIf="activeHotbarSide !== ActiveCrossHotbarSet.ExtendedLeft && activeHotbarSide !== ActiveCrossHotbarSet.ExtendedRight"
+        [allocation]="(activeHotbarSet$ | async)![0]"
+        [isActive]="activeHotbarSide === ActiveCrossHotbarSet.Left"
+        (onAssignSlot)="onAssignSlot($event, ActiveCrossHotbarSet.Left)"></rh-cross-hotbar-set>
+
+    <rh-cross-hotbar-set
+        *ngIf="activeHotbarSide !== ActiveCrossHotbarSet.ExtendedLeft && activeHotbarSide !== ActiveCrossHotbarSet.ExtendedRight"
+        [allocation]="(activeHotbarSet$ | async)![1]"
+        [isActive]="activeHotbarSide === ActiveCrossHotbarSet.Right"
+        (onAssignSlot)="onAssignSlot($event, ActiveCrossHotbarSet.Right)"></rh-cross-hotbar-set>
+
+    <rh-cross-hotbar-set
+        *ngIf="activeHotbarSide === ActiveCrossHotbarSet.ExtendedLeft || activeHotbarSide === ActiveCrossHotbarSet.ExtendedRight"
+        [allocation]="(activeHotbarSet$ | async)![1]"
+        [isActive]="true"></rh-cross-hotbar-set>
+  </div>
+
+  <div class="rh-cross-hotbar__active-set">SET {{ (activeHotbarIndex$ | async)! + 1 }} [R1]</div>
+</div>

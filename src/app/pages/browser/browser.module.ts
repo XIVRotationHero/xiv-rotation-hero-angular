@@ -12,6 +12,7 @@ import {BuilderModule} from "../../modules/builder/builder.module";
 import {ConfigurationModule} from "../../modules/configuration/configuration.module";
 import {UserModule} from "../../modules/user/user.module";
 import {DialogModule} from "../../modules/dialog/dialog.module";
+import {CrossHotbarModule} from "../../modules/cross-hotbar/cross-hotbar.module";
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {DialogModule} from "../../modules/dialog/dialog.module";
     BuilderModule,
     ConfigurationModule,
     UserModule,
-    DialogModule
+    DialogModule,
+    CrossHotbarModule
   ]
 })
 export class BrowserModule { }

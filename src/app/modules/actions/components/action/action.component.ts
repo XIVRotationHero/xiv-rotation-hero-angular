@@ -17,6 +17,7 @@ export class ActionComponent {
   @Input() public showCooldowns = false;
   @Input() public showComboIndicator = false;
   @Input() public displayRecastTime = false;
+  @Input() public canShowTooltip = true;
 
   public isComboAction = false;
 
@@ -29,36 +30,36 @@ export class ActionComponent {
   public tooltipInstance?: Instance;
 
   constructor(
-    private readonly actionService: ActionService,
-    private readonly actionCostService: ActionCostService,
-    private readonly elementRef: ElementRef,
-    private readonly domSanitizer: DomSanitizer
+      private readonly actionService: ActionService,
+      private readonly actionCostService: ActionCostService,
+      private readonly elementRef: ElementRef,
+      private readonly domSanitizer: DomSanitizer
   ) {
     this.actionService.comboActionIds$
-      .subscribe((comboIds) => {
-        this.isComboAction = comboIds.includes(this.action?.ActionComboTargetID)
-      });
+        .subscribe((comboIds) => {
+          this.isComboAction = comboIds.includes(this.action?.ActionComboTargetID)
+        });
   }
 
   public ngOnInit() {
     this.domSanitizer.bypassSecurityTrustHtml(this.action.Description);
 
     this.actionCostService.resources$
-      .pipe(
-        map((resources) => {
-          if (!this.action) {
-            return false;
-          }
+        .pipe(
+            map((resources) => {
+              if (!this.action) {
+                return false;
+              }
 
-          const {PrimaryCostType, PrimaryCostValue, SecondaryCostType, SecondaryCostValue} = this.action;
+              const {PrimaryCostType, PrimaryCostValue, SecondaryCostType, SecondaryCostValue} = this.action;
 
-          return (
-            (!PrimaryCostType || resources[PrimaryCostType] >= PrimaryCostValue) &&
-            (!SecondaryCostType || resources[SecondaryCostType] >= SecondaryCostValue)
-          )
-        })
-      )
-      .subscribe((isExecutable) => this.isExecutable = isExecutable);
+              return (
+                  (!PrimaryCostType || resources[PrimaryCostType] >= PrimaryCostValue) &&
+                  (!SecondaryCostType || resources[SecondaryCostType] >= SecondaryCostValue)
+              )
+            })
+        )
+        .subscribe((isExecutable) => this.isExecutable = isExecutable);
   }
 
   @HostListener('mouseover')
@@ -66,19 +67,19 @@ export class ActionComponent {
     if (this.tooltipInstance) return;
 
     this.tooltipInstance = createPopper(
-      this.elementRef.nativeElement,
-      this.actionTooltip.elementRef.nativeElement,
-      {
-        placement: 'top',
-        modifiers: [
-          {
-            name: 'offset',
-            options: {
-              offset: [10, 10]
+        this.elementRef.nativeElement,
+        this.actionTooltip.elementRef.nativeElement,
+        {
+          placement: 'top',
+          modifiers: [
+            {
+              name: 'offset',
+              options: {
+                offset: [10, 10]
+              }
             }
-          }
-        ]
-      }
+          ]
+        }
     );
     this.actionTooltip.elementRef.nativeElement.setAttribute('data-show', '');
   }

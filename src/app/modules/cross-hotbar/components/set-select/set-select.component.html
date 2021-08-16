@@ -1,0 +1,14 @@
+<div class="rh-set-select">
+  <div
+    class="rh-set-select__set-select-number"
+    [ngClass]="{
+          'rh-set-select__set-select-number--active': index === activeHotbarIndex
+        }"
+    *ngFor="let set of availableHotbarSets; index as index">{{ index + 1 }}</div>
+  <div class="rh-set-select__set-selectors rh-set-select__set-selectors--left">
+    <rh-dpad-icon></rh-dpad-icon>
+  </div>
+  <div class="rh-set-select__set-selectors rh-set-select__set-selectors--right">
+    <rh-action-buttons-icon></rh-action-buttons-icon>
+  </div>
+</div>

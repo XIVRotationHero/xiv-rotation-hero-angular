@@ -1,0 +1,7 @@
+<span
+    class="rh-configuration__input-toggle rh-configuration__input-toggle--mouse"
+    [ngClass]="{
+      'rh-configuration__input-toggle--mouse': inputType === InputType.Mouse,
+      'rh-configuration__input-toggle--controller': inputType === InputType.Controller
+    }"
+    (click)="onInputTypeChange.emit(inputType === InputType.Mouse ? InputType.Controller : InputType.Mouse)"></span>

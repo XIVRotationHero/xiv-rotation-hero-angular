@@ -1,0 +1,91 @@
+$slot-size: 64px;
+$slot-margin: 2px;
+$slot-border: 1px;
+
+:host {
+  flex: 0 0 $slot-size;
+  width: $slot-size;
+  height: $slot-size;
+  border-radius: 15%;
+  margin: $slot-margin;
+  position: relative;
+  font-family: 'Kodchasan', sans-serif;
+
+  &.empty {
+    background: linear-gradient(180deg, rgba(53, 53, 53, .2) 19%, rgba(35, 35, 35, .2) 100%);
+    border-bottom: rgba(170, 170, 170, 0.233) 2px solid;
+    box-shadow: 0 3px 5px inset rgba(0, 0, 0, 0.534);
+    transform: scale(.9);
+  }
+
+  &:hover::after,
+  {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: 4px solid white;
+    box-shadow: inset 0 0 10px white, 0 0 10px white;
+    border-radius: 10%;
+  }
+}
+
+.rh-action-slot {
+  &--empty {
+    background: linear-gradient(180deg, rgba(53, 53, 53, .2) 19%, rgba(35, 35, 35, .2) 100%);
+    border-bottom: rgba(170, 170, 170, 0.233) 2px solid;
+    box-shadow: 0 3px 5px inset rgba(0, 0, 0, 0.534);
+    transform: scale(.9);
+  }
+
+  &__drop-container {
+    height: 100%;
+
+    &--triggered {
+      border: 4px solid white;
+    }
+  }
+
+  .hide-empty-slots &--empty {
+    visibility: hidden;
+  }
+
+  &--empty &__action {
+    display: none;
+  }
+
+  &__keybinding {
+    position: absolute;
+    left: 5px;
+    top: -6px;
+    color: white;
+    font-weight: 500;
+    font-size: 24px;
+    text-shadow: 0 0 4px black, 0 0 8px black;
+    user-select: none;
+    pointer-events: none;
+
+    &::before {
+      font-size: 12px;
+      vertical-align: super;
+      display: inline-block;
+      margin-right: 2px;
+      text-shadow: 0 0 2px black, 0 0 4px black, 0 0 8px black;
+    }
+
+    &--ctrl::before {
+      content: 'C';
+    }
+
+    &--shift::before {
+      content: '\21E7';
+    }
+
+    &--alt::before {
+      content: 'A';
+    }
+  }
+}

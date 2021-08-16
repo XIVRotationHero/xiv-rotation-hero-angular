@@ -11,3 +11,17 @@
     position: relative;
   }
 }
+
+.rh-brand {
+  position: absolute;
+  top: 45%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 8vh;
+  font-weight: 900;
+  pointer-events: none;
+  color: #323232;
+  text-shadow: 0 0 5px white;
+  opacity: 0.03;
+}

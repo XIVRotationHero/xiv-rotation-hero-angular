@@ -1,0 +1,13 @@
+.rh-tab-bar {
+  display: flex;
+
+  &__item {
+    flex-grow: 1;
+    text-align: center;
+
+    &--active {
+      color: white;
+      font-weight: 900;
+    }
+  }
+}

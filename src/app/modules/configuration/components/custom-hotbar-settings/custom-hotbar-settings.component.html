@@ -1,0 +1,84 @@
+<form [formGroup]="form">
+  <div>Expanded Hold Controls</div>
+  <label class="ui-style">
+    <input
+        class="checkbox"
+        type="checkbox"
+        formControlName="enableExpandedControls"/>
+    <span class="ui-style-element"></span>
+
+    Enable expanded controls with LT + RT
+  </label>
+
+  <label class="ui-style">
+    <span class="ui-style-label">Display with: LT -> RT</span>
+
+    <select formControlName="displayWithLtRt">
+      <option
+          *ngFor="let option of hotbarOptions"
+          [ngValue]="option">{{getHotbarLabel(option)}}</option>
+    </select>
+  </label>
+
+  <label class="ui-style">
+    <span class="ui-style-label">Display with: RT -> LT</span>
+
+    <select formControlName="displayWithRtLt">
+      <option
+          *ngFor="let option of hotbarOptions"
+          [ngValue]="option">{{getHotbarLabel(option)}}</option>
+    </select>
+  </label>
+
+  <label class="ui-style">
+    <input
+        class="checkbox"
+        type="checkbox"
+        formControlName="enableWxhbWithDoubleTap"/>
+    <span class="ui-style-element"></span>
+
+    Enable WXHB with simultaneous LT and RT double tap.
+  </label>
+
+  <label class="ui-style">
+    <input
+        class="radio"
+        type="radio"
+        formControlName="wxhbInputType"
+        [value]="WxhbInputType.ActionButtons"/>
+    <span class="ui-style-element"></span>
+
+    Enable only action buttons.
+  </label>
+
+  <label class="ui-style">
+    <input
+        class="radio"
+        type="radio"
+        formControlName="wxhbInputType"
+        [value]="WxhbInputType.DirectionalAndActionButtons"/>
+    <span class="ui-style-element"></span>
+
+    Enable directional and action buttons.
+  </label>
+
+  <label class="ui-style">
+    <span class="ui-style-label">Display with: Left/LT double tap</span>
+
+    <select formControlName="displayWithDoubleLt">
+      <option
+          *ngFor="let option of hotbarOptions"
+          [ngValue]="option">{{getHotbarLabel(option)}}</option>
+    </select>
+  </label>
+
+  <label class="ui-style">
+    <span class="ui-style-label">Display with: Right/RT double tap</span>
+
+    <select formControlName="displayWithDoubleRt">
+      <option
+          *ngFor="let option of hotbarOptions"
+          [ngValue]="option">{{getHotbarLabel(option)}}</option>
+    </select>
+  </label>
+</form>

@@ -3,15 +3,10 @@
 <div class="rh-action-list__actions">
   <div
       class="rh-action-list__action"
-      cdkDropList
-      [cdkDropListEnterPredicate]="noDrop"
       *ngFor="let action of actions$ | async">
-    <rh-action
+    <rh-action-slot
         class="rh-action-list__action-image"
-        cdkDrag
-        cdkDragPreviewContainer="global"
-        [cdkDragData]="action"
-        [action]="action"></rh-action>
+        [actionId]="action.ID"></rh-action-slot>
     <div class="rh-action-list__action-title">{{ action.Name }}</div>
     <div class="rh-action-list__acquired-level">Level {{ action.ClassJobLevel }}</div>
   </div>

@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ClassJobIconComponent } from './components/class-job-icon/class-job-icon.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ClassJobIconComponent} from './components/class-job-icon/class-job-icon.component';
 import {GameDataResolver} from "./resolvers/game-data.resolver";
-import { ActionIconComponent } from './components/action-icon/action-icon.component';
+import {ActionIconComponent} from './components/action-icon/action-icon.component';
 
 @NgModule({
   declarations: [
     ClassJobIconComponent,
-    ActionIconComponent
+    ActionIconComponent,
   ],
   exports: [
     ClassJobIconComponent,

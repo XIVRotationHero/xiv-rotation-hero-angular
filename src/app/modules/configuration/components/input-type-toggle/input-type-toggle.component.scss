@@ -1,0 +1,17 @@
+.rh-configuration {
+  &__input-toggle {
+    background: url('/assets/images/configcharacter_hr1.png');
+    width: 104px;
+    height: 192px;
+    display: inline-block;
+    cursor: pointer;
+
+    &--controller {
+      background-position: 0 0;
+    }
+
+    &--mouse {
+      background-position: -104px 0;
+    }
+  }
+}

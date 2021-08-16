@@ -21,8 +21,6 @@ export class HotbarDisplaySettingsComponent {
     private readonly configurationService: ConfigurationService,
     private readonly fb: FormBuilder
   ) {
-    this.hotbarSettings$.pipe();
-
     this.form = this.fb.group({
       hotbarOptions: this.fb.array([])
     });

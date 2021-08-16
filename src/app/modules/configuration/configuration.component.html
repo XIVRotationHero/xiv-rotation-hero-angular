@@ -1,1 +1,11 @@
-<rh-hotbar-display-settings></rh-hotbar-display-settings>
+<div class="rh-config-window">
+  <div>
+    <rh-input-type-toggle
+        [inputType]="(configurationService.inputType$ | async)!"
+        (onInputTypeChange)="configurationService.inputType$.next($event)"></rh-input-type-toggle>
+  </div>
+
+  <div>
+    <rh-hotbar-configuration></rh-hotbar-configuration>
+  </div>
+</div>

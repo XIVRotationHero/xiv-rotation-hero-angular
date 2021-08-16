@@ -1,0 +1,32 @@
+<div class="rh-tab-bar">
+  <a
+      class="rh-tab-bar__item"
+      [ngClass]="{
+      'rh-tab-bar__item--active': activeView === HotbarConfigurationView.HotbarDisplaySettings
+    }"
+      (click)="activeView = HotbarConfigurationView.HotbarDisplaySettings">
+    Display
+  </a>
+  <a
+      class="rh-tab-bar__item"
+      [ngClass]="{
+      'rh-tab-bar__item--active': activeView === HotbarConfigurationView.CrossHotbarSettings
+    }"
+      (click)="activeView = HotbarConfigurationView.CrossHotbarSettings">
+    Cross
+  </a>
+  <a
+      class="rh-tab-bar__item"
+      [ngClass]="{
+      'rh-tab-bar__item--active': activeView === HotbarConfigurationView.CustomHotbarSettings
+    }"
+      (click)="activeView = HotbarConfigurationView.CustomHotbarSettings">
+    Custom
+  </a>
+</div>
+
+<rh-hotbar-display-settings
+    *ngIf="activeView === HotbarConfigurationView.HotbarDisplaySettings"></rh-hotbar-display-settings>
+<rh-cross-hotbar-settings *ngIf="activeView === HotbarConfigurationView.CrossHotbarSettings"></rh-cross-hotbar-settings>
+<rh-custom-hotbar-settings
+    *ngIf="activeView === HotbarConfigurationView.CustomHotbarSettings"></rh-custom-hotbar-settings>

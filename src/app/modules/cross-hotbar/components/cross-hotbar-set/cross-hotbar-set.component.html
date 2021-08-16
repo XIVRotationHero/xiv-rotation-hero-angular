@@ -1,0 +1,23 @@
+<div class="rh-cross-hotbar-set"
+     [ngClass]="{
+        'rh-cross-hotbar-set--active': isActive
+     }">
+  <div class="rh-cross-hotbar-set__hotbar-help">
+    <div class="rh-cross-hotbar-set__action-name" *ngFor="let slot of displayedAllocation">
+      {{ slot ? (slot | actionById).Name : '' }}
+    </div>
+  </div>
+  <div class="rh-cross-hotbar-set__slots">
+    <rh-action-slot
+        class="rh-cross-hotbar-set__slot"
+        *ngFor="let slot of displayedAllocation; index as index"
+        [hotbarId]="1"
+        [slotId]="1"
+        (onDrop)="onDropHandler($event)"></rh-action-slot>
+    <rh-dpad-icon
+        *ngIf="displayBothHalves"
+        class="rh-cross-hotbar-set__selectors rh-cross-hotbar-set__selectors--left"></rh-dpad-icon>
+    <rh-action-buttons-icon
+        class="rh-cross-hotbar-set__selectors rh-cross-hotbar-set__selectors--right"></rh-action-buttons-icon>
+  </div>
+</div>

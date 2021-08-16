@@ -7,7 +7,8 @@ import {CoreModule} from "../../core/core.module";
 import {CooldownViewComponent} from './components/cooldown-view/cooldown-view.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {ActionByIdPipe} from './pipes/action-by-id.pipe';
-import { ActionTooltipComponent } from './components/action-tooltip/action-tooltip.component';
+import {ActionTooltipComponent} from './components/action-tooltip/action-tooltip.component';
+import {ActionSlotComponent} from './components/action-slot/action-slot.component';
 
 @NgModule({
   declarations: [
@@ -15,11 +16,13 @@ import { ActionTooltipComponent } from './components/action-tooltip/action-toolt
     ActionListComponent,
     CooldownViewComponent,
     ActionByIdPipe,
-    ActionTooltipComponent
+    ActionTooltipComponent,
+    ActionSlotComponent
   ],
   exports: [
     ActionComponent,
-    ActionByIdPipe
+    ActionByIdPipe,
+    ActionSlotComponent
   ],
   imports: [
     CommonModule,
@@ -28,4 +31,5 @@ import { ActionTooltipComponent } from './components/action-tooltip/action-toolt
     DragDropModule
   ]
 })
-export class ActionsModule { }
+export class ActionsModule {
+}

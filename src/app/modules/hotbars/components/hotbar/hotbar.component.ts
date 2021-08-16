@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBinding, Input, Output} from '@angular/core';
 import {HotbarOptions} from "../../interfaces/hotbar-options";
 import {HotbarStyle} from "../../enums/hotbar-style.enum";
-import {HotbarDisplaySettings} from "../../interfaces/hotbar-display-settings";
+import {HotbarDisplaySettings} from "../../../configuration/interfaces/hotbar-display-settings";
 
 @Component({
   selector: 'rh-hotbar',

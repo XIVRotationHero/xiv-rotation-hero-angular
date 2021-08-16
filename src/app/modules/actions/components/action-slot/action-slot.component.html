@@ -1,0 +1,24 @@
+<div
+    class="rh-action-slot__drop-container"
+    [ngClass]="{
+      'rh-action-slot__drop-container--triggered': showTriggerBorder$ | async
+    }"
+    cdkDropList
+    cdkDropListSortingDisabled
+    [cdkDropListData]="cdkDropListData"
+    (cdkDropListDropped)="onDropHandler($event)">
+  <rh-action
+      *ngIf="actionId"
+      cdkDrag
+      [cdkDragData]="actionId"
+      cdkDragPreviewContainer="global"
+      [action]="actionId | actionById"
+      [showCooldowns]="true"
+      [showComboIndicator]="true"
+      [displayRecastTime]="displayRecastTime"
+      [canShowTooltip]="!isDraggingAction"
+      (cdkDragStarted)="isDraggingAction = true"
+      (cdkDragEnded)="isDraggingAction = false"
+      (click)="triggerAction()"></rh-action>
+  <div class="rh-action-slot__keybinding">{{ keyBinding$ | async}}</div>
+</div>

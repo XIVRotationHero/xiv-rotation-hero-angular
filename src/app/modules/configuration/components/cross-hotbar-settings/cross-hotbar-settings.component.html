@@ -1,0 +1,143 @@
+<form [formGroup]="form">
+
+  <div>General Settings</div>
+
+  <label class="ui-style">
+    <input
+        class="checkbox"
+        type="checkbox"
+        formControlName="enableCrossHotbar"/>
+    <span class="ui-style-element"></span>
+
+    Enable cross hotbar.
+  </label>
+
+  <label class="ui-style">
+    <input
+        class="checkbox"
+        type="checkbox"
+        formControlName="alwaysDisplayCrossHotbar"/>
+    <span class="ui-style-element"></span>
+
+    Always display cross hotbar.
+  </label>
+
+  <label class="ui-style">
+    <input
+        class="checkbox"
+        type="checkbox"
+        formControlName="displayHotbarHelp"/>
+    <span class="ui-style-element"></span>
+
+    Display hotbar help.
+  </label>
+
+  <label class="ui-style">
+    <input
+        class="checkbox"
+        type="checkbox"
+        formControlName="displayControlGuide"/>
+    <span class="ui-style-element"></span>
+
+    Display control guide
+  </label>
+
+  <div>Cross Hotbar Controls</div>
+  <label class="ui-style">
+    <input
+        class="radio"
+        type="radio"
+        formControlName="crossHotbarControls"
+        [value]="CrossHotbarControls.Hold"/>
+    <span class="ui-style-element"></span>
+
+    Hold
+  </label>
+
+  <label class="ui-style">
+    <input
+        class="radio"
+        type="radio"
+        formControlName="crossHotbarControls"
+        [value]="CrossHotbarControls.Toggle"/>
+    <span class="ui-style-element"></span>
+
+    Toggle
+  </label>
+
+  <label class="ui-style">
+    <input
+        class="radio"
+        type="radio"
+        formControlName="crossHotbarControls"
+        [value]="CrossHotbarControls.Mixed"/>
+    <span class="ui-style-element"></span>
+
+    Mixed
+  </label>
+
+  <div>Cross Hotbar Display Types</div>
+
+  <label class="ui-style">
+    <input
+        class="radio"
+        type="radio"
+        formControlName="crossHotbarDisplayType"
+        [value]="CrossHotbarDisplayType.DpadActionButtons"/>
+    <span class="ui-style-element"></span>
+
+    D-pad + Action Buttons / D-pad + Action Buttons
+  </label>
+
+  <label class="ui-style">
+    <input
+        class="radio"
+        type="radio"
+        formControlName="crossHotbarDisplayType"
+        [value]="CrossHotbarDisplayType.DpadDpad"/>
+    <span class="ui-style-element"></span>
+
+    D-pad + D-pad / Action Buttons + Action Buttons
+  </label>
+
+  <div>W Cross Hotbar Display Settings</div>
+  <label class="ui-style">
+    <input
+        class="checkbox"
+        type="checkbox"
+        formControlName="alwaysDisplayWxhb"/>
+    <span class="ui-style-element"></span>
+
+    Always display WXHB.
+  </label>
+
+  <label class="ui-style">
+    <input
+        class="checkbox"
+        type="checkbox"
+        formControlName="returnToXhbAfterWxhbInput"/>
+    <span class="ui-style-element"></span>
+
+    Return to XHB after WXHB input.
+  </label>
+
+  <label class="ui-style">
+    <input
+        class="checkbox"
+        type="checkbox"
+        formControlName="positionWxhbSeparatelyFromXhb"/>
+    <span class="ui-style-element"></span>
+
+    Position WXHB separately from XHB.
+  </label>
+
+  <label class="ui-style">
+    WXHB Input Timer<br/>
+
+    <input
+        type="range"
+        min="10"
+        max="100"
+        formControlName="wxhbInputTimer"/> {{form.getRawValue().wxhbInputTimer}}
+  </label>
+</form>
