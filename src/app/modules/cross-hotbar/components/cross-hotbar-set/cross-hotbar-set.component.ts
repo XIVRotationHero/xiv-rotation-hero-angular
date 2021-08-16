@@ -41,7 +41,6 @@ export class CrossHotbarSetComponent {
   }
 
   public onDropHandler(dropEvent: { hotbarId: number, slotId: number, actionId: number }) {
-    console.log('emitting')
     this.onAssignSlot.emit(dropEvent);
   }
 }

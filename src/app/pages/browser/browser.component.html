@@ -7,7 +7,7 @@
     (toggleUserOverlay)="isUserPanelVisible = !isUserPanelVisible"></rh-toolbar>
 
 <div class="rh-browser__content" cdkDropListGroup>
-  <rh-hotbars></rh-hotbars>
+  <rh-hotbars *ngIf="(configurationService.inputType$ | async) === InputType.Mouse"></rh-hotbars>
 
   <rh-cross-hotbar
       [hotbarCrossSettings]="configurationService.hotbarCrossSettings$ | async"
