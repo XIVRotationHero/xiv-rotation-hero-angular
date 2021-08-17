@@ -10,15 +10,36 @@
   background: rgba(255, 255, 255, 0.5);
 }
 
-.rh-user-overlay__container {
-  background: #323232;
-  padding: 32px;
-  min-width: 300px;
-}
+.rh-user-overlay {
+  &__container {
+    position: relative;
+    background: #323232;
+    padding: 32px;
+    min-width: 300px;
+  }
 
-.rh-user-overlay__view-switcher {
-  color: white;
-  text-align: center;
-  font-size: 12px;
-  margin-bottom: 0;
+  &__view-switcher {
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 0;
+  }
+
+  &__close-button {
+    position: absolute;
+    right: 6px;
+    top: 2px;
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    color: white;
+
+    &:after {
+      content: "\2716";
+      font-size: 24px;
+      text-shadow: 0 0 2px black;
+    }
+  }
 }

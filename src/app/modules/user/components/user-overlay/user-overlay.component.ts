@@ -1,5 +1,5 @@
-import {Component, ChangeDetectionStrategy, EventEmitter, HostListener, Output} from '@angular/core';
-import { ActiveUserView } from '../../enums/active-user-view';
+import {ChangeDetectionStrategy, Component, EventEmitter, HostListener, Output} from '@angular/core';
+import {ActiveUserView} from '../../enums/active-user-view';
 import {Subject} from "rxjs";
 import {UserService} from "../../services/user.service";
 import {takeUntil} from "rxjs/operators";
@@ -17,7 +17,9 @@ export class UserOverlayComponent {
   @Output()
   public readonly closeOverlay: EventEmitter<void> = new EventEmitter();
 
-  @HostListener('document:keydown.escape') onKeydownHandler() {
+  @HostListener('click')
+  @HostListener('document:keydown.escape')
+  public onCloseOverlayTrigger() {
     this.closeOverlay.emit();
   }
 
@@ -25,10 +27,10 @@ export class UserOverlayComponent {
 
   constructor(private readonly userService: UserService) {
     this.userService.signedInUser$
-      .pipe(takeUntil(this.isDestroyed$))
-      .subscribe(() => {
-        this.closeOverlay.next();
-      });
+        .pipe(takeUntil(this.isDestroyed$))
+        .subscribe(() => {
+          this.closeOverlay.next();
+        });
   }
 
   public ngOnDestroy() {
