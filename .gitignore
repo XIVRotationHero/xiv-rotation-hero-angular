@@ -46,4 +46,4 @@ testem.log
 Thumbs.db
 
 # Local environment file
-src/app/environment.local.ts
+src/environments/environment.local.ts

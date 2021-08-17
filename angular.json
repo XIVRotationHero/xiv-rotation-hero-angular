@@ -89,7 +89,7 @@
               "browserTarget": "xiv-rotation-hero-angular:build:production"
             },
             "local": {
-              "browserTarget": "xiv-rotation-hero-angular:build:development"
+              "browserTarget": "xiv-rotation-hero-angular:build:local"
             },
             "development": {
               "browserTarget": "xiv-rotation-hero-angular:build:development"
