@@ -1,0 +1,14 @@
+<div class="rh-oauth-provider-user-badge__provider-icon">
+  <img [alt]="user.oauthClients[0].oauthProvider + ' logo'"
+       [src]="'/assets/images/social/' + user.oauthClients[0].oauthProvider + '.png'"/>
+</div>
+<div class="rh-oauth-provider-user-badge__container">
+  <div class="rh-oauth-provider-user-badge__user">
+    {{ user.oauthClients[0].providerUsername}}
+    <span class="rh-oauth-provider-user-badge__user-discriminator"
+          *ngIf="user.oauthClients[0].providerUserDiscriminator">
+      #{{user.oauthClients[0].providerUserDiscriminator}}
+    </span>
+  </div>
+  <div class="rh-oauth-provider-user-badge__provider-name">{{ user.oauthClients[0].oauthProvider }}</div>
+</div>

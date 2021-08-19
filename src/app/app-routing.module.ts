@@ -1,6 +1,7 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {GameDataResolver} from "./core/resolvers/game-data.resolver";
+import {UserResolver} from "./core/resolvers/user.resolver";
 
 const rootRoutes: Routes = [
   {
@@ -8,6 +9,13 @@ const rootRoutes: Routes = [
     loadChildren: () => import('./pages/browser/browser.module').then(m => m.BrowserModule),
     resolve: {
       gameData: GameDataResolver
+    }
+  },
+  {
+    path: 'oauth',
+    loadChildren: () => import('./pages/oauth/oauth.module').then(m => m.OauthModule),
+    resolve: {
+      user: UserResolver
     }
   },
   {
@@ -29,6 +37,7 @@ const rootRoutes: Routes = [
     redirectTo: 'browser',
     pathMatch: 'full'
   },
+  {path: '**', redirectTo: 'browser'}
 ];
 
 @NgModule({
@@ -41,4 +50,5 @@ const rootRoutes: Routes = [
     RouterModule
   ]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}

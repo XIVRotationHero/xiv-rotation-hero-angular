@@ -9,13 +9,13 @@ import {
   Routes,
   UrlTree
 } from "@angular/router";
-import {BrowserComponent} from "./browser.component";
-import {ApiService} from "../../modules/api/services/api.service";
+import {OauthComponent} from "./oauth.component";
 import {Observable} from "rxjs";
 import {map} from "rxjs/operators";
+import {ApiService} from "../../modules/api/services/api.service";
 
 @Injectable()
-class IsLoggedOutOrHasUsername implements CanActivate {
+class IsOauthUserWithoutName implements CanActivate {
   public constructor(
       private readonly apiService: ApiService,
       private readonly router: Router
@@ -25,7 +25,7 @@ class IsLoggedOutOrHasUsername implements CanActivate {
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.apiService.me()
         .pipe(
-            map((user) => Boolean(!user || user.username !== null) ? true : this.router.createUrlTree(['/oauth']))
+            map((user) => Boolean(user && user.isOAuthUser && user.username === null) ? true : this.router.createUrlTree(['/browser']))
         );
   }
 }
@@ -33,18 +33,23 @@ class IsLoggedOutOrHasUsername implements CanActivate {
 const routes: Routes = [
   {
     path: '',
-    component: BrowserComponent,
-    canActivate: [IsLoggedOutOrHasUsername]
+    component: OauthComponent,
+    canActivate: [IsOauthUserWithoutName]
   }
-]
+];
 
 @NgModule({
   declarations: [],
-  providers: [IsLoggedOutOrHasUsername],
+  providers: [
+    IsOauthUserWithoutName
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes)
+  ],
+  exports: [
+    RouterModule
   ]
 })
-export class BrowserRoutingModule {
+export class OauthRoutingModule {
 }

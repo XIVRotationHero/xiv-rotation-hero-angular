@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {RotationCreate} from "../interfaces/rotation-create";
 import {RotationUpdate} from "../interfaces/rotation-update";
 import {Rotation} from "../interfaces/rotation";
@@ -9,7 +9,6 @@ import {User} from "../interfaces/user";
 import {environment} from "../../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -17,15 +16,16 @@ import {map} from "rxjs/operators";
 export class ApiService {
   private readonly API_BASE_URL = environment.apiBaseUrl;
 
-  public constructor(private readonly httpClient: HttpClient) {}
+  public constructor(private readonly httpClient: HttpClient) {
+  }
 
   // AUTH
   signIn(email: string, password: string): Observable<User> {
-    return this.request('/auth/login', 'POST', JSON.stringify({ email, password })) as Observable<User>;
+    return this.request('/auth/login', 'POST', JSON.stringify({email, password})) as Observable<User>;
   }
 
   signUp(email: string, username: string, password: string) {
-    return this.request('/auth/signup', 'POST', JSON.stringify({ email, password, username }));
+    return this.request('/auth/signup', 'POST', JSON.stringify({email, password, username}));
   }
 
   me(): Observable<User> {
@@ -80,7 +80,7 @@ export class ApiService {
 
     const paramString = paramArray.length ? `?${paramArray.join('&')}` : '';
 
-    return this.request(`/rotation/${ paramString }`, 'GET') as Observable<PaginatedResponse<Rotation>>;
+    return this.request(`/rotation/${paramString}`, 'GET') as Observable<PaginatedResponse<Rotation>>;
   }
 
   // USER
@@ -92,6 +92,14 @@ export class ApiService {
     return this.request('/user/rotations', 'GET') as Observable<PaginatedResponse<Rotation>>;
   }
 
+  usernameTaken(username: string): Observable<boolean> {
+    return this.request(`/user/name-taken/${username}`, 'GET') as Observable<boolean>;
+  }
+
+  changeUsername(username: string): Observable<User> {
+    return this.request(`/user/name`, 'POST', {username}) as Observable<User>;
+  }
+
   // Token
   userTokenFavourites(token: string): Observable<PaginatedResponse<Rotation>> {
     return this.request(`/token/${token}/favourites`, 'GET') as Observable<PaginatedResponse<Rotation>>;
@@ -101,17 +109,17 @@ export class ApiService {
     return this.request(`/token/${token}/rotations`, 'GET') as Observable<PaginatedResponse<Rotation>>;
   }
 
-  private request(url: string, method: 'POST' | 'PATCH' | 'GET' | 'DELETE', body?: string) {
+  private request(url: string, method: 'POST' | 'PATCH' | 'GET' | 'DELETE', body?: string | Record<string, unknown>) {
     return this.httpClient.request(
-      method,
-      `${this.API_BASE_URL}${url}`,
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        withCredentials: true,
-        body
-      }
+        method,
+        `${this.API_BASE_URL}${url}`,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true,
+          body
+        }
     );
   }
 }

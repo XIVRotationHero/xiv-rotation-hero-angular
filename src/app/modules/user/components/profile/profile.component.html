@@ -1,13 +1,13 @@
 <p>
-  ID:<br />
+  ID:<br/>
   {{ user?.id }}
 </p>
 <p>
-  Username:<br />
+  Username:<br/>
   {{ user?.username }}
 </p>
-<p>
-  ACT Overlay URL:<br />
+<p *ngIf="user?.uniqueToken">
+  ACT Overlay URL:<br/>
   {{ user?.uniqueToken }}
 </p>
 

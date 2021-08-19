@@ -1,7 +1,7 @@
 <rh-class-job-selection
-  [classJobs]="classJobs$ | async"
-  [currentClassJob]="currentClassJob$ | async"
-  (selectClassJob)="selectClassJob($event)">
+    [classJobs]="classJobs$ | async"
+    [currentClassJob]="currentClassJob$ | async"
+    (selectClassJob)="selectClassJob($event)">
 </rh-class-job-selection>
 
 <a class="rh-toolbar__button button" (click)="toggleDialog.emit(rotationHeroDialogConfiguration)">Rotation Hero</a>
@@ -19,9 +19,9 @@
 <button class="rh-toolbar__user-menu button"
         *ngIf="user$ | async"
         (click)="isUserPanelVisible = !isUserPanelVisible">
-  {{ (user$ | async)?.username }}
+  {{ (displayedUserName$ | async) }}
 </button>
 
 <rh-profile
     *ngIf="isUserPanelVisible && (user$ | async)"
-    [user]="user$ | async"></rh-profile>
+    [user]="(user$ | async)!"></rh-profile>

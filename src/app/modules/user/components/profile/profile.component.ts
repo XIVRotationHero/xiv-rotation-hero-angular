@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {User} from "../../../api/interfaces/user";
 
@@ -10,9 +10,10 @@ import {User} from "../../../api/interfaces/user";
 })
 export class ProfileComponent {
 
-  @Input() user: User | null = null;
+  @Input() user!: User;
 
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {
+  }
 
   logout() {
     this.userService.signOutSubject$.next();
