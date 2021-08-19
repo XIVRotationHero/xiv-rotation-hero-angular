@@ -35,11 +35,12 @@ export class ToolbarComponent {
   public readonly classJobs$ = this.gameDataService.classJobs$;
   public readonly currentClassJob$ = this.appStateService.currentClassJob$
   public readonly user$ = this.userService.signedInUser$;
+  public readonly displayedUserName$ = this.userService.displayedUserName$;
 
   constructor(
-    public readonly gameDataService: GameDataService,
-    private readonly appStateService: AppStateService,
-    private readonly userService: UserService
+      public readonly gameDataService: GameDataService,
+      private readonly appStateService: AppStateService,
+      private readonly userService: UserService
   ) {
   }
 

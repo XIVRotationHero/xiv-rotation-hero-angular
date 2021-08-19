@@ -5,13 +5,28 @@
       (ngSubmit)="onSubmit(signInFormGroup.value)">
   <div class="rh-sign-in__input-container">
     <label class="rh-sign-in__input-label">Email</label>
-    <input class="rh-sign-in__input" type="email" formControlName="email" />
+    <input class="rh-sign-in__input" type="email" formControlName="email"/>
   </div>
   <div class="rh-sign-in__input-container">
     <label class="rh-sign-in__input-label">Password</label>
-    <input class="rh-sign-in__input" type="password" formControlName="password" />
+    <input class="rh-sign-in__input" type="password" formControlName="password"/>
   </div>
   <button
       class="rh-sign-in__button"
-      [disabled]="!signInFormGroup.valid">Sign in</button>
+      [disabled]="!signInFormGroup.valid">Sign in
+  </button>
 </form>
+
+<div class="rh-sign-in__separator">
+  <span>OR</span>
+</div>
+
+<p class="rh-sign-in__social-auth-label">Sign in with...</p>
+
+<button
+    class="rh-sign-in__social-button "
+    *ngFor="let provider of oauthProviders"
+    [ngClass]="'rh-sign-in__social-button--' + provider.className"
+    (click)="signInWithProvider(provider)">
+  <span class="rh-sign-in__social-button-label">{{provider.name}}</span>
+</button>

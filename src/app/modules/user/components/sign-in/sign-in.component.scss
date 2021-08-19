@@ -1,4 +1,6 @@
-:host { display: block; }
+:host {
+  display: block;
+}
 
 .rh-sign-in {
   &__title {
@@ -22,10 +24,10 @@
   &__input {
     display: block;
     color: white;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     border: 0;
     outline: 0;
-    border-bottom: 2px solid rgba(255,255,255,0.2);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
     line-height: 1.5;
     width: 100%;
     padding: 6px 8px;
@@ -47,5 +49,58 @@
       color: gray;
       border-color: gray;
     }
+  }
+
+  &__separator {
+    background: linear-gradient(to right, transparent, white, transparent) no-repeat center center;
+    background-size: 100% 1px;
+    color: white;
+    text-align: center;
+    margin: 8px 0;
+
+    span {
+      display: inline-block;
+      background: #323232;
+      font-size: 12px;
+      padding: 0 6px;
+    }
+  }
+
+  &__social-button {
+    cursor: pointer;
+    font-size: inherit;
+    width: 100%;
+    border: 0;
+    padding: 0;
+    text-align: left;
+    display: flex;
+    align-items: stretch;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 40px;
+    }
+
+    &--discord {
+      background: #8c9eff;
+      color: white;
+
+      &::before {
+        background: white url("/assets/images/social/discord.png") no-repeat center center;
+        background-size: 75%;
+      }
+    }
+  }
+
+  &__social-button-label {
+    padding: 8px 12px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  &__social-auth-label {
+    color: white;
+    font-size: 12px;
   }
 }

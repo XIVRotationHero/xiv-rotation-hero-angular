@@ -1,0 +1,41 @@
+<div class="rh-oauth">
+  <img
+      alt="XIV Rotation Hero Logo"
+      src="/assets/images/xivrh-logo.png"
+      class="rh-oauth__logo"/>
+
+  <div class="rh-oauth__panel">
+    <rh-oauth-provider-user-badge
+        *ngIf="signedInUser$ | async"
+        [user]="(signedInUser$ | async)!"></rh-oauth-provider-user-badge>
+
+    <form class="rh-oauth__form"
+          [formGroup]="form"
+          (ngSubmit)="onSubmitForm()">
+      <h3 style="text-transform: uppercase">Choose a username</h3>
+
+      <input
+          type="text"
+          class="rh-oauth__username-input"
+          formControlName="username"
+          autofocus
+          autocomplete="none"/>
+      <span class="rh-oauth__username-error" *ngIf="usernameControl.errors?.usernameIsTaken">
+        This username is already taken :(
+      </span>
+
+      <button
+          type="submit"
+          class="button button--block button--filled"
+          [disabled]="!form.valid">
+        Complete sign up
+      </button>
+      <button
+          type="button"
+          class="button button--block button--warning"
+          (click)="onLogout()">
+        Cancel sign up
+      </button>
+    </form>
+  </div>
+</div>

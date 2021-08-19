@@ -1,0 +1,30 @@
+:host {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+
+  &.discord .rh-oauth-provider-user-badge__container {
+    background: #8c9eff;
+    color: white;
+  }
+}
+
+.rh-oauth-provider-user-badge {
+  &__provider-icon {
+    background: white;
+  }
+
+  &__user {
+    font-weight: 700;
+  }
+
+  &__user-discriminator {
+    opacity: .7;
+    font-weight: 300;
+  }
+
+  &__container {
+    padding: 6px;
+    flex-grow: 1;
+  }
+}
