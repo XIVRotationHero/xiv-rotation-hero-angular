@@ -6,6 +6,7 @@ import {
   Input,
   OnChanges,
   Output,
+  Renderer2,
   SimpleChanges
 } from "@angular/core";
 import {HotbarService} from "../../../hotbars/services/hotbar.service";
@@ -29,6 +30,8 @@ export class ActionSlotComponent implements OnChanges {
   @Input() actionId?: number;
   @Input() displayRecastTime = false;
   @Input() keyBindingLabel?: string;
+  @Input() showCooldowns = false;
+  @Input() showComboIndicator = false;
 
   @HostBinding('class.empty')
   private isEmpty: boolean = false;
@@ -49,7 +52,8 @@ export class ActionSlotComponent implements OnChanges {
       private readonly keyBindingService: KeyBindingService,
       private readonly hotbarService: HotbarService,
       private readonly gameDataService: GameDataService,
-      private readonly actionService: ActionService
+      private readonly actionService: ActionService,
+      private readonly renderer: Renderer2
   ) {
   }
 
@@ -89,5 +93,13 @@ export class ActionSlotComponent implements OnChanges {
     if (this.actionId) {
       this.actionService.triggerActionId(this.actionId);
     }
+  }
+
+  public disableTooltips() {
+    this.renderer.addClass(document.body, 'disable-tooltips');
+  }
+
+  public enableTooltips() {
+    this.renderer.removeClass(document.body, 'disable-tooltips');
   }
 }

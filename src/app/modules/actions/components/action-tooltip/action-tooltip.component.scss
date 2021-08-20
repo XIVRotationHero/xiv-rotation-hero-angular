@@ -9,6 +9,10 @@
   }
 }
 
+::ng-deep .disable-tooltips .rh-action-tooltip {
+  display: none;
+}
+
 .rh-action-tooltip {
   background: linear-gradient(to bottom, #474747 0px, #272727 20px);
   box-shadow: 0 4px 8px 4px rgba(0, 0, 0, .5);
@@ -66,7 +70,7 @@
     flex-grow: 0;
     flex-shrink: 0;
     text-align: right;
-    background: linear-gradient(to top, #323232 0%, #323232 20%, rgba(0,0,0,0) 21%, rgba(0,0,0,0) 100%);
+    background: linear-gradient(to top, #323232 0%, #323232 20%, rgba(0, 0, 0, 0) 21%, rgba(0, 0, 0, 0) 100%);
     margin: 2px;
 
     &::before {
@@ -92,6 +96,7 @@
   &__range {
     grid-area: range;
     white-space: nowrap;
+
     &::before {
       content: 'Range: ';
       color: #9b9f93;
@@ -101,6 +106,7 @@
   &__effect-range {
     grid-area: radius;
     white-space: nowrap;
+
     &::before {
       content: 'Radius: ';
       color: #9b9f93;

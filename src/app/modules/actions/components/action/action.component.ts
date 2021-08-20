@@ -63,7 +63,7 @@ export class ActionComponent {
   }
 
   @HostListener('mouseover')
-  public onMouseOver() {
+  public showTooltip() {
     if (this.tooltipInstance) return;
 
     this.tooltipInstance = createPopper(
@@ -85,9 +85,11 @@ export class ActionComponent {
   }
 
   @HostListener('mouseout')
-  public onMouseOut() {
-    this.actionTooltip.elementRef.nativeElement.removeAttribute('data-show');
-    this.tooltipInstance?.destroy();
-    this.tooltipInstance = undefined;
+  public hideTooltip() {
+    if (this.tooltipInstance) {
+      this.actionTooltip.elementRef.nativeElement.removeAttribute('data-show');
+      this.tooltipInstance?.destroy();
+      this.tooltipInstance = undefined;
+    }
   }
 }

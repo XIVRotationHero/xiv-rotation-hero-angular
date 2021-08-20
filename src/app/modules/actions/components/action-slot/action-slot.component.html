@@ -4,7 +4,7 @@
       'rh-action-slot__drop-container--triggered': showTriggerBorder$ | async
     }"
     cdkDropList
-    cdkDropListSortingDisabled
+    [cdkDropListSortingDisabled]="true"
     [cdkDropListData]="cdkDropListData"
     (cdkDropListDropped)="onDropHandler($event)">
   <rh-action
@@ -13,12 +13,11 @@
       [cdkDragData]="actionId"
       cdkDragPreviewContainer="global"
       [action]="actionId | actionById"
-      [showCooldowns]="true"
-      [showComboIndicator]="true"
+      [showCooldowns]="showCooldowns"
+      [showComboIndicator]="showComboIndicator"
       [displayRecastTime]="displayRecastTime"
-      [canShowTooltip]="!isDraggingAction"
-      (cdkDragStarted)="isDraggingAction = true"
-      (cdkDragEnded)="isDraggingAction = false"
+      (cdkDragStarted)="disableTooltips()"
+      (cdkDragEnded)="enableTooltips()"
       (click)="triggerAction()"></rh-action>
   <div class="rh-action-slot__keybinding">{{ keyBinding$ | async}}</div>
 </div>
