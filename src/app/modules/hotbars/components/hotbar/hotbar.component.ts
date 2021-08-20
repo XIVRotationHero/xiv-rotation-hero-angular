@@ -38,17 +38,18 @@ export class HotbarComponent {
 
   @Input() public options?: HotbarOptions;
 
-  @Input() public allocation: any[] = [ null, null, null, null, null, null, null, null, null, null, null, null ];
+  @Input() public allocation: any[] = [null, null, null, null, null, null, null, null, null, null, null, null];
 
   @Output() public onCycle: EventEmitter<number> = new EventEmitter();
   @Output() public changePosition: EventEmitter<[number, number]> = new EventEmitter();
+  @Output() public allocateAction: EventEmitter<{ hotbarId: number, slotId: number, actionId: number }> = new EventEmitter();
 
   private positionX: number = 0;
   private positionY: number = 0;
-  private lastMousePosition: [ number, number ] = [0, 0];
+  private lastMousePosition: [number, number] = [0, 0];
 
   public constructor(
-    private readonly elementRef: ElementRef
+      private readonly elementRef: ElementRef
   ) {
     this.onMouseDragStop = this.onMouseDragStop.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
@@ -63,7 +64,7 @@ export class HotbarComponent {
     document.addEventListener('mousemove', this.onMouseMove);
     document.addEventListener('mouseup', this.onMouseDragStop);
 
-    this.lastMousePosition = [ evt.clientX, evt.clientY ];
+    this.lastMousePosition = [evt.clientX, evt.clientY];
   }
 
   public onMouseMove(evt: MouseEvent) {
@@ -71,17 +72,17 @@ export class HotbarComponent {
     const width = evt.view ? evt.view.innerWidth : 0;
     const height = evt.view ? evt.view.innerHeight : 0;
 
-    const [ currentX, currentY ] = this.position;
-    const [ realX, realY ] = [ currentX * width, currentY * height ];
+    const [currentX, currentY] = this.position;
+    const [realX, realY] = [currentX * width, currentY * height];
 
     // Get difference between last and new position in pixels
-    const [ oldX, oldY ] = this.lastMousePosition;
-    const { clientX, clientY } = evt;
-    const [ diffX, diffY ] = [ oldX - clientX, oldY - clientY ];
-    this.lastMousePosition = [ clientX, clientY ];
+    const [oldX, oldY] = this.lastMousePosition;
+    const {clientX, clientY} = evt;
+    const [diffX, diffY] = [oldX - clientX, oldY - clientY];
+    this.lastMousePosition = [clientX, clientY];
 
     // convert to percentage
-    this.position = [ Math.max((realX - diffX) / width, 0), Math.max((realY - diffY) / height, 0) ];
+    this.position = [Math.max((realX - diffX) / width, 0), Math.max((realY - diffY) / height, 0)];
   }
 
   public slotId(index: number) {

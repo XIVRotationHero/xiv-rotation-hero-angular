@@ -1,18 +1,18 @@
 <div
-  class="rh-hotbar__number"
-  [ngClass]="{
+    class="rh-hotbar__number"
+    [ngClass]="{
       'rh-hotbar__number--hidden': !hotbarDisplaySettings?.displayHotbarNumbers
     }"
-  (mousedown)="onMouseDragStart($event)">
+    (mousedown)="onMouseDragStart($event)">
   <div
-    *ngIf="hotbarId === 0 && displayedHotbarId !== null &&hotbarDisplaySettings?.enableHotbarCyclingButton"
-    (click)="onCycle.emit(displayedHotbarId + 1)">
+      *ngIf="hotbarId === 0 && displayedHotbarId !== null &&hotbarDisplaySettings?.enableHotbarCyclingButton"
+      (click)="onCycle.emit(displayedHotbarId + 1)">
     Up
   </div>
   {{ hotbarId === 0 ? displayedHotbarId! + 1 : hotbarId + 1}}
   <div
-    *ngIf="hotbarId === 0 && displayedHotbarId !== null && hotbarDisplaySettings?.enableHotbarCyclingButton"
-    (click)="onCycle.emit(displayedHotbarId - 1)">
+      *ngIf="hotbarId === 0 && displayedHotbarId !== null && hotbarDisplaySettings?.enableHotbarCyclingButton"
+      (click)="onCycle.emit(displayedHotbarId - 1)">
     Down
   </div>
 </div>
@@ -20,13 +20,16 @@
      [ngClass]="{
     'rh-hotbar__slots--hide-unassigned': hotbarDisplaySettings?.hideUnassignedSlots
   }">
-  <rh-hotbar-slot
-    *ngFor="let slot of allocation; index as slotId; trackBy: slotId"
-    [hotbarId]="hotbarId"
-    [slotId]="slotId"
-    [actionId]="slot"
-    [displayRecastTime]="!!hotbarDisplaySettings?.displayRecastTimes"
-    [ngClass]="{
-      'unassigned': !slot
-    }"></rh-hotbar-slot>
+  <rh-action-slot
+      *ngFor="let slot of allocation; index as slotId; trackBy: slotId"
+      [hotbarId]="hotbarId"
+      [slotId]="slotId"
+      [actionId]="slot"
+      [displayRecastTime]="!!hotbarDisplaySettings?.displayRecastTimes"
+      [keyBindingLabel]="'Hotbar '+ (this.hotbarId+1) + ' - Slot ' + (this.slotId+1)"
+      [ngClass]="{
+        'unassigned': !slot
+      }"
+      (onDrop)="allocateAction.emit($event)">
+  </rh-action-slot>
 </div>
