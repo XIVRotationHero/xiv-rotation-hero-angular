@@ -1,5 +1,6 @@
-import {Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, Output, ViewChild} from '@angular/core';
 import {DialogRef, DialogService} from "../../services/dialog.service";
+import {DialogContentHostDirective} from "../../directives/dialog-content-host.directive";
 
 @Component({
   selector: 'rh-dialog',
@@ -16,6 +17,8 @@ export class DialogComponent {
   @HostBinding('class.active')
   @Input() public isActive!: boolean;
 
+  @ViewChild(DialogContentHostDirective, {static: true}) contentHost!: DialogContentHostDirective;
+
   @Output() public closeDialog: EventEmitter<void> = new EventEmitter();
 
   private lastMousePosition: [number, number] = [0, 0];
@@ -24,8 +27,8 @@ export class DialogComponent {
   private maxTop = 0;
 
   public constructor(
-    private readonly elementRef: ElementRef,
-    private readonly dialogService: DialogService
+      private readonly elementRef: ElementRef,
+      private readonly dialogService: DialogService
   ) {
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseDragStop = this.onMouseDragStop.bind(this);
@@ -51,13 +54,13 @@ export class DialogComponent {
   private onMouseMove(evt: MouseEvent): void {
     evt.preventDefault();
 
-    const { offsetLeft, offsetTop } = this.elementRef.nativeElement;
+    const {offsetLeft, offsetTop} = this.elementRef.nativeElement;
 
     // Get difference between last and new position in pixels
-    const [ oldX, oldY ] = this.lastMousePosition;
-    const { clientX, clientY } = evt;
-    const [ diffX, diffY ] = [ oldX - clientX, oldY - clientY ];
-    this.lastMousePosition = [ clientX, clientY ];
+    const [oldX, oldY] = this.lastMousePosition;
+    const {clientX, clientY} = evt;
+    const [diffX, diffY] = [oldX - clientX, oldY - clientY];
+    this.lastMousePosition = [clientX, clientY];
 
     // Set position
     this.updatePosition(offsetLeft - diffX, offsetTop - diffY);

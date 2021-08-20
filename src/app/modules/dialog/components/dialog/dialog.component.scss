@@ -4,7 +4,6 @@
   left: 0;
   border: 2px solid transparent;
   border-radius: 12px;
-  overflow: hidden;
   box-shadow: 0 5px 20px 5px rgba(0, 0, 0, 0.2);
   color: white;
   will-change: top, left;
@@ -63,5 +62,6 @@
 
   &__content {
     background: #323232;
+    border-radius: 0 0 10px 10px;
   }
 }

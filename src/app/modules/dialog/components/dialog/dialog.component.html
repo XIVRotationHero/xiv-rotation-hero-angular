@@ -1,9 +1,9 @@
 <div class="rh-dialog__title-bar"
-    (mousedown)="onMouseDragStart($event)">
+     (mousedown)="onMouseDragStart($event)">
   <div class="rh-dialog__title">{{ dialogTitle }}</div>
   <div class="rh-dialog__close-button"
-     (click)="closeDialog.emit()"></div>
+       (click)="closeDialog.emit()"></div>
 </div>
 <div class="rh-dialog__content">
-  <ng-content></ng-content>
+  <ng-template rhDialogContentHost></ng-template>
 </div>

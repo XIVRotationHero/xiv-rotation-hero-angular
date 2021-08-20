@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ViewContainerRef} from '@angular/core';
 import {DialogService} from "../../services/dialog.service";
 
 @Component({
@@ -9,12 +9,13 @@ import {DialogService} from "../../services/dialog.service";
 export class DialogOutletComponent implements AfterViewInit {
 
   public constructor(
-    private readonly elementRef: ElementRef,
-    private readonly dialogService: DialogService
-  ) {}
+      private readonly viewContainerRef: ViewContainerRef,
+      private readonly dialogService: DialogService
+  ) {
+  }
 
   public ngAfterViewInit() {
-    this.dialogService.registerContainer(this.elementRef);
+    this.dialogService.registerContainer(this.viewContainerRef);
   }
 
 }

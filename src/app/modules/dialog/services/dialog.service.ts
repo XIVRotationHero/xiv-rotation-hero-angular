@@ -2,11 +2,10 @@ import {
   ApplicationRef,
   ComponentFactoryResolver,
   ComponentRef,
-  ElementRef,
-  EmbeddedViewRef,
   Injectable,
   Injector,
-  Type
+  Type,
+  ViewContainerRef
 } from '@angular/core';
 import {DialogComponent} from "../components/dialog/dialog.component";
 import {take} from "rxjs/operators";
@@ -19,7 +18,7 @@ export interface DialogConfiguration {
 }
 
 export interface DialogRef {
-  componentRef: ComponentRef<any>;
+  contentComponentRef: ComponentRef<any>;
   dialogComponentRef: ComponentRef<DialogComponent>;
   close: () => any;
 }
@@ -32,16 +31,17 @@ export class DialogService {
   private dialogs: Map<DialogConfiguration, DialogRef> = new Map();
   private dialogOrder: DialogRef[] = [];
 
-  private elementRef?: ElementRef;
+  private viewContainerRef?: ViewContainerRef;
 
   constructor(
-    private readonly componentFactoryResolver: ComponentFactoryResolver,
-    private readonly injector: Injector,
-    private readonly appRef: ApplicationRef
-  ) {}
+      private readonly componentFactoryResolver: ComponentFactoryResolver,
+      private readonly injector: Injector,
+      private readonly appRef: ApplicationRef
+  ) {
+  }
 
-  public registerContainer(elementRef: ElementRef) {
-    this.elementRef = elementRef;
+  public registerContainer(viewContainerRef: ViewContainerRef) {
+    this.viewContainerRef = viewContainerRef;
   }
 
   public toggle(dialogConfiguration: DialogConfiguration) {
@@ -53,65 +53,43 @@ export class DialogService {
   }
 
   public open(dialogConfiguration: DialogConfiguration): DialogRef | undefined {
-    if (!this.elementRef || this.dialogs.has(dialogConfiguration)) {
+    if (!this.viewContainerRef || this.dialogs.has(dialogConfiguration)) {
       return;
     }
 
-    const componentRef = this.componentFactoryResolver
-      .resolveComponentFactory(dialogConfiguration.content)
-      .create(this.injector);
+    const contentComponentFactory = this.componentFactoryResolver.resolveComponentFactory(dialogConfiguration.content);
+    const dialogComponentFactory = this.componentFactoryResolver.resolveComponentFactory(DialogComponent)
 
-    const dialogComponentRef = this.componentFactoryResolver
-      .resolveComponentFactory(DialogComponent)
-      .create(this.injector, [ [ componentRef.location.nativeElement ] ]);
+    const dialogComponentRef = this.viewContainerRef.createComponent(dialogComponentFactory);
 
-    const dialogRef: DialogRef = {
-      dialogComponentRef,
-      componentRef,
-      close: () => this.close(dialogConfiguration)
-    }
-
+    const contentComponentRef = dialogComponentRef.instance.contentHost.viewContainerRef.createComponent(contentComponentFactory);
     dialogComponentRef.instance.dialogTitle = dialogConfiguration.title;
-    dialogComponentRef.instance.dialogRef = dialogRef;
+    dialogComponentRef.instance.dialogRef = {
+      dialogComponentRef,
+      contentComponentRef,
+      close: () => this.close(dialogConfiguration)
+    };
     dialogComponentRef.instance.closeDialog.pipe(take(1))
-      .subscribe(() => this.close(dialogConfiguration))
+        .subscribe(() => this.close(dialogConfiguration))
 
-    this.appRef.attachView(componentRef.hostView);
-    this.appRef.attachView(dialogRef.dialogComponentRef.hostView);
-
-    const domElem = (dialogRef.dialogComponentRef.hostView as EmbeddedViewRef<any>)
-      .rootNodes[0] as HTMLElement;
-
-    this.elementRef.nativeElement.appendChild(domElem);
-
-    this.dialogs.set(dialogConfiguration, dialogRef);
-
-    this.dialogOrder.push(dialogRef);
+    this.dialogs.set(dialogConfiguration, dialogComponentRef.instance.dialogRef);
+    this.dialogOrder.push(dialogComponentRef.instance.dialogRef);
 
     this.updateZOrder();
 
-    return dialogRef;
+    return dialogComponentRef.instance.dialogRef;
   }
 
   public close(dialogConfiguration: DialogConfiguration) {
-    if (!dialogConfiguration || !this.dialogs.get(dialogConfiguration) || !this.elementRef) {
+    if (!dialogConfiguration || !this.dialogs.get(dialogConfiguration) || !this.viewContainerRef) {
       return;
     }
 
     const dialogRef = this.dialogs.get(dialogConfiguration) as DialogRef;
-
-    const domElem = (dialogRef.dialogComponentRef.hostView as EmbeddedViewRef<any>)
-      .rootNodes[0] as HTMLElement;
-
-    this.elementRef.nativeElement.removeChild(domElem);
-
-    this.appRef.detachView(dialogRef.dialogComponentRef.hostView)
-    this.appRef.detachView(dialogRef.componentRef.hostView);
-
+    dialogRef.contentComponentRef.destroy();
+    dialogRef.dialogComponentRef.destroy();
     this.dialogOrder.splice(this.dialogOrder.indexOf(dialogRef), 1);
-
     this.dialogs.delete(dialogConfiguration);
-
     this.updateZOrder();
   }
 
