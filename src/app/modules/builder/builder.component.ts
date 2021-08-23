@@ -1,6 +1,17 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {Phase} from "../api/enums/phase";
 import {RotationCreate} from "../api/interfaces/rotation-create";
+import {ActionService} from "../actions/services/action.service";
+import {RotationPhase} from "../api/interfaces/rotation-phase";
+import {filter, takeUntil} from "rxjs/operators";
+import {RotationService} from "../../core/services/rotation.service";
+import {Rotation} from "../api/interfaces/rotation";
+import {PublishState} from "../api/enums/publish-state";
+import {DialogService} from "../dialog/services/dialog.service";
+import {RotationHeroDialogConfiguration} from "../rotation-hero/rotation-hero-dialog-configuration";
+import {Subject} from "rxjs";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {UserService} from "../user/services/user.service";
 
 @Component({
   selector: 'rh-builder',
@@ -14,62 +25,111 @@ export class BuilderComponent {
     title: '',
     description: '',
     classJobId: -1,
-    phases: []
+    phases: [
+      {phase: Phase.PrePull, actions: []},
+      {phase: Phase.Opener, actions: []},
+      {phase: Phase.Cooldown, actions: []},
+      {phase: Phase.Burst, actions: []}
+    ]
   }
 
-  public pendingRemovalPhase: Phase | null = null;
+  public showMetaInfo = true;
+  public isRecording = false;
+  public recordEnabledPhase: RotationPhase = this.rotation.phases[0];
+  public disabledPhases: Set<Phase> = new Set();
 
-  public readonly availablePhases: Phase[] = [
-    Phase.PrePull,
-    Phase.Opener,
-    Phase.Cooldown,
-    Phase.Burst
-  ];
-  public readonly enabledPhases: Set<string> = new Set();
+  public readonly form: FormGroup;
+  public readonly currentUser$ = this.userService.signedInUser$;
+  public readonly isDestroyed$: Subject<void> = new Subject();
 
-  public readonly Phase = Phase;
+  public constructor(
+      private readonly actionService: ActionService,
+      private readonly changeDetectorRef: ChangeDetectorRef,
+      private readonly rotationService: RotationService,
+      private readonly dialogService: DialogService,
+      private readonly fb: FormBuilder,
+      private readonly userService: UserService
+  ) {
+    this.actionService.executedActionIds$
+        .pipe(
+            takeUntil(this.isDestroyed$),
+            filter(() => this.isRecording)
+        )
+        .subscribe((actionId) => {
+          this.recordEnabledPhase.actions = [...this.recordEnabledPhase.actions, actionId];
+          this.changeDetectorRef.detectChanges();
+        });
 
-  public togglePhase(phase: Phase) {
-    const targetPhase = this.rotation.phases.find((rotationPhase) => rotationPhase.phase === phase);
+    this.form = this.fb.group({
+      title: ['', [Validators.min(1)]],
+      description: ['', [Validators.min(1)]],
+    });
+  }
 
-    if (targetPhase) {
-      if (targetPhase.actions?.length) {
-        this.pendingRemovalPhase = phase;
-      } else {
-        this.removePhase(phase);
+  public ngOnDestroy() {
+    this.isDestroyed$.next();
+  }
+
+  public tryRotation(): void {
+    const rotation: Rotation = {
+      ...this.rotation,
+      id: '',
+      createdAt: '',
+      patch: '',
+      favouriteCount: 0,
+      publishState: PublishState.Unpublished,
+      phases: this.rotation.phases.filter((phase) => !this.disabledPhases.has(phase.phase) && phase.actions.length !== 0),
+      user: {
+        id: 'NoUserId',
+        username: 'NoUserName'
       }
-    } else {
-      this.enabledPhases.add(phase);
-      this.rotation.phases.push({ phase, actions: [] });
-    }
-  }
-
-  public removePhase(phase: Phase) {
-    const targetPhase = this.rotation.phases.find((rotationPhase) => rotationPhase.phase === phase);
-
-    if (targetPhase) {
-      const phaseIndex = this.rotation.phases.indexOf(targetPhase);
-      this.rotation.phases = [...this.rotation.phases.slice(0, phaseIndex), ...this.rotation.phases.slice(phaseIndex + 1)];
-      this.enabledPhases.delete(phase);
     }
 
-    this.pendingRemovalPhase = null;
+    this.dialogService.open(RotationHeroDialogConfiguration);
+    this.rotationService.activeRotation$.next(rotation);
   }
 
-  public updatePhaseAction(phase: Phase, actions: number[]) {
-    const targetPhase = this.rotation.phases.find((rotationPhase) => rotationPhase.phase === phase);
-
-    if (targetPhase) {
-      const phaseIndex = this.rotation.phases.indexOf(targetPhase);
-      this.rotation.phases = [
-        ...this.rotation.phases.slice(0, phaseIndex),
-        {
-          phase,
-          actions
-        },
-        ...this.rotation.phases.slice(phaseIndex + 1)
+  public resetRotation(): void {
+    this.rotation = {
+      title: '',
+      description: '',
+      classJobId: -1,
+      phases: [
+        {phase: Phase.PrePull, actions: []},
+        {phase: Phase.Opener, actions: []},
+        {phase: Phase.Cooldown, actions: []},
+        {phase: Phase.Burst, actions: []}
       ]
     }
+
+    this.disabledPhases.clear();
+  }
+
+  public saveRotation(): void {
+    const rotation: Rotation = {
+      ...this.rotation,
+      ...this.form.value
+    }
+
+    this.rotationService.saveRotation(rotation).subscribe();
+  }
+
+  public updatePhaseAction(phase: Phase, actions: number[]): void {
+    const targetPhase = this.rotation.phases.find((rotationPhase) => rotationPhase.phase === phase);
+
+    if (targetPhase) {
+      targetPhase.actions = actions;
+    }
+  }
+
+  public phaseType(index: number, phase: RotationPhase): string {
+    return phase.phase;
+  }
+
+  public togglePhase(phase: Phase): void {
+    this.disabledPhases.has(phase)
+        ? this.disabledPhases.delete(phase)
+        : this.disabledPhases.add(phase)
   }
 
 }

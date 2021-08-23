@@ -1,47 +1,52 @@
 <div class="rh-builder__toolbar rh-builder__toolbar--top">
-  <a class="rh-builder__toolbar-button">New</a>
-  <a class="rh-builder__toolbar-button">Try out</a>
-  <a class="rh-builder__toolbar-button">Save/Update</a>
+  <a class="rh-builder__toolbar-button" (click)="resetRotation()">New</a>
+  <a class="rh-builder__toolbar-button" (click)="tryRotation()">Try out</a>
+  <a class="rh-builder__toolbar-button"
+     [ngClass]="{
+       'rh-builder__toolbar-button--disabled': !form.valid || !(currentUser$ | async)
+     }"
+     matTooltip="You need to be signed in to save a rotation."
+     [matTooltipDisabled]="!!(currentUser$ | async)"
+     (click)="form.valid && saveRotation()">Save</a>
 </div>
 
 <div class="rh-builder__toolbar rh-builder__toolbar--bottom">
-  <button>Record</button>
+  <button
+      class="rh-builder__record-button"
+      [ngClass]="{
+        'rh-builder__record-button--recording': isRecording
+      }"
+      (click)="isRecording = !isRecording"
+      [matTooltip]="isRecording ? 'Stop recording' : 'Start recording'">
+    &#11044; Record
+  </button>
 
-  <div class="rh-builder__phase-buttons">
-    <a class="rh-builder__phase-button"
-       *ngFor="let phase of availablePhases"
-       [ngClass]="{ 'rh-builder__phase-button--enabled': enabledPhases.has(phase) }"
-       (click)="togglePhase(phase)">{{ phase }}</a>
-  </div>
-
-  <a class="rh-builder__meta-toggle">Toggle meta info</a>
+  <a class="rh-builder__meta-toggle"
+     (click)="showMetaInfo = !showMetaInfo">Toggle meta info</a>
 </div>
 
-<div class="rh-builder__warning"
-     *ngIf="pendingRemovalPhase">
-  <div class="rh-builder__warning-text">
-    Phase {{pendingRemovalPhase}} already contains actions. Removing it will also clear these. Do you still want to remove it?
-  </div>
-  <div class="rh-builder__warning-buttons button-group">
-    <button
-        class="button button--block"
-        (click)="removePhase(pendingRemovalPhase)">Yes</button>
-    <button
-        class="button button--block button--warning"
-        (click)="pendingRemovalPhase = null">No</button>
-  </div>
-</div>
-
-<div class="rh-builder__meta-information">
+<form class="rh-builder__meta-information"
+      [formGroup]="form"
+      *ngIf="showMetaInfo">
   <div class="rh-builder__meta-label">Title:</div>
-  <input class="rh-builder__title-input" type="text" placeholder="Enter rotation title">
+  <input
+      class="rh-builder__title-input"
+      placeholder="Enter rotation title"
+      formControlName="title"/>
   <div class="rh-builder__meta-label">Description:</div>
-  <textarea class="rh-builder__description-input" placeholder="Enter a description for your rotation"></textarea>
-  <div class="rh-builder__meta-label">ID:</div>
-  <div class="rh-builder__rotation-id">-</div>
-</div>
+  <textarea
+      class="rh-builder__description-input"
+      placeholder="Enter a description for your rotation"
+      formControlName="description"></textarea>
+</form>
 
 <rh-rotation-phase-view
-    *ngFor="let phase of rotation.phases"
-    [phase]="phase"
+    *ngFor="let phase of rotation.phases; trackBy:phaseType"
+    [phase]="phase.phase"
+    [actions]="phase.actions"
+    [isDisabled]="disabledPhases.has(phase.phase)"
+    [isRecordEnabled]="phase === recordEnabledPhase"
+    [isRecording]="isRecording"
+    (setAsRecordingTarget)="recordEnabledPhase = phase"
+    (togglePhase)="togglePhase(phase.phase)"
     (updateActions)="updatePhaseAction(phase.phase, $event)"></rh-rotation-phase-view>

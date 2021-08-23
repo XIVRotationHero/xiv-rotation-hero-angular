@@ -14,9 +14,10 @@ import {ActionTooltipComponent} from "../action-tooltip/action-tooltip.component
 })
 export class ActionComponent {
   @Input() public action!: Action;
-  @Input() public showCooldowns = false;
-  @Input() public showComboIndicator = false;
-  @Input() public displayRecastTime = false;
+  @Input() public canShowCooldowns = false;
+  @Input() public canShowComboIndicator = false;
+  @Input() public canShowRecastTime = false;
+  @Input() public canShowCost = false;
   @Input() public canShowTooltip = true;
 
   public isComboAction = false;
@@ -63,8 +64,8 @@ export class ActionComponent {
   }
 
   @HostListener('mouseover')
-  public showTooltip() {
-    if (this.tooltipInstance) return;
+  private showTooltip() {
+    if (this.canShowTooltip && this.tooltipInstance) return;
 
     this.tooltipInstance = createPopper(
         this.elementRef.nativeElement,

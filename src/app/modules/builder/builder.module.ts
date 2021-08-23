@@ -5,7 +5,9 @@ import {RotationPhaseViewComponent} from './components/rotation-phase-view/rotat
 import {DialogModule} from "../dialog/dialog.module";
 import {ActionsModule} from "../actions/actions.module";
 import {DragDropModule} from "@angular/cdk/drag-drop";
-
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -16,10 +18,14 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     CommonModule,
     DialogModule,
     ActionsModule,
-    DragDropModule
+    DragDropModule,
+    MatTooltipModule,
+    FontAwesomeModule,
+    ReactiveFormsModule
   ],
   exports: [
     BuilderComponent
   ]
 })
-export class BuilderModule { }
+export class BuilderModule {
+}

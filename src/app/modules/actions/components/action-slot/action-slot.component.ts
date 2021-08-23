@@ -30,8 +30,10 @@ export class ActionSlotComponent implements OnChanges {
   @Input() actionId?: number;
   @Input() displayRecastTime = false;
   @Input() keyBindingLabel?: string;
-  @Input() showCooldowns = false;
-  @Input() showComboIndicator = false;
+  @Input() canShowCooldown = false;
+  @Input() canShowComboIndicator = false;
+  @Input() canShowTooltip = true;
+  @Input() canShowCost = false;
 
   @HostBinding('class.empty')
   private isEmpty: boolean = false;
@@ -45,8 +47,6 @@ export class ActionSlotComponent implements OnChanges {
   public readonly showTriggerBorder$ = this.triggered$.pipe(
       switchMap(() => of(false).pipe(delay(200), startWith(true)))
   );
-
-  public isDraggingAction = false;
 
   constructor(
       private readonly keyBindingService: KeyBindingService,

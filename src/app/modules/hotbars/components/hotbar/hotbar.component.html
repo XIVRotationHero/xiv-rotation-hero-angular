@@ -30,6 +30,9 @@
       [ngClass]="{
         'unassigned': !slot
       }"
+      [canShowCost]="true"
+      [canShowCooldown]="true"
+      [canShowComboIndicator]="true"
       (onDrop)="allocateAction.emit($event)">
   </rh-action-slot>
 </div>

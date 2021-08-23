@@ -1,33 +1,172 @@
 :host {
   display: flex;
-  padding: 4px 0;
   border-bottom: 1px solid #262626;
   box-sizing: border-box;
+  min-width: 500px;
+  user-select: none;
+
+  &.disabled {
+    opacity: .5;
+  }
 }
 
 .rh-rotation-phase-view {
+  &__collapse {
+    background: #464646;
+    border-radius: 12px 0 0 12px;
+    cursor: pointer;
+  }
+
+  &__collapse-icon {
+    display: inline-block;
+    font-size: 12px;
+    padding: 2px 4px;
+
+    &--collapsed {
+      transform: rotateZ(180deg);
+    }
+  }
+
   &__information {
     width: 80px;
-    background: #262626;
+    background: #565656;
     padding: 6px;
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    :host.collapsed & {
+      padding: 2px 6px;
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  &__phase-name {
+    text-transform: uppercase;
+    font-size: 12px;
+
+    :host.collapsed & {
+      order: 2;
+    }
+  }
+
+  &__phase-buttons {
+    :host.collapsed & {
+      order: 1;
+      margin-right: 4px;
+    }
+  }
+
+  &__phase-button {
+    display: inline-block;
+    box-sizing: border-box;
+    color: white;
+    padding: 0;
+    border-radius: 4px;
+    width: 20px;
+    text-align: center;
+    font-weight: 500;
+    line-height: 20px;
+    font-size: 12px;
+    border: 1px solid #414141;
+    cursor: pointer;
+    background: #4b4b4b;
+
+    :host.collapsed & {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      vertical-align: middle;
+
+      &:before {
+        content: '';
+      }
+    }
+
+    &--record-enabled {
+      animation-name: blink-record-button;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+    }
+
+    &--record::before {
+      content: 'R';
+    }
+
+    &--recording {
+      background: red;
+    }
+
+    &--enabled {
+      :host.collapsed & {
+        display: none;
+      }
+    }
   }
 
   &__actions {
     padding: 8px;
+    margin: 4px 4px;
     flex: 1 1 auto;
     display: flex;
     flex-wrap: wrap;
+    position: relative;
+    border: 1px dashed gray;
+    border-radius: 4px;
+    min-height: 56px;
+    box-sizing: border-box;
+
+    :host.collapsed & {
+      padding: 0;
+      margin: 0;
+      min-height: 20px;
+      border: 0;
+
+      &--empty::before {
+        display: none;
+      }
+    }
 
     ::ng-deep rh-action {
       width: 30px;
       height: 30px;
       margin: 4px;
+
+      :host.collapsed & {
+        width: 16px;
+        height: 16px;
+        margin: 2px;
+      }
     }
+  }
+
+  &__empty-hint {
+    color: gray;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    line-height: 40px;
   }
 }
 
 rh-action {
   width: 30px;
   height: 30px;
+}
+
+@keyframes blink-record-button {
+  0%,
+  50% {
+    background: red;
+  }
+
+  51%,
+  100% {
+    background: #4b4b4b;
+  }
 }

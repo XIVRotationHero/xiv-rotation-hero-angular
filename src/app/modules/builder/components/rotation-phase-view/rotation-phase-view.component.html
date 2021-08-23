@@ -1,16 +1,52 @@
+<div class="rh-rotation-phase-view__collapse"
+     [matTooltip]="isCollapsed ? 'Expand phase' : 'Collapse phase'"
+     (click)="isCollapsed = !isCollapsed">
+  <span class="rh-rotation-phase-view__collapse-icon"
+        [ngClass]="{
+          'rh-rotation-phase-view__collapse-icon--collapsed': isCollapsed
+        }">
+    &#x25B2;
+  </span>
+</div>
+
 <div class="rh-rotation-phase-view__information">
-  {{ phase?.phase }}
+  <div class="rh-rotation-phase-view__phase-name">{{ phase }}</div>
+  <div class="rh-rotation-phase-view__phase-buttons">
+    <button
+        class="rh-rotation-phase-view__phase-button rh-rotation-phase-view__phase-button--record"
+        [ngClass]="{
+          'rh-rotation-phase-view__phase-button--record-enabled': isRecordEnabled && !isRecording,
+          'rh-rotation-phase-view__phase-button--recording': isRecordEnabled && isRecording
+        }"
+        [matTooltip]="isRecordEnabled ? 'This phase is enabled for recording' : 'Enable phase for recording'"
+        (click)="setAsRecordingTarget.emit()"></button>
+    <button
+        class="rh-rotation-phase-view__phase-button rh-rotation-phase-view__phase-button--enabled"
+        [matTooltip]="isDisabled ? 'Include phase for rotation' : 'Exclude phase for rotation'"
+        (click)="togglePhase.emit()">
+      <fa-icon [icon]="isDisabled ? faEye : faEyeSlash"></fa-icon>
+    </button>
+  </div>
 </div>
 
 <div
     class="rh-rotation-phase-view__actions"
+    [ngClass]="{
+      'rh-rotation-phase-view__actions--empty': actions.length === 0
+    }"
     cdkDropList
-    [cdkDropListData]="phase?.actions"
+    [cdkDropListData]="actions"
     cdkDropListOrientation="horizontal"
     (cdkDropListDropped)="onDrop($event)">
+  <div
+      class="rh-rotation-phase-view__empty-hint"
+      *ngIf="actions.length === 0 && !isCollapsed">
+    Drag actions here {{ isRecordEnabled && isRecording ? '/ Trigger action to record' : '' }}
+  </div>
   <rh-action
       cdkDrag
-      *ngFor="let actionId of phase?.actions"
+      *ngFor="let actionId of actions; index as index"
       [action]="actionId | actionById"
-      (cdkDragEnded)="onDragEnd($event)"></rh-action>
+      (cdkDragEnded)="onDragEnd($event)"
+      (contextmenu)="onRightClick($event, index)"></rh-action>
 </div>

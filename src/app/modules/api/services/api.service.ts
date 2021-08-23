@@ -41,8 +41,8 @@ export class ApiService {
   }
 
   // ROTATIONS
-  createRotation(rotation: RotationCreate): Observable<Response> {
-    return this.request('/rotation/', 'POST', JSON.stringify(rotation)) as Observable<Response>;
+  createRotation(rotation: RotationCreate): Observable<Rotation> {
+    return this.request('/rotation/', 'POST', JSON.stringify(rotation)) as Observable<Rotation>;
   }
 
   updateRotation(rotation: RotationUpdate): Observable<Response> {

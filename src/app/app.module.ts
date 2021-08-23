@@ -5,6 +5,10 @@ import {AppRoutingModule} from "./app-routing.module";
 import {HttpClientModule} from "@angular/common/http";
 import {communicationLayerServiceProvider} from "./modules/act/services/communication-layer.service.provider";
 import {ReactiveFormsModule} from "@angular/forms";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {OverlayModule} from "@angular/cdk/overlay";
+import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions, MatTooltipModule} from "@angular/material/tooltip";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -15,9 +19,14 @@ import {ReactiveFormsModule} from "@angular/forms";
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    OverlayModule,
+    MatTooltipModule,
+    FontAwesomeModule
   ],
   providers: [
-    communicationLayerServiceProvider
+    communicationLayerServiceProvider,
+    {provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: <MatTooltipDefaultOptions>{position: "above"}}
   ],
   bootstrap: [AppComponent]
 })

@@ -74,54 +74,31 @@
     cursor: pointer;
     white-space: nowrap;
     text-transform: uppercase;
+
+    &--disabled {
+      color: gray;
+      cursor: default;
+    }
   }
 
   &__record-button {
     font-weight: 900;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    font-size: 10px;
-    line-height: inherit;
-    color: green;
-
-    &::before {
-      content: '';
-      width: 8px;
-      height: 8px;
-      display: inline-block;
-      margin-right: 6px;
-      background: white;
-      border-radius: 100%;
-    }
-
-    &:focus,
-    &:active,
-    &:hover {
-      color: green;
-    }
-
-    &:disabled {
-      color: #777;
-      cursor: not-allowed;
-
-      &::before {
-        color: #777;
-      }
-    }
+    line-height: 20px;
+    font-size: 14px;
+    border: 1px solid #414141;
+    color: white;
+    background: #4b4b4b;
+    display: inline-block;
+    padding: 0 6px;
+    border-radius: 6px;
 
     &--recording {
       background: red;
-      color: white;
 
       &:focus,
       &:active,
       &:hover {
         color: white;
-      }
-
-      &::before {
-        border-radius: 0;
-        background: linear-gradient(to right, #fff 40%, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0) 60%, #fff 60%);
       }
     }
   }

@@ -34,4 +34,5 @@ import {CrossHotbarModule} from "../../modules/cross-hotbar/cross-hotbar.module"
     CrossHotbarModule
   ]
 })
-export class BrowserModule { }
+export class BrowserModule {
+}
