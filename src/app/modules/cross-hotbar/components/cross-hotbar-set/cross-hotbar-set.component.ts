@@ -26,6 +26,7 @@ export type HalfCrossHotbarAllocation = [
 })
 export class CrossHotbarSetComponent {
   @Input() public isActive = false;
+  @Input() public hotbarId: [number, number] = [0, 0];
   @Input() public allocation!: FullCrossHotbarAllocation;
   @Input() public displayBothHalves = true;
 

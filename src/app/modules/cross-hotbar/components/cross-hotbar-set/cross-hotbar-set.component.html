@@ -2,7 +2,7 @@
      [ngClass]="{
         'rh-cross-hotbar-set--active': isActive
      }">
-  <div class="rh-cross-hotbar-set__hotbar-help">
+  <div class="rh-cross-hotbar-set__hotbar-help" *ngIf="false">
     <div class="rh-cross-hotbar-set__action-name" *ngFor="let slot of displayedAllocation">
       {{ slot ? (slot | actionById).Name : '' }}
     </div>
@@ -11,8 +11,14 @@
     <rh-action-slot
         class="rh-cross-hotbar-set__slot"
         *ngFor="let slot of displayedAllocation; index as index"
-        [hotbarId]="1"
-        [slotId]="1"
+        [hotbarId]="hotbarId[0]"
+        [slotId]="index"
+        [actionId]="slot!"
+        [canShowComboIndicator]="true"
+        [canShowCooldown]="true"
+        [canShowCost]="true"
+        [canShowTooltip]="true"
+        [displayRecastTime]="true"
         (onDrop)="onDropHandler($event)"></rh-action-slot>
     <rh-dpad-icon
         *ngIf="displayBothHalves"

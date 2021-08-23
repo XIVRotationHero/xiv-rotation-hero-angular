@@ -3,39 +3,31 @@ import {GamepadService} from "../gamepad/services/gamepad.service";
 import {GamepadButtonState} from "../gamepad/enums/gamepad-button-state";
 import {ActiveCrossHotbarSet} from "./enums/active-cross-hotbar-set";
 import {PSGamepadButton} from "../gamepad/enums/ps-gamepad-button";
-import {animationFrameScheduler, BehaviorSubject, interval, Observable} from "rxjs";
-import {map, shareReplay} from "rxjs/operators";
+import {animationFrameScheduler, BehaviorSubject, combineLatest, interval, Observable, Subject} from "rxjs";
+import {filter, map, shareReplay, take, withLatestFrom} from "rxjs/operators";
 import {FullCrossHotbarAllocation} from "./components/cross-hotbar-set/cross-hotbar-set.component";
 import {HotbarCrossSettings} from "../configuration/interfaces/hotbar-cross-settings";
 import {HotbarCustomSettings} from "../configuration/interfaces/hotbar-custom-settings";
 import {WxhbInputType} from "./enums/wxhb-input-type";
+import {ConfigurationService} from "../configuration/services/configuration.service";
+import {ActionService} from "../actions/services/action.service";
 
 @Component({
   selector: 'rh-cross-hotbar',
   templateUrl: './cross-hotbar.component.html',
-  styleUrls: ['./cross-hotbar.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./cross-hotbar.component.scss']
 })
 export class CrossHotbarComponent implements OnInit {
+
+  public readonly hotbarCrossSettings$ = this.configurationService.hotbarCrossSettings$;
+  public readonly hotbarCustomSettings$ = this.configurationService.hotbarCustomSettings$;
 
   @Input() hotbarCrossSettings!: HotbarCrossSettings | null;
   @Input() hotbarCustomSettings!: HotbarCustomSettings | null;
 
-  private activeHotbarIndex = 0;
   public inputTimerHandle: any = null;
-  public readonly crossHotbarSets: Array<[FullCrossHotbarAllocation, FullCrossHotbarAllocation]> = [];
   private readonly HOTBAR_SET_COUNT = 8;
 
-  private readonly BUTTON_ORDER = [
-    PSGamepadButton.Left,
-    PSGamepadButton.Up,
-    PSGamepadButton.Down,
-    PSGamepadButton.Right,
-    PSGamepadButton.Square,
-    PSGamepadButton.Triangle,
-    PSGamepadButton.Cross,
-    PSGamepadButton.Circle,
-  ];
   private readonly SET_SELECT_ORDER = [
     PSGamepadButton.Triangle,
     PSGamepadButton.Circle,
@@ -52,17 +44,53 @@ export class CrossHotbarComponent implements OnInit {
 
   private readonly activeHotbarIndexSubject$ = new BehaviorSubject(0);
   public readonly activeHotbarIndex$ = this.activeHotbarIndexSubject$.asObservable().pipe(shareReplay(1));
+  public readonly crossHotbarSetAllocations$: BehaviorSubject<Array<[FullCrossHotbarAllocation, FullCrossHotbarAllocation]>> = new BehaviorSubject(this.createEmptyHotbarSets());
 
-  public readonly activeHotbarSet$: Observable<[FullCrossHotbarAllocation, FullCrossHotbarAllocation]> = this.activeHotbarIndex$.pipe(
-      map((activeIndex) => this.crossHotbarSets[activeIndex]),
-      shareReplay(1)
+  public readonly activeHotbarSet$: Observable<[FullCrossHotbarAllocation, FullCrossHotbarAllocation]> =
+      combineLatest([this.activeHotbarIndex$, this.crossHotbarSetAllocations$]).pipe(
+          map(([activeIndex, sets]) => sets[activeIndex]),
+          shareReplay(1)
+      );
+
+  public readonly activeHotbarSetLeft$: Observable<FullCrossHotbarAllocation> = this.activeHotbarSet$.pipe(
+      map(([left]) => left)
   );
+  public readonly activeHotbarSetRight$: Observable<FullCrossHotbarAllocation> = this.activeHotbarSet$.pipe(
+      map(([, right]) => right)
+  );
+
 
   public readonly ActiveCrossHotbarSet = ActiveCrossHotbarSet;
   public readonly WxhbInputType = WxhbInputType;
 
+  // WXHB allocation
+  public readonly wxhbDoubleLtSetting$ = this.hotbarCustomSettings$.pipe(
+      map((settings) => settings.displayWithDoubleLt),
+      shareReplay(1)
+  );
+  public readonly wxhbDoubleRtSetting$ = this.hotbarCustomSettings$.pipe(
+      map((settings) => settings.displayWithDoubleRt),
+      shareReplay(1)
+  );
+  public readonly wxhbDoubleLt$ = combineLatest([this.wxhbDoubleLtSetting$, this.crossHotbarSetAllocations$]).pipe(
+      map(([setting, sets]) => {
+        const [hotbar, side] = setting;
+        return sets[hotbar][side];
+      })
+  );
+  public readonly wxhbDoubleRt$ = combineLatest([this.wxhbDoubleRtSetting$, this.crossHotbarSetAllocations$]).pipe(
+      map(([setting, sets]) => {
+        const [hotbar, side] = setting;
+        return sets[hotbar][side];
+      })
+  )
+
+  private triggeredCrossHotbarSlotSubject$: Subject<[number, number]> = new Subject();
+
   constructor(
-      private readonly gamepadService: GamepadService
+      private readonly gamepadService: GamepadService,
+      private readonly configurationService: ConfigurationService,
+      private readonly actionService: ActionService
   ) {
   }
 
@@ -73,29 +101,73 @@ export class CrossHotbarComponent implements OnInit {
         .subscribe(() => {
           this.onTick();
         });
+
+    this.triggeredCrossHotbarSlotSubject$
+        .pipe(
+            withLatestFrom(this.crossHotbarSetAllocations$, this.activeHotbarIndex$, this.hotbarCustomSettings$),
+            map((
+                [[activeSet, slotId], allocations, activeHotbarIndex, settings]:
+                    [[ActiveCrossHotbarSet, number], [FullCrossHotbarAllocation, FullCrossHotbarAllocation][], number, HotbarCustomSettings]
+            ) => {
+              let hotbarId: number,
+                  side: number;
+
+              switch (activeSet) {
+                case ActiveCrossHotbarSet.Left:
+                  return allocations[activeHotbarIndex][0][slotId];
+
+                case ActiveCrossHotbarSet.Right:
+                  return allocations[activeHotbarIndex][1][slotId];
+
+                case ActiveCrossHotbarSet.WXHBLeft:
+                  [hotbarId, side] = settings.displayWithDoubleLt;
+                  return allocations[hotbarId][side][slotId];
+
+                case ActiveCrossHotbarSet.WXHBRight:
+                  [hotbarId, side] = settings.displayWithDoubleRt;
+                  return allocations[hotbarId][side][slotId];
+
+                case ActiveCrossHotbarSet.ExtendedLeft:
+                  [hotbarId, side] = settings.displayWithRtLt;
+                  return allocations[hotbarId][side][slotId];
+
+                case ActiveCrossHotbarSet.ExtendedRight:
+                  [hotbarId, side] = settings.displayWithLtRt;
+                  return allocations[hotbarId][side][slotId];
+
+                default:
+                  return;
+              }
+            }),
+            filter((value => !!value))
+        )
+        .subscribe((actionId) => {
+          this.actionService.triggerActionId(actionId as number);
+        });
   }
 
-  createEmptyHotbarSets() {
+  createEmptyHotbarSets(): [FullCrossHotbarAllocation, FullCrossHotbarAllocation][] {
+    const sets: [FullCrossHotbarAllocation, FullCrossHotbarAllocation][] = [];
     for (let i = 0; i < this.HOTBAR_SET_COUNT; i++) {
-      this.crossHotbarSets.push(
+      sets.push(
           [
             [null, null, null, null, null, null, null, null],
             [null, null, null, null, null, null, null, null]
           ]
       );
     }
+    return sets;
   }
 
   onAssignSlot(
       {hotbarId, slotId, actionId}: { hotbarId: number, slotId: number, actionId: number },
       crossHotbarSet: ActiveCrossHotbarSet
   ) {
-    console.log('slotting')
-    if (crossHotbarSet === ActiveCrossHotbarSet.Left || crossHotbarSet === ActiveCrossHotbarSet.Right) {
-      let targetSet = this.crossHotbarSets[hotbarId];
-
-      targetSet[ActiveCrossHotbarSet.Left ? 0 : 1][slotId] = actionId;
-    }
+    this.crossHotbarSetAllocations$.pipe(take(1)).subscribe((allocation) => {
+      const side = (crossHotbarSet === ActiveCrossHotbarSet.Left || crossHotbarSet === ActiveCrossHotbarSet.WXHBLeft) ? 0 : 1;
+      allocation[hotbarId][side][slotId] = actionId;
+      this.crossHotbarSetAllocations$.next(allocation);
+    });
   }
 
   onTick() {
@@ -124,10 +196,11 @@ export class CrossHotbarComponent implements OnInit {
     }
 
     // Get pressed buttons
-    const actionIndex = this.BUTTON_ORDER.findIndex((button) => b[button] === GamepadButtonState.Pressed);
+    const actionIndex = this.SET_SELECT_ORDER.findIndex((button) => b[button] === GamepadButtonState.Pressed);
 
     if (this.activeHotbarSide !== null && actionIndex !== -1) {
       // Trigger action
+      this.triggeredCrossHotbarSlotSubject$.next([this.activeHotbarSide, actionIndex]);
 
       if (this.hotbarCrossSettings?.returnToXhbAfterWxhbInput) {
         if (this.activeHotbarSide === ActiveCrossHotbarSet.WXHBRight) {

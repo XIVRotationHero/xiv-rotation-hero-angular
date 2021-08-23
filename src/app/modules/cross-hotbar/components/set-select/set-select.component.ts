@@ -9,6 +9,6 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 export class SetSelectComponent {
 
   @Input() activeHotbarIndex!: number | null;
-  @Input() availableHotbarSets: any[] = [];
+  @Input() availableHotbarSets: any[] | null = [];
 
 }
