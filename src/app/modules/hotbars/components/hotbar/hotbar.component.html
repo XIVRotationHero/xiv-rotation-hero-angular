@@ -3,7 +3,8 @@
     [ngClass]="{
       'rh-hotbar__number--hidden': !hotbarDisplaySettings?.displayHotbarNumbers
     }"
-    (mousedown)="onMouseDragStart($event)">
+    (mousedown)="onMouseDragStart($event)"
+    (touchstart)="onTouchStart($event)">
   <div
       *ngIf="hotbarId === 0 && displayedHotbarId !== null &&hotbarDisplaySettings?.enableHotbarCyclingButton"
       (click)="onCycle.emit(displayedHotbarId + 1)">

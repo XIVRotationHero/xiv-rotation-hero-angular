@@ -1,5 +1,6 @@
 <div class="rh-dialog__title-bar"
-     (mousedown)="onMouseDragStart($event)">
+     (mousedown)="onMouseDragStart($event)"
+     (touchstart)="onTouchDragStart($event)">
   <div class="rh-dialog__title">{{ dialogTitle }}</div>
   <div class="rh-dialog__close-button"
        (click)="closeDialog.emit()"></div>

@@ -51,8 +51,9 @@ export class HotbarComponent {
   public constructor(
       private readonly elementRef: ElementRef
   ) {
-    this.onMouseDragStop = this.onMouseDragStop.bind(this);
+    this.onDragStop = this.onDragStop.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
+    this.onTouchMove = this.onTouchMove.bind(this);
   }
 
   public onMouseDragStart(evt: MouseEvent) {
@@ -62,9 +63,16 @@ export class HotbarComponent {
     evt.preventDefault();
 
     document.addEventListener('mousemove', this.onMouseMove);
-    document.addEventListener('mouseup', this.onMouseDragStop);
+    document.addEventListener('mouseup', this.onDragStop);
 
     this.lastMousePosition = [evt.clientX, evt.clientY];
+  }
+
+  public onTouchStart(evt: TouchEvent) {
+    document.addEventListener('touchmove', this.onTouchMove);
+    document.addEventListener('touchend', this.onDragStop);
+
+    this.lastMousePosition = [evt.touches[0].clientX, evt.touches[0].clientY];
   }
 
   public onMouseMove(evt: MouseEvent) {
@@ -85,13 +93,32 @@ export class HotbarComponent {
     this.position = [Math.max((realX - diffX) / width, 0), Math.max((realY - diffY) / height, 0)];
   }
 
+  public onTouchMove(evt: TouchEvent) {
+    const width = evt.view ? evt.view.innerWidth : 0;
+    const height = evt.view ? evt.view.innerHeight : 0;
+
+    const [currentX, currentY] = this.position;
+    const [realX, realY] = [currentX * width, currentY * height];
+
+    // Get difference between last and new position in pixels
+    const [oldX, oldY] = this.lastMousePosition;
+    const {clientX, clientY} = evt.touches[0];
+    const [diffX, diffY] = [oldX - clientX, oldY - clientY];
+    this.lastMousePosition = [clientX, clientY];
+
+    // convert to percentage
+    this.position = [Math.max((realX - diffX) / width, 0), Math.max((realY - diffY) / height, 0)];
+  }
+
   public slotId(index: number) {
     return index;
   }
 
-  private onMouseDragStop() {
-    document.removeEventListener('mouseup', this.onMouseDragStop);
+  private onDragStop() {
+    document.removeEventListener('mouseup', this.onDragStop);
     document.removeEventListener('mousemove', this.onMouseMove);
+    document.removeEventListener('touchend', this.onDragStop);
+    document.removeEventListener('touchmove', this.onTouchMove);
 
     this.changePosition.emit(this.position);
   }
