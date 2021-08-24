@@ -1,4 +1,13 @@
-import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBinding, Input, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostBinding,
+  Input,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {HotbarOptions} from "../../interfaces/hotbar-options";
 import {HotbarStyle} from "../../enums/hotbar-style.enum";
 import {HotbarDisplaySettings} from "../../../configuration/interfaces/hotbar-display-settings";
@@ -48,12 +57,21 @@ export class HotbarComponent {
   private positionY: number = 0;
   private lastMousePosition: [number, number] = [0, 0];
 
+  @HostBinding('class')
+  private hotbarStyleClass: string = '';
+
   public constructor(
       private readonly elementRef: ElementRef
   ) {
     this.onDragStop = this.onDragStop.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onTouchMove = this.onTouchMove.bind(this);
+  }
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.hotbarStyle?.currentValue) {
+      this.hotbarStyleClass = `hotbar-style--${this.hotbarStyle}`;
+    }
   }
 
   public onMouseDragStart(evt: MouseEvent) {

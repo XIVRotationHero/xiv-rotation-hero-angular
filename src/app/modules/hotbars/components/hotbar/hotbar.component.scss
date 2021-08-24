@@ -18,38 +18,38 @@ $slot-border: 1px;
 .rh-hotbar {
 
   // Styles
-  &--12x1 &__slots {
+  :host.hotbar-style--12x1 &__slots {
     flex-direction: row;
     width: ($slot-size + (($slot-margin + $slot-border) * 2)) * 12;
   }
 
-  &--6x2 &__slots {
+  :host.hotbar-style--6x2 &__slots {
     flex-direction: row;
     width: ($slot-size + (($slot-margin + $slot-border) * 2)) * 6;
   }
 
-  &--4x3 &__slots {
+  :host.hotbar-style--4x3 &__slots {
     flex-direction: row;
     width: ($slot-size + (($slot-margin + $slot-border) * 2)) * 4;
   }
 
-  &--3x4,
-  &--2x6,
-  &--1x12 {
+  :host.hotbar-style--3x4,
+  :host.hotbar-style--2x6,
+  :host.hotbar-style--1x12 {
     flex-direction: column;
   }
 
-  &--3x4 &__slots {
+  :host.hotbar-style--3x4 &__slots {
     flex-direction: column;
     height: ($slot-size + (($slot-margin + $slot-border) * 2)) * 4;
   }
 
-  &--2x6 &__slots {
+  :host.hotbar-style--2x6 &__slots {
     flex-direction: column;
     height: ($slot-size + (($slot-margin + $slot-border) * 2)) * 6;
   }
 
-  &--1x12 &__slots {
+  :host.hotbar-style--1x12 &__slots {
     flex-direction: column;
     height: ($slot-size + (($slot-margin + $slot-border) * 2)) * 12;
   }
