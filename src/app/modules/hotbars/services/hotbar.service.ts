@@ -192,6 +192,10 @@ export class HotbarService {
   private loadHotbarAllocation(currentClassJobId: number): (number | undefined)[][] {
     const existingHotbarData = localStorage.getItem(`${this.HOTBAR_ALLOCATION_PERSISTANCE_KEY}${currentClassJobId}`);
 
+    if (currentClassJobId === -1) {
+      return [];
+    }
+
     if (existingHotbarData !== null) {
       const hotbarAllocations = <HotbarAllocation>JSON.parse(existingHotbarData);
       return hotbarAllocations.hotbars;
