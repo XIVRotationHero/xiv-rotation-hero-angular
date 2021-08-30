@@ -1,0 +1,6 @@
+<rh-help-articles
+    [articles]="(articles$ | async)!"
+    [selectedArticle]="selectedArticle"
+    (selectArticle)="selectedArticle = $event"></rh-help-articles>
+<rh-help-article-view
+    [selectedArticle]="selectedArticle"></rh-help-article-view>

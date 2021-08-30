@@ -1,0 +1,20 @@
+:host {
+  padding: 10px 20px 10px 20px;
+  overflow: auto;
+}
+
+:host ::ng-deep {
+  line-height: 1.5;
+  font-size: 14px;
+  color: #eae4df;
+  text-align: justify;
+
+  img {
+    max-width: 400px;
+  }
+
+  // Font sizes for renderer
+  h1 {
+    font-size: 24px;
+  }
+}

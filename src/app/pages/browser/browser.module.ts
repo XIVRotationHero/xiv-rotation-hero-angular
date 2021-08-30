@@ -13,6 +13,7 @@ import {ConfigurationModule} from "../../modules/configuration/configuration.mod
 import {UserModule} from "../../modules/user/user.module";
 import {DialogModule} from "../../modules/dialog/dialog.module";
 import {CrossHotbarModule} from "../../modules/cross-hotbar/cross-hotbar.module";
+import {HelpModule} from "../../modules/help/help.module";
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {CrossHotbarModule} from "../../modules/cross-hotbar/cross-hotbar.module"
     ConfigurationModule,
     UserModule,
     DialogModule,
-    CrossHotbarModule
+    CrossHotbarModule,
+    HelpModule
   ]
 })
 export class BrowserModule {

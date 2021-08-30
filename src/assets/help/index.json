@@ -1,0 +1,50 @@
+[
+  {
+    "title": "About XIV Rotation Hero",
+    "path": "about-xivrh"
+  },
+  {
+    "title": "Using Rotation Hero",
+    "path": "",
+    "children": [
+      {
+        "title": "In the browser",
+        "path": ""
+      },
+      {
+        "title": "In Advanced Combat Tracker",
+        "path": ""
+      }
+    ]
+  },
+  {
+    "title": "Configuration",
+    "path": "configuration",
+    "children": [
+      {
+        "title": "Display configuration",
+        "path": ""
+      },
+      {
+        "title": "Cross hotbar configuration",
+        "path": ""
+      },
+      {
+        "title": "Custom configuration",
+        "path": ""
+      }
+    ]
+  },
+  {
+    "title": "Builder",
+    "path": ""
+  },
+  {
+    "title": "Keybinds",
+    "path": ""
+  },
+  {
+    "title": "Contributing",
+    "path": "contributing"
+  }
+]

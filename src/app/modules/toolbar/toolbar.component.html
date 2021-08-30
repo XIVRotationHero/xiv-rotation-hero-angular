@@ -9,6 +9,7 @@
 <a class="rh-toolbar__button button" (click)="toggleDialog.emit(actionsDialogConfiguration)">Actions</a>
 <a class="rh-toolbar__button button" (click)="toggleDialog.emit(builderDialogConfiguration)">Builder</a>
 <a class="rh-toolbar__button button" (click)="toggleDialog.emit(keybindingDialogConfiguration)">Keybinds</a>
+<a class="rh-toolbar__button button" (click)="toggleDialog.emit(helpDialogConfiguration)">Help</a>
 
 <button class="rh-toolbar__user-menu button"
         *ngIf="!(user$ | async)"

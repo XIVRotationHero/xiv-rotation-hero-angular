@@ -1,0 +1,52 @@
+:host {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0 0 0 10px;
+}
+
+.rh-help-articles {
+  &__title {
+    font-size: 14px;
+    margin: 20px 20px 10px;
+  }
+
+  &__list,
+  &__sublist {
+    margin: 0;
+    padding: 10px 0;
+    list-style-type: none;
+    min-width: 200px;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+  }
+
+  &__sublist {
+    margin: 0;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.2);
+    list-style-type: none;
+    box-sizing: border-box;
+  }
+
+  &__article-link {
+    display: block;
+    cursor: pointer;
+    padding: 8px 20px;
+    font-size: 12px;
+    color: #2f79a3;
+
+    &--active {
+      color: white;
+      font-weight: bold;
+    }
+
+    &:hover:not(&--active) {
+      background: rgba(0, 0, 0, 0.2);
+      color: #65abd3;
+    }
+  }
+
+  &__sublist &__article-link {
+    padding: 8px 30px;
+  }
+}

@@ -9,6 +9,7 @@ import {RotationHeroDialogConfiguration} from "../rotation-hero/rotation-hero-di
 import {ConfigurationDialogConfiguration} from "../configuration/configuration-dialog-configuration";
 import {BuilderDialogConfiguration} from "../builder/builder-dialog-configuration";
 import {KeyBindingDialogConfiguration} from "../key-binding/key-binding-dialog-configuration";
+import {HelpDialogConfiguration} from "../help/help-dialog-configuration";
 
 @Component({
   selector: 'rh-toolbar',
@@ -31,6 +32,7 @@ export class ToolbarComponent {
   public readonly layoutDialogConfiguration = ConfigurationDialogConfiguration;
   public readonly builderDialogConfiguration = BuilderDialogConfiguration;
   public readonly keybindingDialogConfiguration = KeyBindingDialogConfiguration;
+  public readonly helpDialogConfiguration = HelpDialogConfiguration;
 
   public readonly classJobs$ = this.gameDataService.classJobs$;
   public readonly currentClassJob$ = this.appStateService.currentClassJob$

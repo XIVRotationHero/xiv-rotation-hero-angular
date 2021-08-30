@@ -1,0 +1,15 @@
+:host {
+  display: flex;
+  height: 400px;
+  width: 700px;
+}
+
+rh-help-overview {
+  width: 200px;
+  flex: 0 0 200px;
+}
+
+rh-help-details {
+  width: 500px;
+  flex: 0 0 400px;
+}

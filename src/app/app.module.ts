@@ -8,7 +8,8 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {OverlayModule} from "@angular/cdk/overlay";
 import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions, MatTooltipModule} from "@angular/material/tooltip";
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {MarkdownModule, MarkedOptions} from "ngx-markdown";
 
 @NgModule({
   declarations: [
@@ -22,7 +23,18 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     BrowserAnimationsModule,
     OverlayModule,
     MatTooltipModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    MarkdownModule.forRoot({
+      markedOptions: {
+        provide: MarkedOptions,
+        useValue: {
+          gfm: true,
+          pedantic: false,
+          smartLists: true,
+          smartypants: false
+        }
+      }
+    }),
   ],
   providers: [
     communicationLayerServiceProvider,
