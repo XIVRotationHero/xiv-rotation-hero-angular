@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {fromEvent, merge, Observable, of, ReplaySubject, Subject} from "rxjs";
 import {filter, map, scan, share, shareReplay, switchMap, tap, withLatestFrom} from "rxjs/operators";
 
-type KeyMap = { [ key: string ]: string };
-type LabelMap = { [ label: string ]: string | undefined };
+type KeyMap = { [key: string]: string };
+type LabelMap = { [label: string]: string | undefined };
 
 @Injectable({
   providedIn: 'root'
@@ -11,65 +11,68 @@ type LabelMap = { [ label: string ]: string | undefined };
 export class KeyBindingService {
   private triggeredLabel$: Observable<string>;
 
-  private availableBindings: { [ label: string ]: () => {} } = {};
-  private labelToBindingMapping: { [ label: string ]: string } = {};
-  private bindingToLabelMapping: { [ binding: string ]: string } = {};
+  private availableBindings: { [label: string]: () => {} } = {};
+  private labelToBindingMapping: { [label: string]: string } = {};
+  private bindingToLabelMapping: { [binding: string]: string } = {};
 
   private lastKeyboardEvent?: KeyboardEvent;
 
   public readonly registerBindingLabel$: Subject<string> = new ReplaySubject(1);
   public readonly registeredBindingLabels$ = this.registerBindingLabel$.pipe(
-    scan((acc, value) => { acc.add(value); return acc; }, new Set()),
-    shareReplay(1)
+      scan((acc, value) => {
+        acc.add(value);
+        return acc;
+      }, new Set()),
+      shareReplay(1)
   );
 
   private readonly initialKeyMaps$ = of(this.loadKeyMap());
   public readonly registerBindingKey$: Subject<[string, string | undefined]> = new Subject();
   public readonly keyMaps$ =
-    this.initialKeyMaps$.pipe(
-      switchMap((keyMaps) =>
-        merge(
-          this.registerBindingKey$,
-          this.registerBindingLabel$.pipe(map((label) => [ label, keyMaps[1][label] ] as [ string, string | undefined ]))
-        ).pipe(
-          scan(this.accumulateKeyMap, keyMaps),
-          shareReplay(1)
-        )
-      )
-    );
+      this.initialKeyMaps$.pipe(
+          switchMap((keyMaps) =>
+              merge(
+                  this.registerBindingKey$,
+                  this.registerBindingLabel$.pipe(map((label) => [label, keyMaps[1][label]] as [string, string | undefined]))
+              ).pipe(
+                  scan(this.accumulateKeyMap, keyMaps),
+                  shareReplay(1)
+              )
+          )
+      );
 
   public constructor() {
     const keyDownEventSequence$ =
-      fromEvent<KeyboardEvent>(document, 'keydown')
-        .pipe(
-          // Filter repeated events and events where the target is an input
-          filter((event) => {
-            return !event.repeat && (<HTMLElement>event.target)?.nodeName !== 'INPUT';
-          }),
-          tap((event) => {
-            this.lastKeyboardEvent = event;
-            event.preventDefault();
-          }),
-          map((event) => this.getSequenceFromKeyboardEvent(event))
-        );
+        fromEvent<KeyboardEvent>(document, 'keydown')
+            .pipe(
+                // Filter repeated events and events where the target is an input
+                filter((event) => {
+                  return !event.repeat && (<HTMLElement>event.target)?.nodeName !== 'INPUT' && (<HTMLElement>event.target)?.nodeName !== 'TEXTAREA';
+                }),
+                tap((event) => {
+                  this.lastKeyboardEvent = event;
+                  event.preventDefault();
+                }),
+                map((event) => this.getSequenceFromKeyboardEvent(event))
+            );
 
     const mouseEventSequence$ =
-      fromEvent<MouseEvent>(document, 'mousedown')
-        .pipe(map((event) => this.getSequenceFromMouseEvent(event)));
+        fromEvent<MouseEvent>(document, 'mousedown')
+            .pipe(map((event) => this.getSequenceFromMouseEvent(event)));
 
     this.triggeredLabel$ = merge(keyDownEventSequence$, mouseEventSequence$)
-      .pipe(
-        withLatestFrom(this.keyMaps$, (sequence, [ keyMap ]) => keyMap[ sequence.join('+') ]),
-        filter((label): label is string => label !== undefined),
-        share()
-      );
+        .pipe(
+            withLatestFrom(this.keyMaps$, (sequence, [keyMap]) => keyMap[sequence.join('+')]),
+            filter((label): label is string => label !== undefined),
+            share()
+        );
 
     // Handle key ups to clear last keyboard event
     fromEvent<KeyboardEvent>(document, 'keyup')
-      .pipe(
-        tap((event) => this.lastKeyboardEvent = undefined)
-      )
-      .subscribe();
+        .pipe(
+            tap(() => this.lastKeyboardEvent = undefined)
+        )
+        .subscribe();
 
     // Subscribe on registered bindings so they don't get lost
     this.registeredBindingLabels$.subscribe();
@@ -80,7 +83,7 @@ export class KeyBindingService {
 
   public getBindingLabelStream(keyBindingLabel: string): Observable<string> {
     return this.triggeredLabel$
-      .pipe(filter((label) => label === keyBindingLabel));
+        .pipe(filter((label) => label === keyBindingLabel));
   }
 
   /**
@@ -88,24 +91,24 @@ export class KeyBindingService {
    */
   public getBindingKeyStream(keyBindingLabel: string): Observable<string | undefined> {
     return this.keyMaps$.pipe(
-      map(([ , labelMap ]) => labelMap[keyBindingLabel])
+        map(([, labelMap]) => labelMap[keyBindingLabel])
     )
   }
 
   /** @deprecated **/
   public registerAvailableBindings(label: string, keyDefault: string | undefined, cb: () => any): void {
-    this.availableBindings[ label ] = cb;
+    this.availableBindings[label] = cb;
 
     if (keyDefault && !Object.values(this.bindingToLabelMapping).includes(label)) {
-      this.bindingToLabelMapping[ keyDefault ] = label;
-      this.labelToBindingMapping[ label ] = keyDefault;
+      this.bindingToLabelMapping[keyDefault] = label;
+      this.labelToBindingMapping[label] = keyDefault;
     }
   }
 
   private accumulateKeyMap(
-    [ keyMap, labelMap ]: [ KeyMap, LabelMap ],
-    [ label, key ]: [ string, string | undefined ]
-  ): [ KeyMap, LabelMap ] {
+      [keyMap, labelMap]: [KeyMap, LabelMap],
+      [label, key]: [string, string | undefined]
+  ): [KeyMap, LabelMap] {
     let oldBindingLabel: string | undefined;
     let oldBindingKey: string | undefined = labelMap[label];
 
@@ -126,11 +129,11 @@ export class KeyBindingService {
     }
     labelMap[label] = key;
 
-    return [ keyMap, labelMap ];
+    return [keyMap, labelMap];
   }
 
   private getSequenceFromKeyboardEvent(evt: KeyboardEvent): string[] {
-    const { code, ctrlKey, shiftKey, altKey } = evt;
+    const {code, ctrlKey, shiftKey, altKey} = evt;
 
     const sequence = [];
     if (ctrlKey) sequence.push('Ctrl');
@@ -138,7 +141,7 @@ export class KeyBindingService {
     if (altKey) sequence.push('Alt');
 
     // Check if a number was pressed
-    const [,digitMatch] = evt.code.match(/Digit(\d)/) || [];
+    const [, digitMatch] = evt.code.match(/Digit(\d)/) || [];
     const [numpadMatch] = evt.code.match(/Numpad(\d)/g) || [];
     if (digitMatch !== undefined) {
       sequence.push(digitMatch);
@@ -152,7 +155,7 @@ export class KeyBindingService {
   }
 
   private getSequenceFromMouseEvent(event: MouseEvent): string[] {
-    const { button } = event;
+    const {button} = event;
     let sequence: string[] = [];
 
     if (this.lastKeyboardEvent) {
@@ -163,15 +166,15 @@ export class KeyBindingService {
     return sequence;
   }
 
-  private loadKeyMap(): [ KeyMap, LabelMap ] {
+  private loadKeyMap(): [KeyMap, LabelMap] {
     let savedKeyBindings = localStorage.getItem('key-bindings');
 
     if (savedKeyBindings) {
       const labelMap: LabelMap = JSON.parse(savedKeyBindings);
-      return Object.entries(labelMap).reduce(this.accumulateKeyMap, [ <KeyMap>{}, <LabelMap>{} ]);
+      return Object.entries(labelMap).reduce(this.accumulateKeyMap, [<KeyMap>{}, <LabelMap>{}]);
     }
 
-    return [ {}, {} ];
+    return [{}, {}];
   }
 
   private saveLabelMap(labelMap: LabelMap): void {
