@@ -14,7 +14,7 @@ import {Rotation} from "../../../api/interfaces/rotation";
 import {CommunicationLayerService} from "../../../act/services/communication-layer.service";
 import {ActionService} from "../../../actions/services/action.service";
 import {Observable, ReplaySubject, Subject} from "rxjs";
-import {map, scan, shareReplay, startWith, switchMap, takeUntil, tap} from "rxjs/operators";
+import {map, scan, shareReplay, startWith, switchMap, takeUntil} from "rxjs/operators";
 import {PlayerOptions} from "./interfaces/player-options";
 
 @Component({
@@ -52,20 +52,19 @@ export class RotationPlayerComponent implements OnInit, OnChanges, OnDestroy {
 
     this.activePhaseAction$ = this.rotationSubject$.pipe(
         takeUntil(this.isDestroyed$),
-        tap((val) => console.log(val)),
         switchMap(
             (rotation) =>
                 this.executedActionIds$
                     .pipe(
                         takeUntil(this.isDestroyed$),
-                        tap((val) => console.log(val)),
                         scan(
                             ([currentPhaseIndex, currentActionIndex]: [number, number], actionId: number) => {
                               const currentPhase = rotation.phases[currentPhaseIndex];
+                              const hasMorePhases = !(rotation.phases.length === currentPhaseIndex + 1);
 
                               if (currentPhase.actions[currentActionIndex] === actionId) {
                                 return currentPhase.actions.length === currentActionIndex + 1
-                                    ? <[number, number]>[currentPhaseIndex + 1, 0]
+                                    ? <[number, number]>[hasMorePhases ? currentPhaseIndex + 1 : 0, 0]
                                     : <[number, number]>[currentPhaseIndex, currentActionIndex + 1]
                               } else {
                                 // Wrong action, decide what to do based on failure mode
