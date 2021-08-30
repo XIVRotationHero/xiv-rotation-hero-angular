@@ -2,10 +2,11 @@ import {Component, ElementRef, HostBinding, HostListener, Input, ViewChild} from
 import {Action} from "../../interfaces/action";
 import {ActionService} from "../../services/action.service";
 import {ActionCostService} from "../../services/action-cost.service";
-import {map} from "rxjs/operators";
+import {map, takeUntil} from "rxjs/operators";
 import {createPopper, Instance} from "@popperjs/core";
 import {DomSanitizer} from "@angular/platform-browser";
 import {ActionTooltipComponent} from "../action-tooltip/action-tooltip.component";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'rh-action',
@@ -30,6 +31,8 @@ export class ActionComponent {
 
   public tooltipInstance?: Instance;
 
+  private isDestroyed$: Subject<void> = new Subject();
+
   constructor(
       private readonly actionService: ActionService,
       private readonly actionCostService: ActionCostService,
@@ -37,8 +40,9 @@ export class ActionComponent {
       private readonly domSanitizer: DomSanitizer
   ) {
     this.actionService.comboActionIds$
+        .pipe(takeUntil(this.isDestroyed$))
         .subscribe((comboIds) => {
-          this.isComboAction = comboIds.includes(this.action?.ActionComboTargetID)
+          this.isComboAction = comboIds[comboIds.length - 1] === this.action?.ActionComboTargetID
         });
   }
 
@@ -47,6 +51,7 @@ export class ActionComponent {
 
     this.actionCostService.resources$
         .pipe(
+            takeUntil(this.isDestroyed$),
             map((resources) => {
               if (!this.action) {
                 return false;

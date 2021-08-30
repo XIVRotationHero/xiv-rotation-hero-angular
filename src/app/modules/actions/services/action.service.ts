@@ -98,11 +98,17 @@ export class ActionService {
 
     this.comboActionIds$ = this.executedActions$.pipe(
         scan((acc, action) => {
-          if (!action.PreservesCombo) {
-            acc = [];
-          }
+          const comboId = action.ActionComboTargetID;
 
-          return [...acc, action.ID];
+          if (comboId !== 0) {
+            return acc[acc.length - 1] === comboId
+                ? [...acc, action.ID]
+                : [];
+          } else if (action.PreservesCombo) {
+            return [...acc, action.ID];
+          } else {
+            return [action.ID];
+          }
         }, <number[]>[]),
         shareReplay(1)
     );
