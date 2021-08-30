@@ -5,15 +5,15 @@
   },
   {
     "title": "Using Rotation Hero",
-    "path": "",
+    "path": "using-rotation-hero",
     "children": [
       {
         "title": "In the browser",
-        "path": ""
+        "path": "in-the-browser"
       },
       {
         "title": "In Advanced Combat Tracker",
-        "path": ""
+        "path": "in-act"
       }
     ]
   },
@@ -23,25 +23,25 @@
     "children": [
       {
         "title": "Display configuration",
-        "path": ""
+        "path": "display-configuration"
       },
       {
         "title": "Cross hotbar configuration",
-        "path": ""
+        "path": "cross-hotbar-configuration"
       },
       {
         "title": "Custom configuration",
-        "path": ""
+        "path": "custom-configuration"
       }
     ]
   },
   {
     "title": "Builder",
-    "path": ""
+    "path": "builder"
   },
   {
     "title": "Keybinds",
-    "path": ""
+    "path": "keybinds"
   },
   {
     "title": "Contributing",
