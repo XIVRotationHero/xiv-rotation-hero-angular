@@ -37,7 +37,8 @@
   <textarea
       class="rh-builder__description-input"
       placeholder="Enter a description for your rotation"
-      formControlName="description"></textarea>
+      formControlName="description"
+      (keydown)="$event.stopImmediatePropagation()"></textarea>
 </form>
 
 <rh-rotation-phase-view

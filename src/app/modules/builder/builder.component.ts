@@ -3,7 +3,7 @@ import {Phase} from "../api/enums/phase";
 import {RotationCreate} from "../api/interfaces/rotation-create";
 import {ActionService} from "../actions/services/action.service";
 import {RotationPhase} from "../api/interfaces/rotation-phase";
-import {filter, takeUntil} from "rxjs/operators";
+import {filter, take, takeUntil} from "rxjs/operators";
 import {RotationService} from "../../core/services/rotation.service";
 import {Rotation} from "../api/interfaces/rotation";
 import {PublishState} from "../api/enums/publish-state";
@@ -12,6 +12,7 @@ import {RotationHeroDialogConfiguration} from "../rotation-hero/rotation-hero-di
 import {Subject} from "rxjs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../user/services/user.service";
+import {AppStateService} from "../../core/services/app-state.service";
 
 @Component({
   selector: 'rh-builder',
@@ -48,7 +49,8 @@ export class BuilderComponent {
       private readonly rotationService: RotationService,
       private readonly dialogService: DialogService,
       private readonly fb: FormBuilder,
-      private readonly userService: UserService
+      private readonly userService: UserService,
+      private readonly appStateService: AppStateService
   ) {
     this.actionService.executedActionIds$
         .pipe(
@@ -64,6 +66,8 @@ export class BuilderComponent {
       title: ['', [Validators.min(1)]],
       description: ['', [Validators.min(1)]],
     });
+
+    this.resetRotation();
   }
 
   public ngOnDestroy() {
@@ -90,19 +94,21 @@ export class BuilderComponent {
   }
 
   public resetRotation(): void {
-    this.rotation = {
-      title: '',
-      description: '',
-      classJobId: -1,
-      phases: [
-        {phase: Phase.PrePull, actions: []},
-        {phase: Phase.Opener, actions: []},
-        {phase: Phase.Cooldown, actions: []},
-        {phase: Phase.Burst, actions: []}
-      ]
-    }
+    this.appStateService.currentClassJobId$.pipe(take(1)).subscribe((classJobId) => {
+      this.rotation = {
+        title: '',
+        description: '',
+        classJobId: classJobId,
+        phases: [
+          {phase: Phase.PrePull, actions: []},
+          {phase: Phase.Opener, actions: []},
+          {phase: Phase.Cooldown, actions: []},
+          {phase: Phase.Burst, actions: []}
+        ]
+      }
 
-    this.disabledPhases.clear();
+      this.disabledPhases.clear();
+    });
   }
 
   public saveRotation(): void {
