@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {User} from "../../../api/interfaces/user";
 
@@ -12,10 +12,24 @@ export class ProfileComponent {
 
   @Input() user!: User;
 
+  @ViewChild('actUrlElement', {static: false}) public actUrlElement!: ElementRef;
+
+  public actOverlayUrl: string = '';
+
   constructor(private readonly userService: UserService) {
+  }
+
+  ngOnChanges() {
+    this.actOverlayUrl = `${window.location.origin}/player?token=${this.user.uniqueToken}`;
   }
 
   logout() {
     this.userService.signOutSubject$.next();
+  }
+
+  copyUrlToClipboard() {
+    const el = (<HTMLInputElement>this.actUrlElement.nativeElement);
+    el.select();
+    void navigator.clipboard.writeText(el.value);
   }
 }

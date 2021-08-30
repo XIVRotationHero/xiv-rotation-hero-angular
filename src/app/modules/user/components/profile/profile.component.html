@@ -1,14 +1,18 @@
 <p>
-  ID:<br/>
-  {{ user?.id }}
+  <strong>ID:</strong><br/>
+  {{ user.id }}
 </p>
 <p>
-  Username:<br/>
-  {{ user?.username }}
+  <strong>Username:</strong><br/>
+  {{ user.username }}
 </p>
-<p *ngIf="user?.uniqueToken">
-  ACT Overlay URL:<br/>
-  {{ user?.uniqueToken }}
+<p *ngIf="user.uniqueToken">
+  <strong>ACT Overlay URL:</strong><a (click)="copyUrlToClipboard()">(copy to clipboard)</a> <br/>
+  <input
+      class="rh-profile__act-url blur"
+      readonly
+      [value]="actOverlayUrl"
+      #actUrlElement/>
 </p>
 
 <button class="button" (click)="logout()">Logout</button>

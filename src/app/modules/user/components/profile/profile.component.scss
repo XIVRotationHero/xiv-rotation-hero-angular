@@ -1,3 +1,12 @@
 :host {
   padding: 16px;
+  color: white;
+}
+
+.rh-profile {
+  &__act-url {
+    color: white;
+    background: transparent;
+    width: 100%;
+  }
 }
