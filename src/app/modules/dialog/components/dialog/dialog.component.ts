@@ -21,6 +21,8 @@ export class DialogComponent {
 
   @Output() public closeDialog: EventEmitter<void> = new EventEmitter();
 
+  public isMinimized = false;
+
   private lastMousePosition: [number, number] = [0, 0];
 
   private maxLeft = 0;

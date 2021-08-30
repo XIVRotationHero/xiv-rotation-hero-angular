@@ -2,9 +2,21 @@
      (mousedown)="onMouseDragStart($event)"
      (touchstart)="onTouchDragStart($event)">
   <div class="rh-dialog__title">{{ dialogTitle }}</div>
-  <div class="rh-dialog__close-button"
-       (click)="closeDialog.emit()"></div>
+  <div class="rh-dialog__buttons">
+    <div class="rh-dialog__button"
+         [ngClass]="{
+           'rh-dialog__button--minimize': !isMinimized,
+           'rh-dialog__button--maximize': isMinimized
+         }"
+         (click)="isMinimized = !isMinimized"></div>
+    <div class="rh-dialog__button rh-dialog__button--close"
+         (click)="closeDialog.emit()"></div>
+  </div>
 </div>
-<div class="rh-dialog__content">
+<div
+    class="rh-dialog__content"
+    [ngClass]="{
+      'rh-dialog__content--minimized': isMinimized
+    }">
   <ng-template rhDialogContentHost></ng-template>
 </div>

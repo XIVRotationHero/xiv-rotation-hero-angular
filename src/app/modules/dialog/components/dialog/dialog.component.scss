@@ -40,20 +40,58 @@
     }
   }
 
-  &__close-button {
+  &__buttons {
     position: absolute;
-    right: 6px;
-    top: 2px;
+    height: 24px;
+    display: flex;
+    right: 2px;
+    top: 4px;
     background: none;
     border: 0;
     padding: 0;
     margin: 0;
     cursor: pointer;
+  }
 
-    &:after {
-      content: "\2716";
-      font-size: 24px;
-      text-shadow: 0 0 2px black;
+  &__button {
+    cursor: pointer;
+    width: 24px;
+    line-height: 1;
+    margin: 0 2px;
+
+    &--close {
+      &:after {
+        content: "\2716";
+        font-size: 24px;
+        text-shadow: 0 0 2px black;
+      }
+    }
+
+    &--minimize {
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 4px;
+        left: 4px;
+        right: 4px;
+        border-bottom: 3px solid white;
+      }
+    }
+
+    &--maximize {
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 4px;
+        left: 4px;
+        right: 4px;
+        top: 4px;
+        border: 3px solid white;
+      }
     }
 
     &--hidden {
@@ -64,5 +102,10 @@
   &__content {
     background: #323232;
     border-radius: 0 0 10px 10px;
+
+    &--minimized {
+      height: 0;
+      overflow: hidden;
+    }
   }
 }
