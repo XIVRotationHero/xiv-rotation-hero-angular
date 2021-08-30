@@ -1,4 +1,4 @@
 export enum RotationBrowserSubCategoryType {
-  Favorites,
-  Recent
+  Favorites = 'favouriteCount',
+  Recent = 'createdAt'
 }

@@ -66,30 +66,16 @@ export class ApiService {
   }
 
   getAllRotations(queryParams: RotationQueryParams = {}): Observable<PaginatedResponse<Rotation>> {
-    const paramArray = [];
-
-    if (queryParams.page) {
-      paramArray.push(`page=${queryParams.page}`);
-    }
-    if (queryParams.sortBy) {
-      paramArray.push(`sortBy=${queryParams.sortBy}`);
-    }
-    if (queryParams.classJobId) {
-      paramArray.push(`classJobId=${queryParams.classJobId}`);
-    }
-
-    const paramString = paramArray.length ? `?${paramArray.join('&')}` : '';
-
-    return this.request(`/rotation/${paramString}`, 'GET') as Observable<PaginatedResponse<Rotation>>;
+    return this.request(`/rotation/${this.getQueryParamString(queryParams)}`, 'GET') as Observable<PaginatedResponse<Rotation>>;
   }
 
   // USER
-  userFavourites(): Observable<PaginatedResponse<Rotation>> {
-    return this.request('/user/favourites', 'GET') as Observable<PaginatedResponse<Rotation>>;
+  userFavourites(queryParams: RotationQueryParams = {}): Observable<PaginatedResponse<Rotation>> {
+    return this.request(`/user/favourites${this.getQueryParamString(queryParams)}`, 'GET') as Observable<PaginatedResponse<Rotation>>;
   }
 
-  userRotations(): Observable<PaginatedResponse<Rotation>> {
-    return this.request('/user/rotations', 'GET') as Observable<PaginatedResponse<Rotation>>;
+  userRotations(queryParams: RotationQueryParams = {}): Observable<PaginatedResponse<Rotation>> {
+    return this.request(`/user/rotations${this.getQueryParamString(queryParams)}`, 'GET') as Observable<PaginatedResponse<Rotation>>;
   }
 
   usernameTaken(username: string): Observable<boolean> {
@@ -121,5 +107,21 @@ export class ApiService {
           body
         }
     );
+  }
+
+  private getQueryParamString(queryParams: RotationQueryParams) {
+    const paramArray = [];
+
+    if (queryParams.page) {
+      paramArray.push(`page=${queryParams.page}`);
+    }
+    if (queryParams.sortBy) {
+      paramArray.push(`sortBy=${queryParams.sortBy}`);
+    }
+    if (queryParams.classJobId) {
+      paramArray.push(`classJobId=${queryParams.classJobId}`);
+    }
+
+    return paramArray.length ? `?${paramArray.join('&')}` : '';
   }
 }

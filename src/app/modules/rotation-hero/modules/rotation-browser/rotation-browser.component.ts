@@ -18,27 +18,46 @@ export class RotationBrowserComponent {
   @Output() selectRotation: EventEmitter<Rotation> = new EventEmitter();
 
   public readonly selectedCategorySubject$: BehaviorSubject<RotationBrowserCategoryType> =
-    new BehaviorSubject<RotationBrowserCategoryType>(RotationBrowserCategoryType.Community);
+      new BehaviorSubject<RotationBrowserCategoryType>(RotationBrowserCategoryType.Community);
   public readonly selectedSubCategorySubject$: BehaviorSubject<RotationBrowserSubCategoryType> =
-    new BehaviorSubject<RotationBrowserSubCategoryType>(RotationBrowserSubCategoryType.Favorites);
+      new BehaviorSubject<RotationBrowserSubCategoryType>(RotationBrowserSubCategoryType.Favorites);
 
   public readonly selectPageSubject$: Subject<number> = new Subject();
   public readonly currentPage$ = merge(this.selectedCategorySubject$, this.selectedSubCategorySubject$)
-    .pipe(
-      switchMap(() => this.selectPageSubject$.pipe(startWith(1))),
-      shareReplay(1)
-    )
+      .pipe(
+          switchMap(() => this.selectPageSubject$.pipe(startWith(1))),
+          shareReplay(1)
+      )
 
-  public readonly paginatedResponse$: Observable<PaginatedResponse<Rotation>> = combineLatest([ this.selectedCategorySubject$, this.selectedSubCategorySubject$ ])
-    .pipe(
-      withLatestFrom(this.currentPage$),
-      switchMap(([[category, subCategory], page]) =>
-        this.apiService.getAllRotations({
-          page
-        })
-      ),
-      shareReplay(1)
-    );
+  public readonly paginatedResponse$: Observable<PaginatedResponse<Rotation>> = combineLatest([this.selectedCategorySubject$, this.selectedSubCategorySubject$])
+      .pipe(
+          withLatestFrom(this.currentPage$),
+          switchMap(([[category, subCategory], page]) => {
+            switch (category) {
+              case RotationBrowserCategoryType.Community:
+              default:
+                return this.apiService.getAllRotations({
+                  page,
+                  sortBy: subCategory
+                });
+
+              case RotationBrowserCategoryType.Favourites:
+                return this.apiService.userFavourites({
+                  page
+                });
+
+              case RotationBrowserCategoryType.Mine:
+                return this.apiService.userRotations({
+                  page
+                });
+
+              case RotationBrowserCategoryType.Search:
+                return this.apiService.getAllRotations();
+            }
+
+          }),
+          shareReplay(1)
+      );
 
   public readonly user$ = this.userService.signedInUser$;
 
@@ -46,8 +65,9 @@ export class RotationBrowserComponent {
   public readonly RotationBrowserSubCategoryType = RotationBrowserSubCategoryType;
 
   constructor(
-    private readonly apiService: ApiService,
-    private readonly userService: UserService
-  ) {}
+      private readonly apiService: ApiService,
+      private readonly userService: UserService
+  ) {
+  }
 
 }
