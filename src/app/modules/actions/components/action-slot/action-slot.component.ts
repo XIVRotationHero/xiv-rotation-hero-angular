@@ -76,7 +76,6 @@ export class ActionSlotComponent implements OnChanges {
   }
 
   public onDropHandler(event: CdkDragDrop<any>) {
-    console.log(event);
     if (this.hotbarId !== undefined && this.hotbarId !== -1 &&
         this.slotId !== undefined && this.slotId !== -1) {
       this.onDrop.next({
@@ -96,10 +95,10 @@ export class ActionSlotComponent implements OnChanges {
   }
 
   public disableTooltips() {
-    this.renderer.addClass(document.body, 'disable-tooltips');
+    this.renderer.addClass(document.body, 'is-dragging-action');
   }
 
   public enableTooltips() {
-    this.renderer.removeClass(document.body, 'disable-tooltips');
+    this.renderer.removeClass(document.body, 'is-dragging-action');
   }
 }

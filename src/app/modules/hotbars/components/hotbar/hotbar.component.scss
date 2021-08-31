@@ -82,3 +82,7 @@ $slot-border: 1px;
   }
 }
 
+// Fix to show slots when an action is being dragged
+::ng-deep body.is-dragging-action .rh-hotbar__slots--hide-unassigned .unassigned {
+  visibility: visible !important;
+}
