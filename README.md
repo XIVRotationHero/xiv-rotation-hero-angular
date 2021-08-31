@@ -1,11 +1,15 @@
-![Logo](./docs/img/xivrh-logo.png)
+<p align="center">
+    <img src="./docs/img/xivrh-logo.png" alt="Logo" />
+</p>
 
-<a href="https://discord.gg/d7r8h5tDPA">
-  <img src="https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat" />
-</a>
-<img src="https://img.shields.io/github/license/XIVRotationHero/xiv-rotation-hero-angular" />
-<img src="https://img.shields.io/github/stars/XIVRotationHero/xiv-rotation-hero-angular?style=flat" />
-<img src="https://img.shields.io/github/issues-raw/XIVRotationHero/xiv-rotation-hero-angular" />
+<p align="center">
+    <a href="https://discord.gg/d7r8h5tDPA">
+      <img src="https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat" />
+    </a>
+    <img src="https://img.shields.io/github/license/XIVRotationHero/xiv-rotation-hero-angular" />
+    <img src="https://img.shields.io/github/stars/XIVRotationHero/xiv-rotation-hero-angular?style=flat" />
+    <img src="https://img.shields.io/github/issues-raw/XIVRotationHero/xiv-rotation-hero-angular" />
+</p>
 
 This is a free open source tool to practice your rotation inside and outside FFXIV.
 
@@ -18,7 +22,7 @@ Note: The **full** browser version means opening the URL in the browser. This is
 ### Rotation hero overlay
 
 * ACT Overlay Support (just include the URL)
-* Community rotation presets for each discipile of war
+* Community rotation presets for each disciple of war
 * Customisable rotations with repeatable steps
 * (Planned) Different training modes to increase efficiency in learning
 
@@ -29,10 +33,10 @@ Note: The **full** browser version means opening the URL in the browser. This is
 * Drag/Drop of actions
 * Persistent hotbar layout and allocation
 * Persistent Key bindings
-* Rotation Recorder / action history
+* Rotation Builder
 * Combo indicators
-* (Partial) Support for gamepads
-* (Partial) Cross hotbars
+* Support for gamepads
+* Cross hotbars
 * (Planned) Movement simulator for directionals and dodging practice
 * (Evaluating) Drag/Drop of HOTBAR.DAT for automatic hotbar allocation
 
