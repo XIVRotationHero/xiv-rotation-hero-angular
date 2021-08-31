@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HotbarOptions} from "../interfaces/hotbar-options";
 import {HotbarStyle} from "../enums/hotbar-style.enum";
 import {BehaviorSubject, combineLatest, Observable, Subject} from "rxjs";
-import {map, scan, shareReplay, startWith, switchMap, take, tap, withLatestFrom} from "rxjs/operators";
+import {filter, map, scan, shareReplay, startWith, switchMap, take, tap, withLatestFrom} from "rxjs/operators";
 import {GameDataService} from "../../../core/services/game-data.service";
 import {KeyBindingService} from "../../key-binding/services/key-binding.service";
 import {AppStateService} from "../../../core/services/app-state.service";
@@ -83,7 +83,10 @@ export class HotbarService {
 
     // Persist hotbar allocation
     this.hotbarAllocation$
-        .pipe(withLatestFrom(this.appStateService.currentClassJobId$))
+        .pipe(
+            withLatestFrom(this.appStateService.currentClassJobId$),
+            filter(([, currentClassJobId]) => currentClassJobId !== 1)
+        )
         .subscribe(([hotbarAllocation, currentClassJobId]) => this.persistHotbarAllocation(currentClassJobId, hotbarAllocation));
 
     this.registerHotbarKeyBindingLabels();
@@ -193,7 +196,7 @@ export class HotbarService {
     const existingHotbarData = localStorage.getItem(`${this.HOTBAR_ALLOCATION_PERSISTANCE_KEY}${currentClassJobId}`);
 
     if (currentClassJobId === -1) {
-      return [];
+      return Array.from({length: this.HOTBAR_COUNT}).map(() => [...this.EMPTY_HOTBAR]);
     }
 
     if (existingHotbarData !== null) {
