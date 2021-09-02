@@ -16,6 +16,7 @@ $border-length: 16px;
   &__content {
     background: rgba(0, 0, 0, 0.7);
     flex-grow: 1;
+    max-width: 400px;
   }
 
   &__title-bar {

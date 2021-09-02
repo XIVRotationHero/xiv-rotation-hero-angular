@@ -22,9 +22,17 @@ $border-length: 16px;
     padding: 4px 12px;
   }
 
-  &__actions {
+  &__actions-scroll-container {
     display: flex;
     flex: 0 0 100%;
+    overflow: hidden;
+    width: 500px;
+    max-width: 500px;
+    position: relative;
+  }
+
+  &__actions {
+    display: flex;
     position: relative;
     will-change: left;
     left: 0;
@@ -44,6 +52,7 @@ $border-length: 16px;
 
   &__action {
     position: relative;
+    flex: 0 0 $action-size;
     width: $action-size;
     height: $action-size;
     border: 1px solid black;

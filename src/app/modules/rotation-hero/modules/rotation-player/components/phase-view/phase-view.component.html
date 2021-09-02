@@ -1,12 +1,17 @@
 <div class="rh-phase-view__phase-title">{{ phase }}</div>
-<div class="rh-phase-view__action-count">{{ actions?.length }}</div>
-<div class="rh-phase-view__actions">
-  <div
-      class="rh-phase-view__action"
-      *ngFor="let action of actions; index as actionIndex"
-      [ngClass]="{
-        'rh-phase-view__action--next': activeActionIndex === actionIndex
-      }">
-    <rh-action-icon [action]="action"></rh-action-icon>
+<div class="rh-phase-view__action-count">{{ doneActionCount }}/{{ actions?.length }}</div>
+<div class="rh-phase-view__actions-scroll-container">
+  <div class="rh-phase-view__actions"
+       *ngIf="phaseState === PhaseState.Active"
+       [style.left]="position">
+    <div
+        class="rh-phase-view__action"
+        #action
+        *ngFor="let action of actions; index as actionIndex"
+        [ngClass]="{
+          'rh-phase-view__action--next': activeActionIndex === actionIndex
+        }">
+      <rh-action-icon [action]="action"></rh-action-icon>
+    </div>
   </div>
 </div>
