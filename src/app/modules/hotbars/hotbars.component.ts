@@ -12,7 +12,7 @@ import {KeyBindingService} from "../key-binding/services/key-binding.service";
   styleUrls: ['./hotbars.component.scss']
 })
 export class HotbarsComponent {
-  public hotbars$: Observable<[HotbarOptions, (number | undefined)[]][]> = combineLatest([
+  public hotbars$: Observable<[HotbarOptions, (number | null)[]][]> = combineLatest([
     this.hotbarService.hotbarSettings$,
     this.hotbarService.hotbarAllocation$
   ]).pipe(
@@ -50,7 +50,7 @@ export class HotbarsComponent {
   }
 
   public onAllocateAction({hotbarId, slotId, actionId}: { hotbarId: number; slotId: number; actionId: number }) {
-    this.hotbarService.allocateAction(hotbarId, slotId, actionId);
+    this.hotbarService.assignAction(hotbarId, slotId, actionId);
   }
 
   public hotbarIndex(index: number) {

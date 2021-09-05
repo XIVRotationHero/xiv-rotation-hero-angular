@@ -1,23 +1,24 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {GamepadService} from "../gamepad/services/gamepad.service";
 import {GamepadButtonState} from "../gamepad/enums/gamepad-button-state";
 import {ActiveCrossHotbarSet} from "./enums/active-cross-hotbar-set";
 import {PSGamepadButton} from "../gamepad/enums/ps-gamepad-button";
 import {animationFrameScheduler, BehaviorSubject, combineLatest, interval, Observable, Subject} from "rxjs";
-import {filter, map, shareReplay, take, withLatestFrom} from "rxjs/operators";
+import {filter, map, shareReplay, take, takeUntil, withLatestFrom} from "rxjs/operators";
 import {FullCrossHotbarAllocation} from "./components/cross-hotbar-set/cross-hotbar-set.component";
 import {HotbarCrossSettings} from "../configuration/interfaces/hotbar-cross-settings";
 import {HotbarCustomSettings} from "../configuration/interfaces/hotbar-custom-settings";
 import {WxhbInputType} from "./enums/wxhb-input-type";
 import {ConfigurationService} from "../configuration/services/configuration.service";
 import {ActionService} from "../actions/services/action.service";
+import {CrossHotbarService} from "./services/cross-hotbar.service";
 
 @Component({
   selector: 'rh-cross-hotbar',
   templateUrl: './cross-hotbar.component.html',
   styleUrls: ['./cross-hotbar.component.scss']
 })
-export class CrossHotbarComponent implements OnInit {
+export class CrossHotbarComponent implements OnInit, OnDestroy {
 
   public readonly hotbarCrossSettings$ = this.configurationService.hotbarCrossSettings$;
   public readonly hotbarCustomSettings$ = this.configurationService.hotbarCustomSettings$;
@@ -26,7 +27,6 @@ export class CrossHotbarComponent implements OnInit {
   @Input() hotbarCustomSettings!: HotbarCustomSettings | null;
 
   public inputTimerHandle: any = null;
-  private readonly HOTBAR_SET_COUNT = 8;
 
   private readonly SET_SELECT_ORDER = [
     PSGamepadButton.Triangle,
@@ -44,7 +44,7 @@ export class CrossHotbarComponent implements OnInit {
 
   private readonly activeHotbarIndexSubject$ = new BehaviorSubject(0);
   public readonly activeHotbarIndex$ = this.activeHotbarIndexSubject$.asObservable().pipe(shareReplay(1));
-  public readonly crossHotbarSetAllocations$: BehaviorSubject<Array<[FullCrossHotbarAllocation, FullCrossHotbarAllocation]>> = new BehaviorSubject(this.createEmptyHotbarSets());
+  public readonly crossHotbarSetAllocations$ = this.crossHotbarService.hotbarAllocation$;
 
   public readonly activeHotbarSet$: Observable<[FullCrossHotbarAllocation, FullCrossHotbarAllocation]> =
       combineLatest([this.activeHotbarIndex$, this.crossHotbarSetAllocations$]).pipe(
@@ -58,7 +58,6 @@ export class CrossHotbarComponent implements OnInit {
   public readonly activeHotbarSetRight$: Observable<FullCrossHotbarAllocation> = this.activeHotbarSet$.pipe(
       map(([, right]) => right)
   );
-
 
   public readonly ActiveCrossHotbarSet = ActiveCrossHotbarSet;
   public readonly WxhbInputType = WxhbInputType;
@@ -83,27 +82,30 @@ export class CrossHotbarComponent implements OnInit {
         const [hotbar, side] = setting;
         return sets[hotbar][side];
       })
-  )
+  );
 
   private triggeredCrossHotbarSlotSubject$: Subject<[number, number]> = new Subject();
+
+  private isDestroyed$ = new Subject<void>();
 
   constructor(
       private readonly gamepadService: GamepadService,
       private readonly configurationService: ConfigurationService,
-      private readonly actionService: ActionService
+      private readonly actionService: ActionService,
+      private readonly crossHotbarService: CrossHotbarService
   ) {
   }
 
   ngOnInit(): void {
-    this.createEmptyHotbarSets();
-
     interval(0, animationFrameScheduler)
+        .pipe(takeUntil(this.isDestroyed$))
         .subscribe(() => {
           this.onTick();
         });
 
     this.triggeredCrossHotbarSlotSubject$
         .pipe(
+            takeUntil(this.isDestroyed$),
             withLatestFrom(this.crossHotbarSetAllocations$, this.activeHotbarIndex$, this.hotbarCustomSettings$),
             map((
                 [[activeSet, slotId], allocations, activeHotbarIndex, settings]:
@@ -146,31 +148,22 @@ export class CrossHotbarComponent implements OnInit {
         });
   }
 
-  createEmptyHotbarSets(): [FullCrossHotbarAllocation, FullCrossHotbarAllocation][] {
-    const sets: [FullCrossHotbarAllocation, FullCrossHotbarAllocation][] = [];
-    for (let i = 0; i < this.HOTBAR_SET_COUNT; i++) {
-      sets.push(
-          [
-            [null, null, null, null, null, null, null, null],
-            [null, null, null, null, null, null, null, null]
-          ]
-      );
-    }
-    return sets;
+  public ngOnDestroy() {
+    this.isDestroyed$.next();
   }
 
-  onAssignSlot(
+  public onAssignSlot(
       {hotbarId, slotId, actionId}: { hotbarId: number, slotId: number, actionId: number },
       crossHotbarSet: ActiveCrossHotbarSet
-  ) {
+  ): void {
     this.crossHotbarSetAllocations$.pipe(take(1)).subscribe((allocation) => {
       const side = (crossHotbarSet === ActiveCrossHotbarSet.Left || crossHotbarSet === ActiveCrossHotbarSet.WXHBLeft) ? 0 : 1;
       allocation[hotbarId][side][slotId] = actionId;
-      this.crossHotbarSetAllocations$.next(allocation);
+      this.crossHotbarService.assignAction(hotbarId, side === 1 ? slotId + 8 : slotId, actionId);
     });
   }
 
-  onTick() {
+  private onTick(): void {
     this.gamepadService.poll();
 
     // Only update when there are actual updates
@@ -218,7 +211,7 @@ export class CrossHotbarComponent implements OnInit {
    * If both keys are held, the later one switches to the extended hotbar side.
    * If one is released it goes back to the still held button.
    */
-  updateActiveCrossHotbarSet(l2ButtonState: GamepadButtonState, r2ButtonState: GamepadButtonState): void {
+  private updateActiveCrossHotbarSet(l2ButtonState: GamepadButtonState, r2ButtonState: GamepadButtonState): void {
     if (this.inputTimerHandle) {
       clearTimeout(this.inputTimerHandle);
       this.inputTimerHandle = undefined;

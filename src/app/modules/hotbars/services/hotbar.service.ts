@@ -1,26 +1,40 @@
 import {Injectable} from '@angular/core';
 import {HotbarOptions} from "../interfaces/hotbar-options";
 import {HotbarStyle} from "../enums/hotbar-style.enum";
-import {BehaviorSubject, combineLatest, Observable, Subject} from "rxjs";
-import {filter, map, scan, shareReplay, startWith, switchMap, take, tap, withLatestFrom} from "rxjs/operators";
+import {BehaviorSubject, Observable} from "rxjs";
+import {take, tap} from "rxjs/operators";
 import {GameDataService} from "../../../core/services/game-data.service";
 import {KeyBindingService} from "../../key-binding/services/key-binding.service";
 import {AppStateService} from "../../../core/services/app-state.service";
-import {HotbarAllocation} from "../interfaces/hotbar-allocation";
-import {Action} from "../../actions/interfaces/action";
+import {AbstractHotbarService} from "../../../core/services/abstract-hotbar.service";
+
+type Allocation = number | null;
+type HotbarAllocation = [
+  Allocation,
+  Allocation,
+  Allocation,
+  Allocation,
+  Allocation,
+  Allocation,
+  Allocation,
+  Allocation,
+  Allocation,
+  Allocation,
+  Allocation,
+  Allocation
+];
 
 @Injectable({
   providedIn: 'root'
 })
-export class HotbarService {
+export class HotbarService extends AbstractHotbarService<HotbarAllocation> {
   public hotbarSettings$: Observable<HotbarOptions[]>;
-  public hotbarAllocation$: Observable<(number | undefined)[][]>;
 
-  private readonly HOTBAR_SETTINGS_PERSISTANCE_KEY = 'hotbar-settings';
-  private readonly HOTBAR_ALLOCATION_PERSISTANCE_KEY = 'hotbar-allocation-';
-  private readonly HOTBAR_COUNT = 10;
-  private readonly SLOTS_PER_HOTBAR = 12;
-  private readonly EMPTY_HOTBAR: (number | undefined)[] = Array.from({length: this.SLOTS_PER_HOTBAR}).map(() => undefined);
+  private static readonly HOTBAR_COUNT = 10;
+  private static readonly SLOTS_PER_HOTBAR = 12;
+  private static readonly HOTBAR_PERSISTENCE_KEY = 'rh-hotbar-allocation-';
+
+  private readonly HOTBAR_SETTINGS_PERSISTENCE_KEY = 'rh-hotbar-settings';
 
   private HOTBAR_KEYS = [
     '1',
@@ -50,46 +64,28 @@ export class HotbarService {
     {visible: false, hotbarStyle: HotbarStyle.Horizontal, position: [0.2, 0.20], scale: .8}
   ];
 
-  private hotbarResetTrigger$: Subject<void> = new Subject();
-  private hotbarAllocationSubject$: Subject<[number, number, number | undefined]> = new Subject();
   private hotbarSettingsSubject$: BehaviorSubject<HotbarOptions[]> = new BehaviorSubject(this.loadSettings());
 
   public constructor(
-      private readonly appStateService: AppStateService,
-      private readonly gameDataService: GameDataService,
+      protected readonly appStateService: AppStateService,
+      protected readonly gameDataService: GameDataService,
       private readonly keyBindingService: KeyBindingService
   ) {
-    const currentClassJobAllocation$ = this.appStateService.currentClassJobId$.pipe(
-        map(this.loadHotbarAllocation.bind(this)),
-        shareReplay(1)
-    );
+    super(appStateService, gameDataService, HotbarService.HOTBAR_PERSISTENCE_KEY, HotbarService.HOTBAR_COUNT,  HotbarService.SLOTS_PER_HOTBAR);
 
     this.hotbarSettings$ = this.hotbarSettingsSubject$.asObservable()
         .pipe(tap(this.persistSettings.bind(this)));
 
-    this.hotbarAllocation$ = combineLatest([this.hotbarResetTrigger$.pipe(startWith([])), currentClassJobAllocation$])
-        .pipe(
-            switchMap(([, allocation]) => this.hotbarAllocationSubject$.asObservable()
-                .pipe(
-                    scan((acc, [hotbarId, slotId, actionId]) => {
-                      acc[hotbarId][slotId] = actionId;
-                      return acc;
-                    }, allocation),
-                    startWith(allocation)
-                )
-            ),
-            shareReplay(1)
-        );
-
-    // Persist hotbar allocation
-    this.hotbarAllocation$
-        .pipe(
-            withLatestFrom(this.appStateService.currentClassJobId$),
-            filter(([, currentClassJobId]) => currentClassJobId !== 1)
-        )
-        .subscribe(([hotbarAllocation, currentClassJobId]) => this.persistHotbarAllocation(currentClassJobId, hotbarAllocation));
-
     this.registerHotbarKeyBindingLabels();
+  }
+
+  public get emptyHotbar(): HotbarAllocation {
+    return <HotbarAllocation>Array.from({ length: HotbarService.SLOTS_PER_HOTBAR }).fill(null);
+  }
+
+  public allocateAction(allocation: HotbarAllocation[], hotbarId: number, slotId: number, actionId: number | null): HotbarAllocation[] {
+    allocation[hotbarId][slotId] = actionId;
+    return allocation;
   }
 
   public updateHotbarOptions(hotbarOptions: HotbarOptions[]) {
@@ -107,7 +103,7 @@ export class HotbarService {
 
   public registerHotbarKeyBindingLabels() {
     // Register labels for hotbar slots
-    for (let i = 0; i < this.HOTBAR_COUNT; i++) {
+    for (let i = 0; i < HotbarService.HOTBAR_COUNT; i++) {
       for (let k = 0; k < 12; k++) {
         const label = `Hotbar ${i + 1} - Slot ${k + 1}`;
         this.keyBindingService.registerBindingLabel$.next(label);
@@ -125,22 +121,18 @@ export class HotbarService {
     }
   }
 
-  public allocateAction(hotbarId: number, slotId: number, actionId: number | undefined) {
-    this.hotbarAllocationSubject$.next([hotbarId, slotId, actionId]);
-  }
-
-  public getClearHotbars(): (number | undefined)[][] {
+  public getClearHotbars(): (number | null)[][] {
     return Array
         .from({length: this.HOTBAR_COUNT})
-        .map(() => [...this.EMPTY_HOTBAR]);
+        .map(() => [...this.emptyHotbar]);
   }
 
   public clearHotbar(hotbarId: number) {
     this.hotbarAllocation$
         .pipe(take(1))
         .subscribe(() => {
-          for (let slotId = 0; slotId < this.SLOTS_PER_HOTBAR; slotId++) {
-            this.hotbarAllocationSubject$.next([hotbarId, slotId, undefined]);
+          for (let slotId = 0; slotId < HotbarService.SLOTS_PER_HOTBAR; slotId++) {
+            this.hotbarAllocationSubject$.next([hotbarId, slotId, null]);
           }
         });
   }
@@ -179,55 +171,16 @@ export class HotbarService {
   }
 
   private persistSettings(hotbarSettings: HotbarOptions[]) {
-    localStorage.setItem(this.HOTBAR_SETTINGS_PERSISTANCE_KEY, JSON.stringify(hotbarSettings));
+    localStorage.setItem(this.HOTBAR_SETTINGS_PERSISTENCE_KEY, JSON.stringify(hotbarSettings));
   }
 
   private loadSettings(): HotbarOptions[] {
-    const savedSettings = localStorage.getItem(this.HOTBAR_SETTINGS_PERSISTANCE_KEY);
+    const savedSettings = localStorage.getItem(this.HOTBAR_SETTINGS_PERSISTENCE_KEY);
 
     if (savedSettings) {
       return JSON.parse(savedSettings);
     }
 
     return this.HOTBAR_DEFAULTS;
-  }
-
-  private loadHotbarAllocation(currentClassJobId: number): (number | undefined)[][] {
-    const existingHotbarData = localStorage.getItem(`${this.HOTBAR_ALLOCATION_PERSISTANCE_KEY}${currentClassJobId}`);
-
-    if (currentClassJobId === -1) {
-      return Array.from({length: this.HOTBAR_COUNT}).map(() => [...this.EMPTY_HOTBAR]);
-    }
-
-    if (existingHotbarData !== null) {
-      const hotbarAllocations = <HotbarAllocation>JSON.parse(existingHotbarData);
-      return hotbarAllocations.hotbars;
-    }
-
-    const actions = this.gameDataService.getActionsByClassJobId(currentClassJobId);
-    return this.autoAllocateActions(actions.filter((action) => {
-      return !action.Description.match('※This action cannot be assigned to a hotbar');
-    }));
-  }
-
-  private autoAllocateActions(actions: Action[]): (number | undefined)[][] {
-    const allocation: (number | undefined)[][] = Array.from({length: this.HOTBAR_COUNT}).map(() => [...this.EMPTY_HOTBAR]);
-
-    if (actions) {
-      actions.forEach((action, index) => {
-        const hotbarId = Math.floor(index / 12);
-        const slotId = index % 12;
-        allocation[hotbarId][slotId] = action.ID;
-      });
-    }
-
-    return allocation;
-  }
-
-  private persistHotbarAllocation(currentClassJobId: number, allocation: (number | undefined)[][]) {
-    localStorage.setItem(`${this.HOTBAR_ALLOCATION_PERSISTANCE_KEY}${currentClassJobId}`, JSON.stringify({
-      hotbars: allocation,
-      crossHotbars: []
-    }));
   }
 }

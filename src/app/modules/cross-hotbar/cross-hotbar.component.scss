@@ -31,4 +31,14 @@
     border: 1px solid white;
     margin: 0 1rem;
   }
+
+  &__set-select-container {
+    position: relative;
+    height: 0;
+
+    rh-set-select {
+      position: relative;
+      bottom: 100%;
+    }
+  }
 }

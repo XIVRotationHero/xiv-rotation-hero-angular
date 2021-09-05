@@ -22,11 +22,12 @@
         (onAssignSlot)="onAssignSlot($event, ActiveCrossHotbarSet.WXHBRight)"></rh-cross-hotbar-set>
   </div>
 
-  <rh-set-select
-      style="position: absolute"
-      *ngIf="displaySetSelect"
-      [activeHotbarIndex]="activeHotbarIndex$ | async"
-      [availableHotbarSets]="crossHotbarSetAllocations$ | async"></rh-set-select>
+  <div class="rh-cross-hotbar__set-select-container">
+    <rh-set-select
+        *ngIf="displaySetSelect"
+        [activeHotbarIndex]="activeHotbarIndex$ | async"
+        [availableHotbarSets]="crossHotbarSetAllocations$ | async"></rh-set-select>
+  </div>
 
   <div class="rh-cross-hotbar__sets">
     <rh-cross-hotbar-set
