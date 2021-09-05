@@ -21,82 +21,82 @@ export class ApiService {
 
   // AUTH
   public signIn(email: string, password: string): Observable<User> {
-    return this.request('/auth/login', 'POST', JSON.stringify({email, password})) as Observable<User>;
+    return this.request<User>('/auth/login', 'POST', JSON.stringify({email, password}));
   }
 
   public signUp(email: string, username: string, password: string) {
-    return this.request('/auth/signup', 'POST', JSON.stringify({email, password, username}));
+    return this.request<User>('/auth/signup', 'POST', JSON.stringify({email, password, username}));
   }
 
   public me(): Observable<User> {
-    return this.request('/auth/me', 'GET') as Observable<User>;
+    return this.request<User>('/auth/me', 'GET');
   }
 
   public verify(token: string): Observable<Response> {
-    return this.request(`/auth/verify/${token}`, 'POST') as Observable<Response>;
+    return this.request<Response>(`/auth/verify/${token}`, 'POST');
   }
 
-  public logout() {
-    return this.request('/auth/logout', 'GET');
+  public logout(): Observable<void> {
+    return this.request<void>('/auth/logout', 'GET');
   }
 
   // ROTATIONS
   public createRotation(rotation: RotationCreate): Observable<Rotation> {
-    return this.request('/rotation/', 'POST', JSON.stringify(rotation)) as Observable<Rotation>;
+    return this.request<Rotation>('/rotation/', 'POST', JSON.stringify(rotation));
   }
 
   public updateRotation(rotation: RotationUpdate): Observable<Response> {
-    return this.request(`/rotation/${rotation.id}`, 'PATCH', JSON.stringify(rotation)) as Observable<Response>;
+    return this.request<Response>(`/rotation/${rotation.id}`, 'PATCH', JSON.stringify(rotation));
   }
 
   public publishRotation(rotationId: string): Observable<Rotation> {
-    return this.request(`/rotation/${rotationId}/publish`, 'POST') as Observable<Rotation>;
+    return this.request<Rotation>(`/rotation/${rotationId}/publish`, 'POST');
   }
 
   public favoriteRotation(rotationId: string): Observable<FavouriteResponse> {
-    return this.request(`/rotation/${rotationId}/favourite`, 'POST', '') as Observable<FavouriteResponse>;
+    return this.request<FavouriteResponse>(`/rotation/${rotationId}/favourite`, 'POST', '');
   }
 
   public favoriteRotationWithToken(rotationId: string, token: string): Observable<FavouriteResponse> {
-    return this.request(`/rotation/${rotationId}/favourite/token/${token}`, 'POST', '') as Observable<FavouriteResponse>;
+    return this.request<FavouriteResponse>(`/rotation/${rotationId}/favourite/token/${token}`, 'POST', '');
   }
 
   public getRotation(rotationId: string): Observable<Rotation> {
-    return this.request(`/rotation/${rotationId}`, 'GET') as Observable<Rotation>
+    return this.request<Rotation>(`/rotation/${rotationId}`, 'GET');
   }
 
   public getAllRotations(queryParams: RotationQueryParams = {}): Observable<PaginatedResponse<Rotation>> {
-    return this.request(`/rotation/${this.getQueryParamString(queryParams)}`, 'GET') as Observable<PaginatedResponse<Rotation>>;
+    return this.request<PaginatedResponse<Rotation>>(`/rotation/${ApiService.getQueryParamString(queryParams)}`, 'GET');
   }
 
   // USER
   public userFavourites(queryParams: RotationQueryParams = {}): Observable<PaginatedResponse<Rotation>> {
-    return this.request(`/user/favourites${this.getQueryParamString(queryParams)}`, 'GET') as Observable<PaginatedResponse<Rotation>>;
+    return this.request<PaginatedResponse<Rotation>>(`/user/favourites${ApiService.getQueryParamString(queryParams)}`, 'GET');
   }
 
   public userRotations(queryParams: RotationQueryParams = {}): Observable<PaginatedResponse<Rotation>> {
-    return this.request(`/user/rotations${this.getQueryParamString(queryParams)}`, 'GET') as Observable<PaginatedResponse<Rotation>>;
+    return this.request<PaginatedResponse<Rotation>>(`/user/rotations${ApiService.getQueryParamString(queryParams)}`, 'GET');
   }
 
   public usernameTaken(username: string): Observable<boolean> {
-    return this.request(`/user/name-taken/${username}`, 'GET') as Observable<boolean>;
+    return this.request<boolean>(`/user/name-taken/${username}`, 'GET');
   }
 
   public changeUsername(username: string): Observable<User> {
-    return this.request(`/user/name`, 'POST', {username}) as Observable<User>;
+    return this.request<User>(`/user/name`, 'POST', {username});
   }
 
   // Token
   public userTokenFavourites(token: string): Observable<PaginatedResponse<Rotation>> {
-    return this.request(`/token/${token}/favourites`, 'GET') as Observable<PaginatedResponse<Rotation>>;
+    return this.request<PaginatedResponse<Rotation>>(`/token/${token}/favourites`, 'GET');
   }
 
   public userTokenRotations(token: string): Observable<PaginatedResponse<Rotation>> {
-    return this.request(`/token/${token}/rotations`, 'GET') as Observable<PaginatedResponse<Rotation>>;
+    return this.request<PaginatedResponse<Rotation>>(`/token/${token}/rotations`, 'GET');
   }
 
-  private request(url: string, method: 'POST' | 'PATCH' | 'GET' | 'DELETE', body?: string | Record<string, unknown>) {
-    return this.httpClient.request(
+  private request<T>(url: string, method: 'POST' | 'PATCH' | 'GET' | 'DELETE', body?: string | Record<string, unknown>): Observable<T> {
+    return this.httpClient.request<T>(
         method,
         `${this.API_BASE_URL}${url}`,
         {
@@ -109,7 +109,7 @@ export class ApiService {
     );
   }
 
-  private getQueryParamString(queryParams: RotationQueryParams) {
+  private static getQueryParamString(queryParams: RotationQueryParams): string {
     const paramArray = [];
 
     if (queryParams.page) {
