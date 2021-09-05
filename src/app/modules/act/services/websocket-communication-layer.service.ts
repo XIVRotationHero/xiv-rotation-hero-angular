@@ -9,7 +9,7 @@ export interface SocketMessageEvent extends MessageEvent {
   providedIn: 'root'
 })
 export class WebsocketCommunicationLayerService extends CommunicationLayerService {
-  public static readonly WEBSOCKET_REGEX = /[\?&]OVERLAY_WS=([^&]+)/;
+  public static readonly WEBSOCKET_REGEX = /[?&]OVERLAY_WS=([^&]+)/;
 
   private ws!: WebSocket;
   private responsePromises: { [key: number]: (value: any) => void } = {};
@@ -27,11 +27,11 @@ export class WebsocketCommunicationLayerService extends CommunicationLayerServic
   public callOverlayHandler(msg: SocketMessageEvent): Promise<any> {
     msg.rseq = this.rseqCounter++;
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.sendMessage(msg);
-      this.responsePromises[ <number>msg.rseq ] = resolve;
+      this.responsePromises[ msg.rseq ] = resolve;
     });
-  };
+  }
 
   public startOverlayEvents(): void {
     this.eventsStarted = false;
@@ -40,7 +40,7 @@ export class WebsocketCommunicationLayerService extends CommunicationLayerServic
       call: 'subscribe',
       events: ['LogLine'],
     });
-  };
+  }
 
   private sendMessage(obj: any): void {
     if (this.queue) {
@@ -48,7 +48,7 @@ export class WebsocketCommunicationLayerService extends CommunicationLayerServic
     } else {
       this.ws.send(JSON.stringify(obj));
     }
-  };
+  }
 
   private connectWs() {
     this.ws.addEventListener('error', (e) => {

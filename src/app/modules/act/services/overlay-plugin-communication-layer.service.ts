@@ -45,7 +45,7 @@ export class OverlayPluginCommunicationLayerService extends CommunicationLayerSe
         resolve(data === null ? null : JSON.parse(data));
       });
     });
-  };
+  }
 
   public startOverlayEvents(): void {
     this.eventsStarted = true;
@@ -54,9 +54,9 @@ export class OverlayPluginCommunicationLayerService extends CommunicationLayerSe
       call: 'subscribe',
       events: ['LogLine'],
     });
-  };
+  }
 
-  private sendMessage(obj: any, cb: (responseData: string) => any = () => {}) {
+  private sendMessage(obj: any, cb: (responseData: string) => any = () => { /* NOOP */ }) {
     if (this.queue) {
       this.queue.push([obj, cb]);
     } else {

@@ -27,9 +27,9 @@ export class ProfileComponent {
     this.userService.signOutSubject$.next();
   }
 
-  copyUrlToClipboard() {
+  async copyUrlToClipboard() {
     const el = (<HTMLInputElement>this.actUrlElement.nativeElement);
     el.select();
-    void navigator.clipboard.writeText(el.value);
+    await navigator.clipboard.writeText(el.value);
   }
 }

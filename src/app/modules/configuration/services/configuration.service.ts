@@ -9,12 +9,13 @@ import {HotbarCrossSettings} from "../interfaces/hotbar-cross-settings";
 import {CrossHotbarControls} from "../../cross-hotbar/enums/cross-hotbar-controls";
 import {CrossHotbarDisplayType} from "../../cross-hotbar/enums/cross-hotbar-display-type";
 import {InputType} from "../enums/input-type";
+import {LocalStoragePersistanceKey} from "../enums/local-storage-persistance-key";
 
-enum LocalStoragePersistanceKey {
-  InputType = 'rh-input-type',
-  HotbarDisplaySettings = 'rh-hotbar-display-settings',
-  HotbarCrossSettings = 'rh-hotbar-cross-settings',
-  HotbarCustomSettings = 'rh-hotbar-custom-settings'
+function settingsAccumulator(acc: any, next: any) {
+  return {
+    ...acc,
+    ...next
+  }
 }
 
 @Injectable({
@@ -55,35 +56,20 @@ export class ConfigurationService {
 
   public readonly hotbarDisplaySettingsSubject$: Subject<Partial<HotbarDisplaySettings>> = new BehaviorSubject(this.loadSettings(LocalStoragePersistanceKey.HotbarDisplaySettings, this.HOTBAR_DISPLAY_SETTINGS_DEFAULTS));
   public readonly hotbarDisplaySettings$: Observable<HotbarDisplaySettings> = this.hotbarDisplaySettingsSubject$.pipe(
-      scan((acc, next) => {
-        return {
-          ...acc,
-          ...next
-        }
-      }, this.HOTBAR_DISPLAY_SETTINGS_DEFAULTS),
+      scan(settingsAccumulator, this.HOTBAR_DISPLAY_SETTINGS_DEFAULTS),
       shareReplay(1)
   );
 
 
   public readonly hotbarCrossSettingsSubject$: Subject<Partial<HotbarCrossSettings>> = new BehaviorSubject(this.loadSettings(LocalStoragePersistanceKey.HotbarCrossSettings, this.HOTBAR_CROSS_SETTINGS_DEFAULTS));
   public readonly hotbarCrossSettings$: Observable<HotbarCrossSettings> = this.hotbarCrossSettingsSubject$.pipe(
-      scan((acc, next) => {
-        return {
-          ...acc,
-          ...next
-        }
-      }, this.HOTBAR_CROSS_SETTINGS_DEFAULTS),
+      scan(settingsAccumulator, this.HOTBAR_CROSS_SETTINGS_DEFAULTS),
       shareReplay(1)
   );
 
   public readonly hotbarCustomSettingsSubject$: Subject<Partial<HotbarCustomSettings>> = new BehaviorSubject(this.loadSettings(LocalStoragePersistanceKey.HotbarCustomSettings, this.HOTBAR_CUSTOM_SETTINGS_DEFAULTS));
   public readonly hotbarCustomSettings$: Observable<HotbarCustomSettings> = this.hotbarCustomSettingsSubject$.pipe(
-      scan((acc, next) => {
-        return {
-          ...acc,
-          ...next
-        }
-      }, this.HOTBAR_CUSTOM_SETTINGS_DEFAULTS),
+      scan(settingsAccumulator, this.HOTBAR_CUSTOM_SETTINGS_DEFAULTS),
       shareReplay(1)
   );
 

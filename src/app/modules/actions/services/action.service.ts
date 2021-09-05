@@ -74,9 +74,9 @@ export class ActionService {
             (acc, action) =>
                 interval$
                     .pipe(
-                        scan((acc, value) => ({
-                          ...acc,
-                          remaining: acc.remaining - value.interval
+                        scan((subAcc, value) => ({
+                          ...subAcc,
+                          remaining: subAcc.remaining - value.interval
                         }), {
                           start: performance.now(),
                           duration: action.Recast100ms * 100,

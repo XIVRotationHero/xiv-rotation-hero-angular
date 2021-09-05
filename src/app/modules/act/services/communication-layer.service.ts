@@ -32,38 +32,7 @@ export abstract class CommunicationLayerService {
 
   protected processEvent(msg: MessageEvent) {
     this.messageEvents$.next(msg);
-    //
-    // if (this.subscribers[msg.type]) {
-    //   for (let subscriber of this.subscribers[msg.type]) {
-    //     subscriber(msg);
-    //   }
-    // }
   }
-//
-//   public addOverlayListener(event: string, cb: (data: any) => any) {
-//     if (this.eventsStarted && this.subscribers[ event ]) {
-//       console.warn(`A new listener for ${event} has been registered after event transmission has already begun.
-// Some events might have been missed and no cached values will be transmitted.
-// Please register your listeners before calling startOverlayEvents().`);
-//     }
-//
-//     if (!this.subscribers[ event ]) {
-//       this.subscribers[ event ] = [];
-//     }
-//
-//     this.subscribers[event].push(cb);
-//   }
-//
-//   public removeOverlayListener(event: string, cb: (msg: any) => {}) {
-//     if (this.subscribers[event]) {
-//       let list = this.subscribers[ event ];
-//       let pos = list.indexOf(cb);
-//
-//       if (pos > -1) list.splice(pos, 1);
-//     }
-//   }
-
-  public parseLogLine(line: LogLineEvent) {}
 
   abstract callOverlayHandler(msg: MessageEvent): Promise<any>;
   abstract startOverlayEvents(): void

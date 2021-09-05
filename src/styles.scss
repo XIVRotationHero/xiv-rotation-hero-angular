@@ -5,7 +5,6 @@
 @import './styles/forms';
 @import './styles/seperators';
 @import './styles/dialogs';
-@import './styles/select';
 @import './styles/tab-bar';
 @import './styles/generic';
 @import './styles/config-window';
@@ -19,7 +18,7 @@ html, body {
 body {
   margin: 0;
   background: transparent;
-  font-family: 'Fira Sans', 'sans-serif';
+  font-family: 'Fira Sans', sans-serif;
 }
 
 app-root {

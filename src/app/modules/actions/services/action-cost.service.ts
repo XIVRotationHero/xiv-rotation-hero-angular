@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from "rxjs";
-import {scan, share, shareReplay, startWith, switchMap, switchMapTo} from "rxjs/operators";
+import {scan, shareReplay, startWith, switchMapTo} from "rxjs/operators";
 import {CostType} from "../enums/cost-type";
 
 @Injectable({

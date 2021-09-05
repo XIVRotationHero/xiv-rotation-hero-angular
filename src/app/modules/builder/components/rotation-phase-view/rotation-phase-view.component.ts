@@ -32,17 +32,16 @@ export class RotationPhaseViewComponent {
   public onDrop(event: CdkDragDrop<number[], any>): void {
     if (event.container !== undefined) {
       if (!event.isPointerOverContainer) {
-        // Remove item
-        event.container.data
+        // TODO: Remove item
         return;
       }
 
       if (event.previousContainer === event.container) {
-        moveItemInArray(event.container.data as number[], event.previousIndex, event.currentIndex);
+        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
       } else {
         copyArrayItem(
             event.previousContainer.data,
-            event.container.data as number[],
+            event.container.data,
             event.previousIndex,
             event.currentIndex
         );

@@ -249,7 +249,6 @@ export class CrossHotbarComponent implements OnInit, OnDestroy {
     // Check for released state
     if (l2ButtonState === GamepadButtonState.Released || r2ButtonState === GamepadButtonState.Released) {
       this.activeHotbarSide = ActiveCrossHotbarSet.None;
-      return;
     }
   }
 }

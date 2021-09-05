@@ -34,13 +34,6 @@ export class RotationBrowserComponent {
           withLatestFrom(this.currentPage$),
           switchMap(([[category, subCategory], page]) => {
             switch (category) {
-              case RotationBrowserCategoryType.Community:
-              default:
-                return this.apiService.getAllRotations({
-                  page,
-                  sortBy: subCategory
-                });
-
               case RotationBrowserCategoryType.Favourites:
                 return this.apiService.userFavourites({
                   page
@@ -53,6 +46,13 @@ export class RotationBrowserComponent {
 
               case RotationBrowserCategoryType.Search:
                 return this.apiService.getAllRotations();
+
+              case RotationBrowserCategoryType.Community:
+              default:
+                return this.apiService.getAllRotations({
+                  page,
+                  sortBy: subCategory
+                });
             }
 
           }),

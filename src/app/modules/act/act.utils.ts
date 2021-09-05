@@ -3,7 +3,7 @@ import {EventType} from "./enums/event-type";
 
 export function logLineToActionEvent(logLine: LogLineEvent): ActionEvent {
   const [
-    type,
+    ,
     timestamp,
     playerId,
     playerName,
@@ -31,7 +31,7 @@ export function logLineToActionEvent(logLine: LogLineEvent): ActionEvent {
 
 export function logLineToRoleChangeEvent(logLine: LogLineEvent): RoleChangeEvent {
   const [
-    type,
+    ,
     timestamp,
     classJobId,
     strengthValue,

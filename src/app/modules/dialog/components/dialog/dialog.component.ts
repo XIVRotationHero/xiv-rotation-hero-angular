@@ -55,8 +55,6 @@ export class DialogComponent {
   }
 
   public onTouchDragStart(evt: TouchEvent): void {
-    // evt.preventDefault();
-
     document.addEventListener('touchmove', this.onTouchMove, {passive: false});
     document.addEventListener('touchend', this.onMouseDragStop, {passive: false});
 
@@ -68,8 +66,6 @@ export class DialogComponent {
   }
 
   private onMouseMove(evt: MouseEvent): void {
-    // evt.preventDefault();
-
     const {offsetLeft, offsetTop} = this.elementRef.nativeElement;
 
     // Get difference between last and new position in pixels

@@ -24,11 +24,13 @@ export class GameDataService {
   private classJobsSubject$: ReplaySubject<ClassJob[]> = new ReplaySubject(1);
   private actionsByClassJobIdSubject$: ReplaySubject<{ [classJobId: string]: Action[] }> = new ReplaySubject(1);
 
-  constructor(private readonly httpClient: HttpClient) {
+  public constructor(private readonly httpClient: HttpClient) {
     this.classJobs$ = this.classJobsSubject$.asObservable()
         .pipe(map((jobs) => jobs.filter((job => job.BattleClassIndex > 0))));
     this.classJobsById$ = this.classJobs$
-        .pipe(map((jobs) => jobs.reduce((acc, job) => (acc.set(job.ID, job), acc), new Map<number, ClassJob>())));
+        .pipe(
+            map((jobs) => jobs.reduce((acc, job) => { acc.set(job.ID, job); return acc; }, new Map<number, ClassJob>()))
+        );
 
     this.actionsByClassJobId$ = this.actionsByClassJobIdSubject$.asObservable();
 
@@ -42,7 +44,7 @@ export class GameDataService {
     );
   }
 
-  initialise() {
+  public initialise(): Observable<any> {
     return forkJoin([
       (<Observable<{ [classJobId: string]: Action[] }>>this.httpClient.get('./assets/classjobactions.json'))
           .pipe(tap(this.registerActions.bind(this))),
@@ -59,45 +61,45 @@ export class GameDataService {
     ]);
   }
 
-  getActionById(id: number) {
+  public getActionById(id: number): Action {
     return this.actionsById[id];
   }
 
-  getActionsByClassJobId(classJobId: number): Action[] {
+  public getActionsByClassJobId(classJobId: number): Action[] {
     const actions = this.actionsByClassJob[classJobId];
 
     return actions.length ? actions : [];
   }
 
-  getActionIndirectionById(id: number) {
+  public getActionIndirectionById(id: number): ActionIndirection {
     return this.actionIndirectionsById[id];
   }
 
-  getActionIndirectionsByClassJobId(classJobId: number) {
+  public getActionIndirectionsByClassJobId(classJobId: number): ActionIndirection[] {
     const classJob = this.classJobsById.get(classJobId);
     if (!classJob || !classJob.GameContentLinks.ActionIndirection) return [];
 
     return classJob.GameContentLinks.ActionIndirection.ClassJob.map((actionIndirection) => this.actionIndirectionsById[actionIndirection]);
   }
 
-  getClassJobs() {
+  public getClassJobs(): ClassJob[] {
     return this.classJobs;
   }
 
-  getClassJob(classJobID: number): ClassJob | undefined {
+  public getClassJob(classJobID: number): ClassJob | undefined {
     return this.classJobsById.get(classJobID);
   }
 
-  getClassJobIcon(classJobID: number) {
+  public getClassJobIcon(classJobID: number) {
     const classJob = this.getClassJob(classJobID);
 
     return classJob ? classJob.Icon : classJob
   }
 
-  getClassJobAbbreviation(classJobID: number) {
+  public getClassJobAbbreviation(classJobID: number): string {
     const classJob = this.getClassJob(classJobID);
 
-    return classJob ? classJob.Abbreviation : classJob;
+    return classJob ? classJob.Abbreviation : '';
   }
 
   private registerActions(actions: { [classJobId: string]: Action[] }): void {

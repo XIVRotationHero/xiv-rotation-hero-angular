@@ -121,12 +121,6 @@ export class HotbarService extends AbstractHotbarService<HotbarAllocation> {
     }
   }
 
-  public getClearHotbars(): (number | null)[][] {
-    return Array
-        .from({length: this.HOTBAR_COUNT})
-        .map(() => [...this.emptyHotbar]);
-  }
-
   public clearHotbar(hotbarId: number) {
     this.hotbarAllocation$
         .pipe(take(1))

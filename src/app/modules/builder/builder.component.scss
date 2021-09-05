@@ -213,17 +213,14 @@
 
   &__phase-action-image {
     margin-bottom: 4px;
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
   }
 
   &__phase-target-time,
   &__phase-estimated-time {
     font-size: 10px;
-  }
-
-  &__phase-action-image {
-    width: 32px;
-    height: 32px;
-    margin-right: 10px;
   }
 
 }

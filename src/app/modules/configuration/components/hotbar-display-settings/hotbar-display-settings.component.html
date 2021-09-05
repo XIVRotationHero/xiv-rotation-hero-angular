@@ -50,17 +50,17 @@
     Enable drag-and-drop repositioning.
   </label>
 
-  <table formArrayName="hotbarOptions">
+  <table formArrayName="hotbarOptions" aria-label="List of options for hotbar styles">
     <tr>
-      <th></th>
-      <th></th>
-      <th>12x1</th>
-      <th>6x2</th>
-      <th>4x3</th>
-      <th>3x4</th>
-      <th>2x6</th>
-      <th>1x12</th>
-      <th>Size</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col">12x1</th>
+      <th scope="col">6x2</th>
+      <th scope="col">4x3</th>
+      <th scope="col">3x4</th>
+      <th scope="col">2x6</th>
+      <th scope="col">1x12</th>
+      <th scope="col">Size</th>
     </tr>
     <tr
       *ngFor="let hotbarSetting of hotbarOptionsArray.controls; index as index"

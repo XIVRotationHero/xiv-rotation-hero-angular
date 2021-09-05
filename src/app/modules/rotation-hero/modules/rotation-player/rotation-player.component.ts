@@ -5,7 +5,6 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   Optional,
   Output,
   SimpleChanges
@@ -23,7 +22,7 @@ import {PlayerOptions} from "./interfaces/player-options";
   styleUrls: ['./rotation-player.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RotationPlayerComponent implements OnInit, OnChanges, OnDestroy {
+export class RotationPlayerComponent implements OnChanges, OnDestroy {
   @Input() rotation!: Rotation;
   @Input() playerOptions?: PlayerOptions;
 
@@ -60,7 +59,7 @@ export class RotationPlayerComponent implements OnInit, OnChanges, OnDestroy {
                         scan(
                             ([currentPhaseIndex, currentActionIndex]: [number, number], actionId: number) => {
                               const currentPhase = rotation.phases[currentPhaseIndex];
-                              const hasMorePhases = !(rotation.phases.length === currentPhaseIndex + 1);
+                              const hasMorePhases = rotation.phases.length !== currentPhaseIndex + 1;
 
                               if (currentPhase.actions[currentActionIndex] === actionId) {
                                 return currentPhase.actions.length === currentActionIndex + 1
@@ -81,9 +80,6 @@ export class RotationPlayerComponent implements OnInit, OnChanges, OnDestroy {
 
     this.activePhaseIndex$ = this.activePhaseAction$.pipe(map(val => val[0]));
     this.activeActionIndex$ = this.activePhaseAction$.pipe(map(val => val[1]));
-  }
-
-  ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges) {

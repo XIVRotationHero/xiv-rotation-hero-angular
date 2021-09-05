@@ -1,15 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'rh-player',
   template: `<rh-rotation-hero></rh-rotation-hero>`,
   styleUrls: ['./player.component.scss']
 })
-export class PlayerComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class PlayerComponent {
 
 }

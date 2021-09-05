@@ -15,7 +15,7 @@ export class CooldownViewComponent {
     if (action) {
       this.actionSubject$.next(action);
     }
-  };
+  }
 
   @Input() displayRecastTime = false;
 

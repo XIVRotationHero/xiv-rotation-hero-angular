@@ -4,7 +4,6 @@ import {AppStateService} from "../../../../core/services/app-state.service";
 import {combineLatest, Observable} from "rxjs";
 import {map} from "rxjs/operators";
 import {Action} from "../../interfaces/action";
-import {HotbarService} from "../../../hotbars/services/hotbar.service";
 
 @Component({
   selector: 'rh-action-list',
@@ -23,15 +22,6 @@ export class ActionListComponent {
 
   constructor(
     private readonly appStateService: AppStateService,
-    private readonly gameDataService: GameDataService,
-    private readonly hotbarService: HotbarService
+    private readonly gameDataService: GameDataService
   ) {}
-
-  public noDrop() {
-    return false;
-  }
-
-  public autoAssignActions() {
-    this.hotbarService
-  }
 }
