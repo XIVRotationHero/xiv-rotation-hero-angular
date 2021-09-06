@@ -33,25 +33,19 @@ $slot-border: 1px;
     width: ($slot-size + (($slot-margin + $slot-border) * 2)) * 4;
   }
 
-  :host.hotbar-style--3x4,
-  :host.hotbar-style--2x6,
-  :host.hotbar-style--1x12 {
-    flex-direction: column;
-  }
-
   :host.hotbar-style--3x4 &__slots {
-    flex-direction: column;
-    height: ($slot-size + (($slot-margin + $slot-border) * 2)) * 4;
+    flex-direction: row;
+    width: ($slot-size + (($slot-margin + $slot-border) * 2)) * 3;
   }
 
   :host.hotbar-style--2x6 &__slots {
-    flex-direction: column;
-    height: ($slot-size + (($slot-margin + $slot-border) * 2)) * 6;
+    flex-direction: row;
+    width: ($slot-size + (($slot-margin + $slot-border) * 2)) * 2;
   }
 
   :host.hotbar-style--1x12 &__slots {
-    flex-direction: column;
-    height: ($slot-size + (($slot-margin + $slot-border) * 2)) * 12;
+    flex-direction: row;
+    width: ($slot-size + (($slot-margin + $slot-border) * 2)) * 1;
   }
 
   &__slots {
