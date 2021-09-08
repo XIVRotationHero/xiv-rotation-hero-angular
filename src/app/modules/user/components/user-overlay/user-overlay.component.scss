@@ -1,3 +1,5 @@
+@import "mixins";
+
 :host {
   position: absolute;
   top: 0;
@@ -8,6 +10,7 @@
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.5);
+  @include blur-background(.5);
 }
 
 .rh-user-overlay {

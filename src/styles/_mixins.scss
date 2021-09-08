@@ -1,4 +1,4 @@
-@mixin blur-background($blur-size, $factor: 1) {
+@mixin blur-background($factor: 1) {
   background: rgba(36, 36, 36, 0.95*$factor);
 
   @supports (backdrop-filter: blur()) {

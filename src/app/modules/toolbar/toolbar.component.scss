@@ -1,9 +1,7 @@
-// @import '@styles/mixins.scss';
+@import 'mixins.scss';
 
 :host {
   display: flex;
-  // @include blur-background(10px);
-  // background: rgba(40, 40, 50, 0.85);
   background: rgba(36,36,36,0.6);
   box-shadow: 0 8px 10px 0 rgba(0, 0, 0, .2);
   position: relative;
