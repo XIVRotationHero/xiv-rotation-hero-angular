@@ -9,7 +9,6 @@ import {CrossHotbarDisplayType} from "../../../cross-hotbar/enums/cross-hotbar-d
 @Component({
   selector: 'rh-cross-hotbar-settings',
   templateUrl: './cross-hotbar-settings.component.html',
-  styleUrls: ['./cross-hotbar-settings.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CrossHotbarSettingsComponent {

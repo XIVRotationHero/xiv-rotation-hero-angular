@@ -13,7 +13,7 @@ export class HelpService {
 
   public readonly articles$: Observable<Article[]> = of(this.ARTICLE_INDEX_LOCATION)
       .pipe(
-          switchMap((fileLocation) => this.httpClient.get(fileLocation) as Observable<Article[]>),
+          switchMap((fileLocation) => this.httpClient.get<Article[]>(fileLocation)),
           shareReplay(1)
       )
 

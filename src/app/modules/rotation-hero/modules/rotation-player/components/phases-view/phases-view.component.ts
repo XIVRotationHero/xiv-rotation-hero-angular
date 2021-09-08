@@ -5,7 +5,6 @@ import {RotationPhase} from "../../../../../api/interfaces/rotation-phase";
 @Component({
   selector: 'rh-phases-view',
   templateUrl: './phases-view.component.html',
-  styleUrls: ['./phases-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PhasesViewComponent {

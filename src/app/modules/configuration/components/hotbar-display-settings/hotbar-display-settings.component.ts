@@ -8,7 +8,6 @@ import {ConfigurationService} from "../../services/configuration.service";
 @Component({
   selector: 'rh-hotbar-display-settings',
   templateUrl: './hotbar-display-settings.component.html',
-  styleUrls: ['./hotbar-display-settings.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HotbarDisplaySettingsComponent {

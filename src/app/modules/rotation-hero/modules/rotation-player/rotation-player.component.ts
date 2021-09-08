@@ -19,7 +19,6 @@ import {PlayerOptions} from "./interfaces/player-options";
 @Component({
   selector: 'rh-rotation-player',
   templateUrl: './rotation-player.component.html',
-  styleUrls: ['./rotation-player.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RotationPlayerComponent implements OnChanges, OnDestroy {

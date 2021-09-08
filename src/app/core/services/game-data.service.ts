@@ -46,11 +46,11 @@ export class GameDataService {
 
   public initialise(): Observable<any> {
     return forkJoin([
-      (<Observable<{ [classJobId: string]: Action[] }>>this.httpClient.get('./assets/classjobactions.json'))
+      this.httpClient.get<{ [classJobId: string]: Action[] }>('./assets/classjobactions.json')
           .pipe(tap(this.registerActions.bind(this))),
-      (<Observable<ActionIndirection[]>>this.httpClient.get('./assets/actionindirections.json'))
+      this.httpClient.get<ActionIndirection[]>('./assets/actionindirections.json')
           .pipe(tap(this.registerActionIndirections.bind(this))),
-      (<Observable<ClassJob[]>>this.httpClient.get('./assets/classjobs.json'))
+      this.httpClient.get<ClassJob[]>('./assets/classjobs.json')
           .pipe(tap((classJobs) => {
             this.classJobs = classJobs;
             this.classJobsSubject$.next(classJobs);
