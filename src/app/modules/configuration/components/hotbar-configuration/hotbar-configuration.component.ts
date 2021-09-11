@@ -7,7 +7,7 @@ import {HotbarConfigurationView} from '../../enums/hotbar-configuration-view';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HotbarConfigurationComponent {
-  public activeView: HotbarConfigurationView = HotbarConfigurationView.CrossHotbarSettings;
+  public activeView: HotbarConfigurationView = HotbarConfigurationView.HotbarDisplaySettings;
 
   public readonly HotbarConfigurationView = HotbarConfigurationView;
 }
