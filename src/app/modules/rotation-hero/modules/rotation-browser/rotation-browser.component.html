@@ -2,10 +2,10 @@
   <span class="rh-rotation-browser__button"
       (click)="selectedCategorySubject$.next(RotationBrowserCategoryType.Community)">Community</span>
   <span class="rh-rotation-browser__button"
-        *ngIf="user$ | async"
+        *ngIf="currentUser$ | async"
         (click)="selectedCategorySubject$.next(RotationBrowserCategoryType.Favourites)">Favorites</span>
   <span class="rh-rotation-browser__button"
-        *ngIf="user$ | async"
+        *ngIf="currentUser$ | async"
         (click)="selectedCategorySubject$.next(RotationBrowserCategoryType.Mine)">Mine</span>
 </div>
 <div class="rh-rotation-browser__tab-bar rh-rotation-browser__tab-bar--secondary">
@@ -14,12 +14,12 @@
   <span class="rh-rotation-browser__button"
       (click)="selectedSubCategorySubject$.next(RotationBrowserSubCategoryType.Recent)">Recent</span>
 </div>
+<rh-pagination *ngIf="(paginatedResponse$ | async)" [pagination]="(paginatedResponse$ | async)!.pagination"></rh-pagination>
 <div
     class="rh-rotation-browser__list"
     *ngIf="paginatedResponse$ | async">
-  <rh-pagination [pagination]="(paginatedResponse$ | async)?.pagination"></rh-pagination>
   <div class="rh-rotation-browser__list-item"
-      *ngFor="let rotation of (paginatedResponse$ | async)?.results"
+      *ngFor="let rotation of (paginatedResponse$ | async)!.results"
       (click)="selectRotation.emit(rotation)">
     <rh-class-job-icon
         class="rh-rotation-browser__list-item-image"
@@ -31,12 +31,49 @@
       {{ rotation.description }}
     </div>
     <div class="rh-rotation-browser__list-item-favourite">
-      {{ rotation.favouriteCount }}
+      {{ rotation.favouriteCount }} &#9829;
     </div>
-    <div class="rh-rotation-browser__list-item-actions"></div>
+    <div class="rh-rotation-browser__list-item-actions" *ngIf="rotation.user.id === (currentUserId$ | async)">
+      <button
+          class="button rh-rotation-browser__list-item-publish-status"
+          *ngIf="rotation.publishState === PublishState.Unpublished"
+          (click)="$event.stopImmediatePropagation(); showPublishDialog(rotation)">Publish</button>
+      <span class="rh-rotation-browser__list-item-publish-status" *ngIf="rotation.publishState !== PublishState.Unpublished">
+        {{ getPublishStateText(rotation.publishState) }}
+      </span>
+    </div>
   </div>
 </div>
+
 <div class="rh-rotation-browser__empty-view"
     *ngIf="(paginatedResponse$ | async)?.pagination?.resultsTotal === 0">Looks like there's nothing here yet</div>
 <div class="rh-rotation-browser__loading-view"
     *ngIf="!(paginatedResponse$ | async)">Loading rotations</div>
+
+<div class="rh-rotation-browser__publish-dialog" *ngIf="rotationPendingPublish && (currentUser$ | async)">
+  <ng-container *ngIf="publishingRequestStatus === RequestStatus.Idle || publishingRequestStatus === RequestStatus.Failure">
+    <p>You're about to publish the following rotation:</p>
+    <p>{{rotationPendingPublish.title}}</p>
+    <p>This means that after a successful review it will be listed as a community rotation and can NOT be edited anymore.</p>
+    <p>Do you still want to publish your rotation?</p>
+    <button
+        class="button button--block"
+        (click)="confirmPublish()">Yes, publish it!</button>
+    <button
+        class="button button--block button--warning"
+        (click)="cancelPublish()">No, I changed my mind!</button>
+  </ng-container>
+
+  <ng-container *ngIf="publishingRequestStatus === RequestStatus.InProgress">
+    <p>Publishing rotation, please wait...</p>
+  </ng-container>
+
+  <ng-container *ngIf="publishingRequestStatus === RequestStatus.Success">
+    <p>Your rotation has successfully been put into the review queue.</p>
+
+    <p>Thank you for your contribution, it will be reviewed shortly.</p>
+
+    <button class="button button--block"
+            (click)="cancelPublish()">Close overlay</button>
+  </ng-container>
+</div>
