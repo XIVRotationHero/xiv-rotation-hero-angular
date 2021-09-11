@@ -18,4 +18,8 @@ export class RotationService {
     return this.apiService.createRotation(rotation);
   }
 
+  public updateRotation(rotation: Rotation): Observable<Rotation> {
+    return this.apiService.updateRotation(rotation);
+  }
+
 }

@@ -108,16 +108,24 @@ export class BuilderComponent {
       }
 
       this.disabledPhases.clear();
+      this.recordEnabledPhase = this.rotation.phases[0];
     });
   }
 
   public saveRotation(): void {
-    const rotation: Rotation = {
+    let rotation: Rotation = {
       ...this.rotation,
       ...this.form.value
     }
 
-    this.rotationService.saveRotation(rotation).subscribe();
+    rotation.phases = rotation.phases.filter((phase) => !this.disabledPhases.has(phase.phase) && phase.actions.length !== 0);
+
+    (rotation.id
+            ? this.rotationService.updateRotation(rotation)
+            : this.rotationService.saveRotation(rotation)
+    ).subscribe(savedRotation => {
+      this.rotation = savedRotation;
+    });
   }
 
   public updatePhaseAction(phase: Phase, actions: number[]): void {
@@ -135,7 +143,7 @@ export class BuilderComponent {
   public togglePhase(phase: Phase): void {
     this.disabledPhases.has(phase)
         ? this.disabledPhases.delete(phase)
-        : this.disabledPhases.add(phase)
+        : this.disabledPhases.add(phase);
   }
 
 }

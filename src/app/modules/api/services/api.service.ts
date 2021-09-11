@@ -45,8 +45,8 @@ export class ApiService {
     return this.request<Rotation>('/rotation/', 'POST', JSON.stringify(rotation));
   }
 
-  public updateRotation(rotation: RotationUpdate): Observable<Response> {
-    return this.request<Response>(`/rotation/${rotation.id}`, 'PATCH', JSON.stringify(rotation));
+  public updateRotation(rotation: RotationUpdate): Observable<Rotation> {
+    return this.request<Rotation>(`/rotation/${rotation.id}`, 'PATCH', JSON.stringify(rotation));
   }
 
   public publishRotation(rotationId: string): Observable<Rotation> {
