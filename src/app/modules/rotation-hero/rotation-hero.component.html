@@ -1,4 +1,3 @@
-<div class="rh-rotation-hero__title-bar">Rotation Hero</div>
 <div class="rh-rotation-hero__content">
   <rh-rotation-browser
       *ngIf="!(activeRotation | async)"
@@ -8,6 +7,5 @@
       *ngIf="activeRotation | async"
       [rotation]="(activeRotation | async)!"
       (changeRotation)="clearRotation()"
-
   ></rh-rotation-player>
 </div>
