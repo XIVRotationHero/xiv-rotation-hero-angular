@@ -19,17 +19,6 @@ $border-length: 16px;
     max-width: 400px;
   }
 
-  &__title-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #414141;
-
-    padding: 4px 12px;
-    line-height: 1.5;
-    font-weight: bold;
-  }
-
   &__settings {
     font-size: 32px;
     line-height: 1;
