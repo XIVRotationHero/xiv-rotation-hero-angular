@@ -4,11 +4,13 @@ import {PaginatedResponse} from "../../../api/interfaces/paginated-response";
 import {Rotation} from "../../../api/interfaces/rotation";
 import {BehaviorSubject, combineLatest, merge, Observable, Subject} from "rxjs";
 import {RotationBrowserCategoryType} from "./enums/rotation-browser-category-type";
-import {RotationBrowserSubCategoryType} from "./enums/rotation-browser-sub-category-type";
+import {RotationBrowserSortMode} from "./enums/rotation-browser-sort-mode";
 import {map, shareReplay, startWith, switchMap, withLatestFrom} from "rxjs/operators";
 import {UserService} from "../../../user/services/user.service";
 import {PublishState} from "../../../api/enums/publish-state";
 import {RequestStatus} from "../../../api/enums/request-status";
+import {FormControl} from "@angular/forms";
+import {AppStateService} from "../../../../core/services/app-state.service";
 
 @Component({
   selector: 'rh-rotation-browser',
@@ -21,53 +23,56 @@ export class RotationBrowserComponent {
 
   public readonly selectedCategorySubject$: BehaviorSubject<RotationBrowserCategoryType> =
       new BehaviorSubject<RotationBrowserCategoryType>(RotationBrowserCategoryType.Community);
-  public readonly selectedSubCategorySubject$: BehaviorSubject<RotationBrowserSubCategoryType> =
-      new BehaviorSubject<RotationBrowserSubCategoryType>(RotationBrowserSubCategoryType.Favorites);
+  public readonly selectedSortModeSubject$: BehaviorSubject<RotationBrowserSortMode> =
+      new BehaviorSubject<RotationBrowserSortMode>(RotationBrowserSortMode.Favorites);
 
-  public readonly PublishState = PublishState;
+  public readonly filterBySelectedRoleControl = new FormControl(false);
 
   public readonly selectPageSubject$: Subject<number> = new Subject();
-  public readonly currentPage$ = merge(this.selectedCategorySubject$, this.selectedSubCategorySubject$)
+  public readonly currentPage$ = merge(this.selectedCategorySubject$, this.selectedSortModeSubject$)
       .pipe(
           switchMap(() => this.selectPageSubject$.pipe(startWith(1))),
           shareReplay(1)
       )
 
-  public readonly paginatedResponse$: Observable<PaginatedResponse<Rotation>> = combineLatest([this.selectedCategorySubject$, this.selectedSubCategorySubject$])
+  public readonly paginatedResponse$: Observable<PaginatedResponse<Rotation>> = combineLatest([
+    this.selectedCategorySubject$,
+    this.selectedSortModeSubject$,
+    combineLatest([
+        this.filterBySelectedRoleControl.valueChanges.pipe(startWith(false)),
+        this.appStateService.currentClassJobId$
+    ]).pipe(map(([ limitToRole, classJobId ]) => limitToRole ? classJobId : -1))
+  ])
       .pipe(
           withLatestFrom(this.currentPage$),
-          switchMap(([[category, subCategory], page]) => {
+          switchMap(([[category, sortBy, classJobId], page]) => {
+            let queryParams = {
+              page,
+              sortBy,
+              classJobId
+            }
+
             switch (category) {
               case RotationBrowserCategoryType.Favourites:
-                return this.apiService.userFavourites({
-                  page
-                });
+                return this.apiService.userFavourites(queryParams);
 
               case RotationBrowserCategoryType.Mine:
-                return this.apiService.userRotations({
-                  page
-                });
+                return this.apiService.userRotations(queryParams);
 
               case RotationBrowserCategoryType.Search:
-                return this.apiService.getAllRotations();
+                return this.apiService.getAllRotations(queryParams);
 
               case RotationBrowserCategoryType.Community:
               default:
-                return this.apiService.getAllRotations({
-                  page,
-                  sortBy: subCategory
-                });
+                return this.apiService.getAllRotations(queryParams);
             }
-
           }),
           shareReplay(1)
       );
 
   public readonly currentUser$ = this.userService.signedInUser$;
-  public readonly currentUserId$ = this.currentUser$.pipe(map(user => user?.id));
 
-  public readonly RotationBrowserCategoryType = RotationBrowserCategoryType;
-  public readonly RotationBrowserSubCategoryType = RotationBrowserSubCategoryType;
+  public readonly RotationBrowserSortMode = RotationBrowserSortMode;
   public readonly RequestStatus = RequestStatus;
 
   public rotationPendingPublish?: Rotation;
@@ -75,17 +80,9 @@ export class RotationBrowserComponent {
 
   constructor(
       private readonly apiService: ApiService,
+      private readonly appStateService: AppStateService,
       private readonly userService: UserService
   ) {
-  }
-
-  public getPublishStateText(publishState: PublishState) {
-    switch (publishState) {
-      case PublishState.InReview: return 'In review';
-      case PublishState.Rejected: return 'Rejected';
-      case PublishState.Published: return 'Published';
-      case PublishState.Unpublished: return 'Unpublished';
-    }
   }
 
   public showPublishDialog(rotation: Rotation) {

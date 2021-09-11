@@ -1,0 +1,31 @@
+<div
+    class="rh-rotation-list__list"
+    *ngIf="rotations">
+  <div class="rh-rotation-list__list-item"
+       *ngFor="let rotation of rotations"
+       (click)="selectRotation.emit(rotation)">
+    <rh-class-job-icon
+        class="rh-rotation-list__list-item-image"
+        [classJobId]="rotation.classJobId"></rh-class-job-icon>
+    <div class="rh-rotation-list__list-item-title">
+      {{ rotation.title }}
+    </div>
+    <div class="rh-rotation-list__list-item-subtitle">
+      {{ rotation.description }}
+    </div>
+    <div class="rh-rotation-list__list-item-favourite"
+         [matTooltip]="currentUser ? 'Favourite rotation' : 'You need to be logged in to add a rotation to your favourites'"
+         (click)="currentUser && favouriteRotation.next(rotation)">
+      {{ rotation.favouriteCount }} &#9829;
+    </div>
+    <div class="rh-rotation-list__list-item-actions" *ngIf="rotation.user.id === currentUser?.id">
+      <button
+          class="button rh-rotation-list__list-item-publish-status"
+          *ngIf="rotation.publishState === PublishState.Unpublished"
+          (click)="$event.stopImmediatePropagation(); publishRotation.emit(rotation)">Publish</button>
+      <span class="rh-rotation-list__list-item-publish-status" *ngIf="rotation.publishState !== PublishState.Unpublished">
+        {{ getPublishStateText(rotation.publishState) }}
+      </span>
+    </div>
+  </div>
+</div>

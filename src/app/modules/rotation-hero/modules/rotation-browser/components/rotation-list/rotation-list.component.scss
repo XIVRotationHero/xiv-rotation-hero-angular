@@ -1,0 +1,76 @@
+.rh-rotation-list {
+
+  &__list {
+    max-height: 200px;
+    overflow: auto;
+  }
+
+  &__list-item {
+    display: grid;
+    padding: 8px 12px;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      'img title favourites'
+      'img subtitle actions';
+    background: #323232;
+    cursor: pointer;
+
+    &:nth-child(odd) {
+      background: #262626;
+    }
+
+    &:hover {
+      background: #424242;
+    }
+  }
+
+  &__list-item-publish-status {
+    font-size: 12px;
+    padding: 0;
+  }
+
+  &__list-item-image {
+    width: 32px;
+    height: 32px;
+    grid-area: img;
+    margin-right: 8px;
+  }
+
+  &__list-item-title {
+    font-size: 12px;
+    color: #e1e1e1;
+    grid-area: title;
+    line-height: 1.5;
+  }
+
+  &__list-item-subtitle {
+    font-size: 10px;
+    color: #a8a8a8;
+    grid-area: subtitle;
+    line-height: 1.5;
+  }
+
+  &__list-item-favourite {
+    font-size: 14px;
+    color: #e1e1e1;
+    grid-area: favourites;
+    text-align: right;
+    cursor: pointer;
+
+    &:hover {
+      color: red;
+    }
+  }
+
+  &__list-item-actions {
+    grid-area: actions;
+  }
+
+  &__list-item-action {
+    font-size: 12px;
+    padding: 0;
+    line-height: 1;
+    margin: 0 4px;
+  }
+}

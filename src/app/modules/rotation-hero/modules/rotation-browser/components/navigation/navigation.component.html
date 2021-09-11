@@ -1,0 +1,19 @@
+<div class="rh-navigation__tab-bar rh-navigation__tab-bar--primary">
+  <span class="rh-navigation__button"
+        [ngClass]="{
+          'rh-navigation__button--selected': activeCategory === RotationBrowserCategoryType.Community
+        }"
+        (click)="selectCategory.next(RotationBrowserCategoryType.Community)">Community</span>
+  <span class="rh-navigation__button"
+        *ngIf="hasUser"
+        [ngClass]="{
+          'rh-navigation__button--selected': activeCategory === RotationBrowserCategoryType.Favourites
+        }"
+        (click)="selectCategory.next(RotationBrowserCategoryType.Favourites)">Favorites</span>
+  <span class="rh-navigation__button"
+        *ngIf="hasUser"
+        [ngClass]="{
+          'rh-navigation__button--selected': activeCategory === RotationBrowserCategoryType.Mine
+        }"
+        (click)="selectCategory.next(RotationBrowserCategoryType.Mine)">Mine</span>
+</div>

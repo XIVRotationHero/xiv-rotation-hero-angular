@@ -1,54 +1,34 @@
-<div class="rh-rotation-browser__tab-bar rh-rotation-browser__tab-bar--primary">
-  <span class="rh-rotation-browser__button"
-      (click)="selectedCategorySubject$.next(RotationBrowserCategoryType.Community)">Community</span>
-  <span class="rh-rotation-browser__button"
-        *ngIf="currentUser$ | async"
-        (click)="selectedCategorySubject$.next(RotationBrowserCategoryType.Favourites)">Favorites</span>
-  <span class="rh-rotation-browser__button"
-        *ngIf="currentUser$ | async"
-        (click)="selectedCategorySubject$.next(RotationBrowserCategoryType.Mine)">Mine</span>
-</div>
-<div class="rh-rotation-browser__tab-bar rh-rotation-browser__tab-bar--secondary">
-  <span class="rh-rotation-browser__button"
-      (click)="selectedSubCategorySubject$.next(RotationBrowserSubCategoryType.Favorites)">Favorites</span>
-  <span class="rh-rotation-browser__button"
-      (click)="selectedSubCategorySubject$.next(RotationBrowserSubCategoryType.Recent)">Recent</span>
-</div>
-<rh-pagination *ngIf="(paginatedResponse$ | async)" [pagination]="(paginatedResponse$ | async)!.pagination"></rh-pagination>
-<div
-    class="rh-rotation-browser__list"
-    *ngIf="paginatedResponse$ | async">
-  <div class="rh-rotation-browser__list-item"
-      *ngFor="let rotation of (paginatedResponse$ | async)!.results"
-      (click)="selectRotation.emit(rotation)">
-    <rh-class-job-icon
-        class="rh-rotation-browser__list-item-image"
-        [classJobId]="rotation.classJobId"></rh-class-job-icon>
-    <div class="rh-rotation-browser__list-item-title">
-      {{ rotation.title }}
-    </div>
-    <div class="rh-rotation-browser__list-item-subtitle">
-      {{ rotation.description }}
-    </div>
-    <div class="rh-rotation-browser__list-item-favourite">
-      {{ rotation.favouriteCount }} &#9829;
-    </div>
-    <div class="rh-rotation-browser__list-item-actions" *ngIf="rotation.user.id === (currentUserId$ | async)">
-      <button
-          class="button rh-rotation-browser__list-item-publish-status"
-          *ngIf="rotation.publishState === PublishState.Unpublished"
-          (click)="$event.stopImmediatePropagation(); showPublishDialog(rotation)">Publish</button>
-      <span class="rh-rotation-browser__list-item-publish-status" *ngIf="rotation.publishState !== PublishState.Unpublished">
-        {{ getPublishStateText(rotation.publishState) }}
-      </span>
-    </div>
-  </div>
+<rh-navigation
+    [hasUser]="!!(currentUser$ | async)"
+    [activeCategory]="(selectedCategorySubject$ | async)!"
+    (selectCategory)="selectedCategorySubject$.next($event)"></rh-navigation>
+
+<div class="rh-rotation-browser__filters">
+  <label class="ui-style rh-rotation-browser__filter">
+    <input type="checkbox" class="checkbox" [formControl]="filterBySelectedRoleControl" />
+    <span class="ui-style-element"></span>Limit results to selected role
+  </label>
 </div>
 
+<rh-rotation-list
+    *ngIf="paginatedResponse$ | async"
+    [currentUser]="currentUser$ | async"
+    [rotations]="(paginatedResponse$ | async)!.results"
+    (publishRotation)="showPublishDialog($event)"
+    (selectRotation)="selectRotation.emit($event)"></rh-rotation-list>
+
 <div class="rh-rotation-browser__empty-view"
-    *ngIf="(paginatedResponse$ | async)?.pagination?.resultsTotal === 0">Looks like there's nothing here yet</div>
+     *ngIf="(paginatedResponse$ | async)?.pagination?.resultsTotal === 0">Looks like there's nothing here yet</div>
 <div class="rh-rotation-browser__loading-view"
-    *ngIf="!(paginatedResponse$ | async)">Loading rotations</div>
+     *ngIf="!(paginatedResponse$ | async)">Loading rotations</div>
+
+<div class="rh-rotation-browser__footer">
+  <div class="rh-rotation-browser__sort">
+    Sort by:
+    <a (click)="selectedSortModeSubject$.next(RotationBrowserSortMode.Favorites)">Favorites</a> | <a (click)="selectedSortModeSubject$.next(RotationBrowserSortMode.Recent)">Recent</a>
+  </div>
+  <rh-pagination *ngIf="(paginatedResponse$ | async)" [pagination]="(paginatedResponse$ | async)!.pagination"></rh-pagination>
+</div>
 
 <div class="rh-rotation-browser__publish-dialog" *ngIf="rotationPendingPublish && (currentUser$ | async)">
   <ng-container *ngIf="publishingRequestStatus === RequestStatus.Idle || publishingRequestStatus === RequestStatus.Failure">
