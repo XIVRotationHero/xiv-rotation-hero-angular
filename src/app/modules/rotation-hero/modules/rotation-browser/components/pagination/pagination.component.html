@@ -36,7 +36,7 @@
   </ng-container>
 
   <li class="rh-pagination__page"
-      [ngClass]="{ 'rh-pagination__page--disabled': !pagination.pageTotal || pagination.page + 1 === pagination.pageTotal }"
+      [ngClass]="{ 'rh-pagination__page--disabled': !pagination.pageTotal || pagination.page === pagination.pageTotal }"
       (click)="pagination.pageNext && selectPage.emit(pagination.pageNext)">
     &gt;
   </li>
