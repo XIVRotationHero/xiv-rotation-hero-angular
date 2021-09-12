@@ -85,6 +85,10 @@ export class CrossHotbarComponent implements OnInit, OnDestroy {
   );
 
   private triggeredCrossHotbarSlotSubject$: Subject<[number, number]> = new Subject();
+  private r1CycleTimer?: number;
+  private hasSetChangedDuringR1 = false;
+
+  private readonly R1_CYCLE_TIMER_THRESHOLD = 400;
 
   private isDestroyed$ = new Subject<void>();
 
@@ -175,19 +179,49 @@ export class CrossHotbarComponent implements OnInit, OnDestroy {
     this.updateActiveCrossHotbarSet(b[PSGamepadButton.L2], b[PSGamepadButton.R2]);
 
     // Check for set selection
-    if ([GamepadButtonState.Held, GamepadButtonState.Pressed].includes(b[PSGamepadButton.R1])) {
-      this.displaySetSelect = true;
+    this.displaySetSelect = this.isSetSelectActive(b);
 
-      // Check if any button is pressed
+    this.handleR1Cycling(b);
+
+    this.handleSetSelect(b);
+    this.handleActionTriggering(b);
+  }
+
+  private isSetSelectActive(b: GamepadButtonState[]): boolean {
+    return [GamepadButtonState.Pressed, GamepadButtonState.Held].includes(b[PSGamepadButton.R1])
+  }
+
+  private handleR1Cycling(b: GamepadButtonState[]): void {
+    if ([GamepadButtonState.Pressed].includes(b[PSGamepadButton.R1])) {
+      this.r1CycleTimer = performance.now();
+    } else if (b[PSGamepadButton.R1] === GamepadButtonState.Released) {
+      if (
+          !this.hasSetChangedDuringR1 &&
+          (this.r1CycleTimer && performance.now() - this.r1CycleTimer < this.R1_CYCLE_TIMER_THRESHOLD)
+      ) {
+        // Button press for cycling through hotbars via R1 press
+        this.activeHotbarIndex$.pipe(take(1)).subscribe((index) => {
+          this.activeHotbarIndexSubject$.next((index + 1) % 8);
+        });
+      }
+      this.hasSetChangedDuringR1 = false;
+    }
+  }
+
+  private handleSetSelect(b: GamepadButtonState[]): void {
+    // Check if any button is pressed
+    // during set select
+    if (this.displaySetSelect) {
       const [pressedButton] = this.SET_SELECT_ORDER.filter((button) => b[button] === GamepadButtonState.Pressed);
 
       if (pressedButton !== undefined) {
         this.activeHotbarIndexSubject$.next(this.SET_SELECT_ORDER.indexOf(pressedButton));
+        this.hasSetChangedDuringR1 = true;
       }
-    } else if (b[PSGamepadButton.R1] === GamepadButtonState.Released) {
-      this.displaySetSelect = false;
     }
+  }
 
+  private handleActionTriggering(b: GamepadButtonState[]): void {
     // Get pressed buttons
     const actionIndex = this.SET_SELECT_ORDER.findIndex((button) => b[button] === GamepadButtonState.Pressed);
 
@@ -204,7 +238,6 @@ export class CrossHotbarComponent implements OnInit, OnDestroy {
       }
     }
   }
-
 
   /**
    * If a new hotbar side is selected it always overrides the previous one.
