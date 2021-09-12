@@ -134,6 +134,7 @@ export class KeyBindingService {
 
   private getSequenceFromKeyboardEvent(evt: KeyboardEvent): string[] {
     const {code, ctrlKey, shiftKey, altKey} = evt;
+    console.log(evt);
 
     const sequence = [];
     if (ctrlKey) sequence.push('Ctrl');

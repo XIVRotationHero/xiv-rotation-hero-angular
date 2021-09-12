@@ -21,5 +21,8 @@
       (cdkDragStarted)="disableTooltips()"
       (cdkDragEnded)="enableTooltips()"
       (click)="triggerAction()"></rh-action>
-  <div class="rh-action-slot__keybinding">{{ keyBinding$ | async}}</div>
+  <rh-keybinding-view
+      class="rh-action-slot__keybinding"
+      *ngIf="keyBinding$ | async"
+      [keybinding]="(keyBinding$ | async)!"></rh-keybinding-view>
 </div>

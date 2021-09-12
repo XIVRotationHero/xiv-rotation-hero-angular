@@ -9,6 +9,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
 import {ActionByIdPipe} from './pipes/action-by-id.pipe';
 import {ActionTooltipComponent} from './components/action-tooltip/action-tooltip.component';
 import {ActionSlotComponent} from './components/action-slot/action-slot.component';
+import { KeybindingViewComponent } from './components/keybinding-view/keybinding-view.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import {ActionSlotComponent} from './components/action-slot/action-slot.componen
     CooldownViewComponent,
     ActionByIdPipe,
     ActionTooltipComponent,
-    ActionSlotComponent
+    ActionSlotComponent,
+    KeybindingViewComponent
   ],
   exports: [
     ActionComponent,
