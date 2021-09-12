@@ -1,0 +1,12 @@
+:host {
+  display: flex;
+}
+
+.rh-keybinding-view {
+  &__modifiers {
+    flex: 1 1 10px;
+    font-size: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+}

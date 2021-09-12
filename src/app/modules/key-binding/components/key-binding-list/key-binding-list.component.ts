@@ -19,7 +19,7 @@ export class KeyBindingListComponent implements OnInit {
 
   constructor(private readonly keyBindingService: KeyBindingService) {}
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     const keyboardSequences =
       fromEvent<KeyboardEvent>(document, 'keydown', { capture: true })
         .pipe(
@@ -54,9 +54,14 @@ export class KeyBindingListComponent implements OnInit {
       });
   }
 
-  recordNewKeyForLabel(label: string) {
+  public recordNewKeyForLabel(label: string): void {
     this.labelRecordingKey = label;
     this.recordingTrigger$.next(label);
+  }
+
+  public clearBinding(label: string): void {
+    this.labelRecordingKey = null;
+    this.keyBindingService.registerBindingKey$.next([label, undefined]);
   }
 
   private onKeyDown(evt: KeyboardEvent): string[] {
