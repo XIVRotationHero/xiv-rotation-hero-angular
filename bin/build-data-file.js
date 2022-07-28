@@ -31,9 +31,9 @@ class XIVApi {
       actionIds = [
         ...actionIds,
         ...job.GameContentLinks.ActionIndirection.ClassJob.map((id) => {
-          return actionIndirections[ id ].Name.ID;
+          return actionIndirections[ id ]?.Name?.ID || null;
         })
-      ]
+      ].filter((id) => id !== null)
     }
 
     const filters = [
